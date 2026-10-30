@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.ruff_cache/
+*.so
+.DS_Store
+*.egg-info/
+/logs/
+/results/
+/data/
+/figures/
+/fits.parquet

@@ -1,0 +1,27 @@
+# Selection p_i = g_i [r_i + (1 - r_i) c_i w_i], realised by a fixed-seed hash draw, then an exact-size trim.
+gate:                       # g_i
+  min_content_s: 1.0        # audible (> -60 dB) seconds
+  min_duration_s: 0.5
+  max_duration_s: 120.0
+  silent_fraction: 0.98     # excluded when silence fraction >= this AND rms <= silent_rms_db
+  silent_rms_db: -80.0
+floors:                     # r_i
+  leaf: 2000                # per leaf: confidence-ordered weights summed up to this
+  leaf_confident: 0.5
+  leaf_weight_unconfident: 0.3
+  language: 50000           # per language, by language confidence
+  emotion: 1000000          # per expressive emotion, by hash
+  species: 500              # per top Perch class, by hash
+  emotions: [angry, disgusted, fearful, happy, sad, surprised]
+  second_music_sfx: 0.25    # second top-level prediction is music or designed sound effects
+  second_other: 0.10        # second top-level prediction is any other non-speech class
+  allowlist: [CommonVoice_22_0, EarSAVAS]
+cluster_log2: 14.5          # c_i = min(1, 2^14.5 / n_k)
+budget: 660000000           # T, expected clips before the exact-size trim
+shares: {speech: 0.37, music: 0.29, rest: 0.34}
+min_reduction: 0.5          # reductions of at most this expected count are skipped
+min_text_len: 25            # A_i: text of at least this many characters
+draw_seed: 0xD1B54A32D192ED03     # u_i = SplitMix64(audio_id xor seed) / 2^64
+target: 500000000           # exact number of selected rows
+trim_seed: 1229801703532086340    # speech fill clips are kept by lowest SplitMix64(audio_id xor seed)
+second_level: second_level.csv        # speech second-level keyword tags (relative to this file)

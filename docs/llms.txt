@@ -1,0 +1,168 @@
+# LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining
+
+> Project page of the LAION-Audio-XL paper. LAION-Audio-XL is a corpus of 365M audio clips with 703M captions (1.38M hours), curated from 1.48B collected clips. The paper derives compute scaling laws for contrastive language-audio pretraining (CLAP) and releases CLAP2, a family of five CLAP models (CLAP2-XXS to CLAP2-L, 27M to 340M parameters). CLAP2-M (153M parameters) reaches 52.3% on MAEB-30, the best score of any model trained from scratch on the MAEB leaderboard.
+
+Authors: Gijs Wijngaard (Jülich Supercomputing Center (JSC), Forschungszentrum Jülich (FZJ); LAION; equal contribution, order decided by coin flip), Felix Förster (Technical University of Munich, MCML; equal contribution), Ross Wightman (LAION), Marianna Nezhurina (JSC, FZJ; LAION), Christoph Schuhmann (LAION), Jenia Jitsev (JSC, FZJ; LAION; senior advisor), A. Sophia Koepke (Technical University of Munich, MCML; University of Tübingen, Tübingen AI Center; senior advisor).
+
+Code: https://github.com/LAION-AI/clap2. Dataset: https://huggingface.co/datasets/laion/laion-audio-xl (configs open, sharealike, noncommercial; clips crawled from the web are listed as links in the gated laion/laion-audio-xl-links). Models: https://huggingface.co/laion/clap2-medium-audioxl-s1B; all five sizes are laion/clap2-{xxs,xs,small,medium,large}-audioxl-s1B, loaded with OpenCLIP. A paper link will follow.
+
+## Abstract
+
+Recent advances in contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.47 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our models outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks. As a result, our models can serve as a drop-in replacement for CLAP in downstream applications. We will publicly release our dataset, captions, model checkpoints, and code.
+
+## Key results
+
+- Headline: the smallest model, CLAP2-XXS (27M parameters), scores 46.2% on MAEB-30 and beats every earlier contrastive audio-text (CLAP-style) model, including GLAP (44.1%, 855M parameters, 31× larger).
+- Progress: from wav2clip (2021, 28.1%) to GLAP (2025, 44.1%), four years of CLAP-style models raised the best MAEB-30 score by 16 points; CLAP2-M (153M, 52.3%) adds 8.2 more. Omni-embedding models of 1B to 9B parameters, which are not drop-in CLAP replacements, reach up to 53.5%.
+- Dataset: LAION-Audio-XL has 365M clips of up to 30 s, 703M captions and 1.38M hours of audio. The larger 500M selection (clips up to 120 s) has 500M clips, 966M captions and 3.34M hours.
+- Scaling: MAEB-30 error follows L(C) = A (C + e^B)^(-α) + E with A = 2.38, B = 20.03, α = 0.0603, E = 0 (C in GFLOPs). Each doubling of compute lowers the error by 4.1%, about +1.9 MAEB-30 points at the largest budget.
+- Compute-optimal allocation: optimal model size N_opt ∝ C^0.405 and optimal samples seen D_opt ∝ C^0.583, so optimal data grows about 1.4× faster than model size. Extra compute should go mostly to more data.
+- Benchmarks: CLAP2-M scores 52.3% on MAEB-30 with 153M parameters, ahead of GLAP (44.1%, 855M) and LAION-CLAP (32.7%, 153M). On MAEB-30, CLAP2-XXS to CLAP2-M (27M to 153M) are only beaten by models with at least 8× more parameters. On HEAR (17 tasks), CLAP2-S to CLAP2-L (104M to 340M) score higher than every other audio-text model.
+
+## Dataset curation pipeline
+
+Sources (collected clips): YouTube 1,180M (from 32.66M Creative Commons videos), web and Common Crawl 185M, 338 academic datasets 84M, internet datasets 12M. All audio is converted to 32 kHz, 16-bit mono and cut at silence into clips of up to 120 s.
+
+| Stage | Clips | Hours | Removed by the next step |
+|---|---:|---:|---|
+| Collected | 1,480M | 11.2M | 200M silent, duplicate or evaluation-set clips |
+| Deduplicated pool | 1,280M | 7.96M | 780M not selected |
+| Selected | 500M | 3.38M | none (captioning) |
+| The 500M selection | 500M | 3.34M | 135M clips longer than 30 s |
+| LAION-Audio-XL | 365M | 1.38M | |
+
+1. Clean: silent or unreadable audio is dropped; exact duplicates are found by hash and audio fingerprint, near-duplicates with SemDeDup; clips that overlap evaluation sets are removed.
+2. Annotate and select: each clip gets taxonomy, language, speaker, emotion, music and species annotations. Selection keeps 500M clips that cover a 3,718-class taxonomy, thinning common content and protecting rare categories.
+3. Caption: expert models annotate every clip (a 3,718-class taxonomy classifier on Dasheng-0.6B features, signal statistics), and the predicted top-level category routes it to specialists: language (MMS-LID-4017), speaker age and gender (wav2vec2), emotion (emotion2vec+ large) and pitch (CREPE) for speech; genre and style (MAEST) and tempo and key (librosa) for music; species (Perch 2.0) for animal sounds. Prompted with the audio and the raw metadata JSON, Qwen3-Omni-30B-A3B-Instruct and MOSS-Audio-8B-Thinking caption disjoint halves of the 470M clips without text, balanced within each source dataset, writing a short (12 ± 3 words) and a long (28 ± 10 words) caption. The other 30M already had captions.
+4. Keep clips up to 30 s: training uses this subset, LAION-Audio-XL, which gives +4.1 MAEB-30 points at 3.5× less compute than the 500M selection.
+
+Composition of LAION-Audio-XL by predicted category: speech 44.9%, music 22.5%, sound effects 16.4%, other 16.2%.
+
+## Sound taxonomy
+
+Selection is driven by a sound taxonomy of 4,416 nodes (4,085 leaves) in up to five levels: 11 top-level groups and 837 second-level categories. Claude Sonnet 4.5 grew it by assigning captions to leaves and proposing new categories; merging removed duplicates and categories that combine several events. The classifier (an MLP on frozen Dasheng-0.6B features) predicts the 3,718 classes of the first three levels and assigns 85.6% of held-out clips to the correct top-level group. Selection thins common classes and protects rare ones: speech falls from 75.3% of the deduplicated pool to 45.0% of LAION-Audio-XL, music rises from 11.7% to 22.3%.
+
+| Top-level group | Leaf classes | Largest categories (leaf classes) |
+|---|---:|---|
+| Music | 1,692 | world / regional music (204), solo instrumental music (194), folk / traditional music (163) |
+| Speech | 645 | noisy in-the-wild speech (98), non-English broadcast (32), instructional / tutorial (27) |
+| Designed sound effects | 531 | Foley (163), cinematic SFX (49), synthesized / abstract (32) |
+| Human non-speech | 292 | vocalization (96), human locomotion (37), crowd activity (33) |
+| Animal / bioacoustics | 240 | birds (127), mammals (71), amphibians (19) |
+| Urban / transport | 222 | road vehicles (77), rail transport (28), public transit / stations (14) |
+| Domestic / household | 185 | kitchen / food preparation (44), doors / windows (25), appliances (15) |
+| Industrial / mechanical | 119 | machinery (35), hand tools (16), factory / production line (11) |
+| Interface / electronic | 68 | UI sounds (16), alarms / warning signals (8), phone interfaces (8) |
+| Nature / environmental | 48 | water (16), weather (9), wind (8) |
+| Sports / recreation | 43 | throwing sports (4), athletics / track and field (3), racket / ball sports (2) |
+
+## Example training samples
+
+Each LAION-Audio-XL sample stores the audio (32 kHz mono, up to 30 s), a short and a long caption, and predicted tags: a taxonomy category with confidence, music genre, tempo and key for music, language, speaker gender and age, emotion and pitch for speech, and signal statistics (loudness, bandwidth, spectral centroid, silence, clipping).
+
+- Sound (YouTube, table tennis match). Short: "A crowd cheers and shouts during a table tennis match with racket and ball sounds." Long: "The audio captures the energetic atmosphere of an indoor table tennis match. The sharp, rapid sounds of a paddle striking a ball are prominent, accompanied by the squeaking of athletic shoes on a hard floor. Overlapping these game sounds, a crowd can be heard cheering and shouting in excitement, creating a lively and competitive ambience." Captioned by Qwen3-Omni-30B-A3B-Instruct.
+- Music (YouTube, batucada). Short: "A Latin batucada percussion ensemble plays a fast, rhythmic, and energetic piece." Tags: Music (80%), genre Batucada (42%), 134 BPM, G# major. Captioned by Qwen3-Omni-30B-A3B-Instruct.
+- Speech (YouTube, Japanese product review). Short: "Two men discuss a leaf blower's effectiveness, its motor whirring loudly." Tags: Speech (88%), male speaker. Captioned by MOSS-Audio-8B-Thinking.
+
+## Comparison with other audio-text corpora
+
+| Dataset | Hours | Captions | Clips | Access |
+|---|---:|---:|---:|---|
+| Clotho | 37 | 30K | 6K | public |
+| AudioCaps | 143 | 57K | 51K | public |
+| WavCaps | 7.6K | 403K | 403K | public |
+| LAION-Audio-630K | 4.3K | 634K | 634K | public |
+| Auto-ACD | 5.3K | 1.9M | 1.9M | public |
+| SALMONN-2 | 18.2K | 8.9M | not reported | public |
+| Audio Flamingo 3 | 54.4K | 26.8M | not reported | public |
+| LAION-BVD (BVD-A-10M) | 27K | 10M | 10M | public |
+| AutoReCap-XL | 124K | 47M | 47M | public |
+| Dasheng mix | 272K | none (audio only) | 97M | public |
+| SLAP (MovieGen Audio) | 1M | 109M | 109M | not released |
+| Bagpiper | 933K | 392M | 392M | public |
+| GLAP mix | 435K | 445M | 445M | public |
+| 500M selection (ours) | 3.37M | 972M | 500M | release planned |
+| LAION-Audio-XL (ours) | 1.38M | 703M | 362M | release planned |
+
+## Models: CLAP2
+
+Contrastive audio-text models with a NaFlex audio encoder: 16 × 16 log-mel patches become 50 audio tokens per second, so the sequence length follows the clip length instead of a fixed window (a 2 s clip gives 100 tokens, 7 s gives 350, 15 s gives 750). Both towers, audio and text, are trained from scratch. Five sizes were trained on 1M to 1,024M samples seen.
+
+Architecture: a dual encoder. Each tower runs on its own and outputs one embedding; the cosine similarity between an audio and a text embedding scores how well they match, for retrieval, zero-shot classification or as audio features. Audio tower: 32 kHz audio, 128 mel bins (50 Hz to 16 kHz) at 100 frames per second, a NaFlex ViT with 2-D axial RoPE, pre-norm RMSNorm, SwiGLU, LayerScale and one register token, multihead attention pooling and a Linear-GELU-Linear head. Text tower: GPT-2 BPE (50,260 entries, 256-token context), a bidirectional transformer with 1-D RoPE, RMSNorm, SwiGLU and QK-norm, attention pooling and a bias-free linear projection. Inputs are read at their native length up to 30 s (1,504 tokens); longer recordings are truncated to 30 s. The audio tower takes about 80% of the compute per clip, so audio can be embedded once and searched with cheap text queries.
+
+| Model | Audio tower (width × depth, heads) | Text tower | Audio / text params (M) | Token embeddings (M) | GFLOPs per clip |
+|---|---|---|---:|---:|---:|
+| CLAP2-XXS (27M) | 224 × 12, 4 | 224 × 12, 4 | 8.3 / 7.8 | 11.3 | 26.1 |
+| CLAP2-XS (48M) | 320 × 12, 5 | 320 × 12, 5 | 16.6 / 15.7 | 16.1 | 46.8 |
+| CLAP2-S (104M) | 512 × 12, 8 | 512 × 11, 8 | 41.8 / 36.4 | 25.7 | 103.4 |
+| CLAP2-M (153M) | 640 × 12, 10 | 640 × 11, 10 | 64.4 / 56.2 | 32.2 | 152.9 |
+| CLAP2-L (340M) | 1024 × 12, 16 | 960 × 11, 15 | 166.5 / 125.4 | 48.3 | 357.9 |
+
+| Model | Params (M) | MAEB-30 (%) | HEAR (%) |
+|---|---:|---:|---:|
+| CLAP2-XXS (27M) | 27.3 | 46.2 | 79.1 |
+| CLAP2-XS (48M) | 48.3 | 49.1 | 80.6 |
+| CLAP2-S (104M) | 103.9 | 51.8 | 81.8 |
+| CLAP2-M (153M) | 152.8 | 52.3 | 81.4 |
+| CLAP2-L (340M) | 340.1 | 52.2 | 82.0 |
+
+MAEB-30 is the Massive Audio Embedding Benchmark (30 tasks across speech, music and environmental sound). HEAR is the Holistic Evaluation of Audio Representations (17 tasks).
+
+## Retrieval examples
+
+Selected queries from MAEB test sets (not averages). Rank = position of the correct item in each model's ranking over the whole test set (1 = retrieved first). CLAP2-L (340M) after 1,024M samples seen, compared with LAION Larger CLAP (laion/larger_clap_general) and GLAP (mispeech/GLAP).
+
+| Category | Task | Query | CLAP2-L | LAION Larger CLAP | GLAP |
+|---|---|---|---:|---:|---:|
+| Sound | text→audio, Clotho, 1,045 clips | Clicking sounds are following by a revving engine, and then a low hum and a single, lou… | 1 | 64 | 67 |
+| Sound | text→audio, MACS, 393 clips | starts with a beep sound then footsteps luggage with wheels dragged along hard floor ba… | 1 | 1 | 17 |
+| Sound | text→audio, MACS, 393 clips | birds singing and child shouting at the end | 2 | 9 | 20 |
+| Sound | text→audio, MACS, 393 clips | a person speaks using a microphone and a few children and adults talk nearby | 1 | 16 | 272 |
+| Music | audio→text, JamAlt lyrics, English | (sung line) → “The dead not so accursed” | 1 | 722 | 27 |
+| Music | audio→text, JamAlt lyrics, English | (sung line) → “Doesn't listen, full of blow holes” | 1 | 852 | 72 |
+| Music | audio→text, JamAlt lyrics, French | (sung line) → “Ton cœur battrait plus fort, quand arrive l'été” | 1 | 551 | 82 |
+| Speech | text→audio, FLEURS, English | lion prides act much like packs of wolves or dogs animals surprisingly similar to lions… | 1 | 201 | 3 |
+| Speech | text→audio, FLEURS, German | löwenrudel agieren ähnlich wie wolfs- oder hunderudel tiere die den löwen aber nicht an… | 1 | 73 | 7 |
+| Speech | text→audio, FLEURS, English | the word civilization comes from the latin civilis meaning civil related to the latin c… | 1 | 177 | 73 |
+| Failure case | text→audio, Clotho, 1,045 clips | A small, thin sheet of metal is being bent back and forth | 521 | 1 | 1 |
+| Failure case | text→audio, Clotho, 1,045 clips | Rain falls with great force against the pavement | 547 | 1 | 6 |
+| Failure case | audio→text, JamAlt lyrics, English | (sung line) → “Tears are like diamonds in my eyes” | 76 | 295 | 1 |
+
+## MAEB-30 scores of audio-text models below 1B parameters
+
+| Model | Params (M) | Mean | Speech | Music | Sound |
+|---|---:|---:|---:|---:|---:|
+| CLAP2-XXS (ours) | 27 | 46.2 | 46.0 | 69.2 | 23.9 |
+| CLAP2-XS (ours) | 48 | 49.1 | 48.8 | 72.1 | 26.9 |
+| CLAP2-S (ours) | 104 | 51.8 | 52.4 | 74.2 | 27.6 |
+| CLAP2-M (ours) | 153 | 52.3 | 52.4 | 76.1 | 28.1 |
+| CLAP2-L (ours) | 340 | 52.2 | 52.5 | 76.1 | 27.5 |
+| jina-embeddings-v5-omni-nano | 986 | 51.8 | 53.5 | 73.8 | 24.7 |
+| GLAP | 855 | 44.1 | 42.4 | 69.6 | 23.4 |
+| M2D-CLAP | 199 | 38.0 | 30.0 | 69.7 | 29.9 |
+| TP-CLAP | 198 | 37.2 | 28.6 | 67.0 | 33.3 |
+| CLAP-IPA small | 174 | 36.5 | 41.4 | 50.5 | 8.1 |
+| AudioVerse CLAP | 144 | 36.0 | 27.8 | 64.2 | 32.7 |
+| LAION Larger CLAP | 194 | 35.2 | 26.8 | 66.4 | 29.1 |
+| MS-CLAP 2023 | 160 | 34.4 | 25.1 | 67.3 | 29.3 |
+| LAION-CLAP HTSAT unfused | 153 | 32.7 | 24.2 | 63.6 | 27.1 |
+| MuQ-MuLan-large | 630 | 29.5 | 24.1 | 65.1 | 10.5 |
+| wav2clip | 163 | 28.1 | 23.9 | 58.5 | 10.2 |
+| SpeechT5 multimodal | 298 | 26.4 | 25.7 | 46.3 | 8.4 |
+
+## Citation
+
+```bibtex
+@inproceedings{wijngaard2027laionaudioxl,
+  title     = {{LAION-Audio-XL}: A Web-Scale Corpus and Scaling Studies
+               for Contrastive Language-Audio Pretraining},
+  author    = {Wijngaard, Gijs and F{\"o}rster, Felix and Wightman, Ross
+               and Nezhurina, Marianna and Schuhmann, Christoph
+               and Jitsev, Jenia and Koepke, A. Sophia},
+  year      = {2027},
+}
+```
+
+## Pages
+
+- [Project page](index.html): interactive figures for the dataset, the scaling laws and the benchmark results.

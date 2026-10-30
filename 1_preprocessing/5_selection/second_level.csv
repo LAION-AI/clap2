@@ -1,0 +1,57 @@
+tag,keyword
+generic,Spontaneous conversational
+generic,Instructional
+generic,Monologue
+generic,Noisy in-the-wild
+generic,Dialogue
+generic,Public speaking
+generic,Vlog
+generic,Podcast
+generic,Interview
+generic,Isolated word
+condition,Emotional
+condition,Acted
+condition,Whisper
+condition,Shout
+condition,Sing
+condition,Chant
+condition,Overlap
+condition,cocktail
+condition,Far-field
+condition,far-field
+condition,Telephone
+condition,Child
+condition,child
+condition,Infant
+condition,Elderly
+condition,ASMR
+condition,Liturg
+condition,Recited
+condition,recit
+condition,TTS
+condition,Synthesized
+condition,synthes
+language,accent
+language,Accent
+language,Non-English
+language,Korean
+language,French
+language,Mandarin
+language,Japanese
+language,Russian
+language,German
+language,Spanish
+language,Portuguese
+language,Italian
+language,Arabic
+language,Hindi
+language,Dutch
+language,Polish
+language,Turkish
+language,Vietnamese
+language,Thai
+language,Indonesian
+language,language
+language,Multi-language
+language,Cantonese
+language,bilingual

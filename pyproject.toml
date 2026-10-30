@@ -1,0 +1,20 @@
+[project]
+name = "clap2"
+version = "1.0.0"
+description = "LAION-Audio-XL data pipeline and CLAP2 experiments"
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = [
+    "numpy", "scipy", "polars>=1.37", "pyarrow", "pyyaml", "requests", "zstandard",
+    "soundfile", "soxr", "av", "librosa", "torch", "torchaudio", "triton", "safetensors", "huggingface_hub",
+    "warcio", "yt-dlp",                              # 0_download
+    "cffi", "dasheng", "faiss-gpu-cu12",             # 2_deduplication (plus the Olaf build)
+    "mteb[audio]==2.21.0",                           # 3_remove_eval_data registry (MAEB tasks)
+    "transformers", "torchcrepe", "funasr",          # 4_annotation
+    "tensorflow", "perch-hoplite",                   # 4_annotation/5_species
+    "httpx", "pycountry", "google-genai",            # 6_captioning client, caption studies
+    "matplotlib",                                    # 4_experiments figures
+]
+
+[tool.setuptools]
+packages = ["common"]

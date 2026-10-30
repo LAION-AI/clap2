@@ -1,0 +1,26 @@
+{
+  "m1_named": ["C0-C2", "C2", "C2-src", "C2/C4", "C4", "C0-C2?"],
+  "m1_finding": ["C0-C2", "C2", "C2-src", "C2/C4", "C0-C2?"],
+  "m1_strong": ["C0-C2", "C2"],
+  "m5_methods": {"significant": "M5", "content_unidentifiable": "M5u", "chance": "M5c"},
+  "window": {"min_overlap_s": 1.0, "min_overlap_frac": 0.5},
+  "hub": {"min_clips": 100, "min_cov_eval": 0.5},
+  "minds14_prompt": {"min_items": 5},
+  "in_policy": ["C0-C2_content", "C3_named", "nsynth_same_preset", "libricount_source", "minds14_prompt"],
+  "rules": {
+    "C0-C2_content": "a content method (M2, M3, M4, M5 significant) verified the pair as C0, C1 or C2",
+    "C3_named": "content C3 (mixture component) and metadata naming the match: an M1 id / file-name / YouTube-window match on the pair, or a mixture recipe naming the matched source (DCASE2016 events)",
+    "hub_lowcov": "report only: the eval item is matched by more than hub.min_clips clips and the best match covers less than hub.min_cov_eval of it (short generic sounds)",
+    "minds14_prompt": "a clip matching more than minds14_prompt.min_items MInDS-14 items at C0-C2 (a shared phone prompt), also on low-coverage hub items",
+    "nsynth_same_preset": "an NSynth note of another velocity with the same preset and pitch as the eval note, at C0-C2",
+    "nsynth_other_note": "report only: an NSynth note of another preset or pitch",
+    "libricount_source": "a copy (C0-C2) of a LibriSpeech test-clean utterance that LibriCount mixtures are made of",
+    "unscored_component": "report only: other matches against unscored source recordings",
+    "window_unmapped": "report only: a match on a long eval recording that overlaps none of its scored windows",
+    "C3_content": "report only: content C3 without metadata",
+    "M5_unidentifiable": "report only: only an exhaustive-search match whose content cannot be identified at its length",
+    "M1_only": "report only: the eval item's own id without a content match",
+    "M1_report": "report only: other identifier matches without a content match"
+  },
+  "remove": "in policy, and the exhaustive search found the pair significant, or did not measure it, or metadata names the match"
+}

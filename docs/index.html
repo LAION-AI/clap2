@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- apply a saved theme before the first paint, so there is no flash -->
+  <script>try { var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}</script>
+  <title>LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining</title>
+  <meta name="description" content="LAION-Audio-XL is a web-scale corpus of 365M audio clips with 703M captions for contrastive language-audio pretraining (CLAP), with compute scaling laws and the CLAP2 models (CLAP2-XXS to CLAP2-L, 27M–340M parameters); CLAP2-M (153M parameters) reaches 52.3% on MAEB-30.">
+  <meta name="author" content="Gijs Wijngaard, Felix Förster, Ross Wightman, Marianna Nezhurina, Christoph Schuhmann, Jenia Jitsev, A. Sophia Koepke">
+  <meta name="keywords" content="contrastive language-audio pretraining, CLAP, audio-text dataset, audio captioning, scaling laws, compute-optimal, audio embeddings, MAEB, HEAR, NaFlex, LAION">
+  <meta name="robots" content="index, follow">
+  <!-- plain-text summary of the whole page (abstract, key numbers, tables) for language models and other tools that don't run JavaScript -->
+  <link rel="alternate" type="text/markdown" href="llms.txt" title="LAION-Audio-XL summary (Markdown)">
+  <!-- Google Scholar / Highwire tags; add citation_pdf_url once the paper is public -->
+  <meta name="citation_title" content="LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining">
+  <meta name="citation_author" content="Gijs Wijngaard">
+  <meta name="citation_author" content="Felix Förster">
+  <meta name="citation_author" content="Ross Wightman">
+  <meta name="citation_author" content="Marianna Nezhurina">
+  <meta name="citation_author" content="Christoph Schuhmann">
+  <meta name="citation_author" content="Jenia Jitsev">
+  <meta name="citation_author" content="A. Sophia Koepke">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_abstract" content="Recent advances in contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.47 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our models outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks. As a result, our models can serve as a drop-in replacement for CLAP in downstream applications. We will publicly release our dataset, captions, model checkpoints, and code.">
+  <link rel="icon" href="assets/logos/laion-audio-icon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111315" media="(prefers-color-scheme: dark)">
+  <!-- link previews; the absolute URLs come from tools/set_public_url.py -->
+  <link rel="canonical" href="https://projects.laion.ai/clap2/">
+  <meta property="og:url" content="https://projects.laion.ai/clap2/">
+  <meta property="og:site_name" content="LAION Audio XL">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining">
+  <meta property="og:description" content="365M audio–text pairs, compute scaling laws for contrastive language–audio pretraining, and CLAP2-M (153M parameters) reaching 52.3% on MAEB-30.">
+  <meta property="og:image" content="https://projects.laion.ai/clap2/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://projects.laion.ai/clap2/assets/og-image.png">
+  <meta property="og:image:alt" content="LAION-Audio-XL: 365M audio-text clips, and CLAP2 at 52.3% on MAEB-30.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/ask.css">
+  <script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "ScholarlyArticle",
+   "@id": "#paper",
+   "headline": "LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining",
+   "name": "LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining",
+   "abstract": "Recent advances in contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.47 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our models outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks. As a result, our models can serve as a drop-in replacement for CLAP in downstream applications. We will publicly release our dataset, captions, model checkpoints, and code.",
+   "description": "LAION-Audio-XL is a web-scale corpus of 365M audio clips with 703M captions for contrastive language-audio pretraining (CLAP), with compute scaling laws and the CLAP2 models (CLAP2-XXS to CLAP2-L, 27M–340M parameters); CLAP2-M (153M parameters) reaches 52.3% on MAEB-30.",
+   "author": [
+    {
+     "@type": "Person",
+     "name": "Gijs Wijngaard",
+     "affiliation": [
+      {
+       "@type": "Organization",
+       "name": "Jülich Supercomputing Center (JSC), Forschungszentrum Jülich (FZJ)"
+      },
+      {
+       "@type": "Organization",
+       "name": "LAION"
+      }
+     ]
+    },
+    {
+     "@type": "Person",
+     "name": "Felix Förster",
+     "affiliation": [
+      {
+       "@type": "Organization",
+       "name": "Technical University of Munich"
+      },
+      {
+       "@type": "Organization",
+       "name": "Munich Center for Machine Learning"
+      }
+     ]
+    },
+    {
+     "@type": "Person",
+     "name": "Ross Wightman",
+     "affiliation": [
+      {
+       "@type": "Organization",
+       "name": "LAION"
+      }
+     ]
+    },
+    {
+     "@type": "Person",
+     "name": "Marianna Nezhurina",
+     "affiliation": [
+      {
+       "@type": "Organization",
+       "name": "Jülich Supercomputing Center (JSC), Forschungszentrum Jülich (FZJ)"
+      },
+      {
+       "@type": "Organization",
+       "name": "LAION"
+      }
+     ]
+    },
+    {
+     "@type": "Person",
+     "name": "Christoph Schuhmann",
+     "affiliation": [
+      {
+       "@type": "Organization",
+       "name": "LAION"
+      }
+     ]
+    },
+    {
+     "@type": "Person",
+     "name": "Jenia Jitsev",
+     "affiliation": [
+      {
+       "@type": "Organization",
+       "name": "Jülich Supercomputing Center (JSC), Forschungszentrum Jülich (FZJ)"
+      },
+      {
+       "@type": "Organization",
+       "name": "LAION"
+      }
+     ]
+    },
+    {
+     "@type": "Person",
+     "name": "A. Sophia Koepke",
+     "affiliation": [
+      {
+       "@type": "Organization",
+       "name": "Technical University of Munich"
+      },
+      {
+       "@type": "Organization",
+       "name": "Munich Center for Machine Learning"
+      },
+      {
+       "@type": "Organization",
+       "name": "University of Tübingen"
+      },
+      {
+       "@type": "Organization",
+       "name": "Tübingen AI Center"
+      }
+     ]
+    }
+   ],
+   "datePublished": "2026",
+   "inLanguage": "en",
+   "keywords": "contrastive language-audio pretraining, CLAP, audio-text dataset, audio captioning, scaling laws, compute-optimal, audio embeddings, MAEB, HEAR, NaFlex, LAION",
+   "about": [
+    {
+     "@type": "Thing",
+     "name": "Contrastive language-audio pretraining"
+    },
+    {
+     "@type": "Thing",
+     "name": "Neural scaling laws"
+    }
+   ],
+   "url": "https://projects.laion.ai/clap2/",
+   "image": "https://projects.laion.ai/clap2/assets/og-image.png"
+  },
+  {
+   "@type": "Dataset",
+   "@id": "#dataset",
+   "name": "LAION-Audio-XL",
+   "alternateName": [
+    "LAION-Audio-XL-500M"
+   ],
+   "description": "A web-scale audio-text corpus of 365M audio clips up to 30 s (1.38M hours) with 703M short and long captions, curated from 1.48B clips collected from YouTube, Common Crawl, web collections and 338 academic datasets. The larger LAION-Audio-XL-500M keeps clips up to 120 s (500M clips, 966M captions, 3.34M hours). Release of indices, captions and metadata is planned.",
+   "keywords": [
+    "audio",
+    "audio captions",
+    "audio-text pairs",
+    "sound",
+    "speech",
+    "music"
+   ],
+   "creator": [
+    {
+     "@type": "Person",
+     "name": "Gijs Wijngaard",
+     "affiliation": [
+      {
+       "@type": "Organization",
+       "name": "Jülich Supercomputing Center (JSC), Forschungszentrum Jülich (FZJ)"
+      },
+      {
+       "@type": "Organization",
+       "name": "LAION"
+      }
+     ]
+    },
+    {
+     "@type": "Person",
+     "name": "Felix Förster",
+     "affiliation": [
+      {
+       "@type": "Organization",
+       "name": "Technical University of Munich"
+      },
+      {
+       "@type": "Organization",
+       "name": "Munich Center for Machine Learning"
+      }
+     ]
+    },
+    {
+     "@type": "Person",
+     "name": "Ross Wightman",
+     "affiliation": [
+      {
+       "@type": "Organization",
+       "name": "LAION"
+      }
+     ]
+    },
+    {
+     "@type": "Person",
+     "name": "Marianna Nezhurina",
+     "affiliation": [
+      {
+       "@type": "Organization",
+       "name": "Jülich Supercomputing Center (JSC), Forschungszentrum Jülich (FZJ)"
+      },
+      {
+       "@type": "Organization",
+       "name": "LAION"
+      }
+     ]
+    },
+    {
+     "@type": "Person",
+     "name": "Christoph Schuhmann",
+     "affiliation": [
+      {
+       "@type": "Organization",
+       "name": "LAION"
+      }
+     ]
+    },
+    {
+     "@type": "Person",
+     "name": "Jenia Jitsev",
+     "affiliation": [
+      {
+       "@type": "Organization",
+       "name": "Jülich Supercomputing Center (JSC), Forschungszentrum Jülich (FZJ)"
+      },
+      {
+       "@type": "Organization",
+       "name": "LAION"
+      }
+     ]
+    },
+    {
+     "@type": "Person",
+     "name": "A. Sophia Koepke",
+     "affiliation": [
+      {
+       "@type": "Organization",
+       "name": "Technical University of Munich"
+      },
+      {
+       "@type": "Organization",
+       "name": "Munich Center for Machine Learning"
+      },
+      {
+       "@type": "Organization",
+       "name": "University of Tübingen"
+      },
+      {
+       "@type": "Organization",
+       "name": "Tübingen AI Center"
+      }
+     ]
+    }
+   ],
+   "isBasedOn": {
+    "@id": "#paper"
+   },
+   "citation": {
+    "@id": "#paper"
+   },
+   "variableMeasured": [
+    "audio clip",
+    "short caption",
+    "long caption"
+   ]
+  }
+ ]
+}
+  </script>
+</head>
+<body>
+
+<nav class="topbar" aria-label="Page">
+  <div class="topbar-in">
+    <a class="tb-brand" href="#top" aria-label="LAION Audio XL, back to top"><img class="logo-light" src="assets/logos/laion-audio-xl.svg" alt="" width="129" height="30"><img class="logo-dark" src="assets/logos/laion-audio-xl-white.svg" alt="" width="129" height="30"></a>
+    <div class="tb-links" id="tb-links">
+      <a href="#dataset">Dataset</a>
+      <a href="#model">Model</a>
+      <a href="#scaling">Scaling</a>
+      <a href="#results">Results</a>
+      <a href="#usage">Usage</a>
+      <a href="#bibtex">BibTeX</a>
+    </div>
+    <button type="button" class="theme-btn tb-share" data-share aria-label="Share this page" title="Share this page"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+    <button type="button" class="theme-btn" id="theme-btn" aria-label="Switch to dark mode" title="Switch to dark mode"><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg></button>
+    <button type="button" class="menu-btn" id="menu-btn" aria-label="Open menu" aria-controls="tb-links" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="m1" d="M4 7h16"/><path class="m2" d="M4 12h16"/><path class="m3" d="M4 17h16"/></svg></button>
+  </div>
+</nav>
+
+<header class="head" id="top">
+  <div class="col">
+    <h1>LAION&#8209;Audio&#8209;XL: A Web&#8209;Scale Corpus and Scaling Studies for Contrastive Language&#8209;Audio Pretraining</h1>
+    <p class="authors">
+      <span>Gijs Wijngaard<sup>1,2,*</sup></span>
+      <span>Felix Förster<sup>3,*</sup></span>
+      <span>Ross Wightman<sup>2</sup></span>
+      <span>Marianna Nezhurina<sup>1,2</sup></span>
+      <span>Christoph Schuhmann<sup>2</sup></span>
+      <span>Jenia Jitsev<sup>1,2,◆</sup></span>
+      <span>A. Sophia Koepke<sup>3,4,◆</sup></span>
+    </p>
+    <p class="affils">
+      <span><sup>1</sup>Jülich Supercomputing Center (JSC), Forschungszentrum Jülich (FZJ)</span>
+      <span><sup>2</sup>LAION</span>
+      <span><sup>3</sup>Technical University of Munich, MCML</span>
+      <span><sup>4</sup>University of Tübingen, Tübingen AI Center</span>
+      <span class="equal"><sup>*</sup>Equal contribution, order decided by coin flip</span>
+      <span class="equal"><sup>◆</sup>Senior advisor</span>
+    </p>
+    <nav class="links">
+      <a class="btn" href="#" aria-disabled="true" title="Coming soon"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z M14 2v6h6"/></svg>Paper</a>
+      <a class="btn" href="https://github.com/LAION-AI/clap2" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg>Code</a>
+      <a class="btn" href="https://huggingface.co/datasets/laion/laion-audio-xl" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>Dataset</a>
+      <a class="btn" href="https://huggingface.co/laion/clap2-medium-audioxl-s1B" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2l9 5v10l-9 5-9-5V7z M3 7l9 5 9-5 M12 12v10"/></svg>Models</a>
+      <button class="btn btn-share" type="button" data-share><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>Share</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ KEY TAKEAWAYS: three numbers, each card links to its chapter (filled by js/takeaways.js); quick start below ============ -->
+<section class="row chapters" id="chapters" aria-labelledby="chapters-h">
+  <h2 class="sr-only" id="chapters-h">Key Takeaways</h2>
+  <div class="tk-grid" id="takeaways"></div>
+  <!-- 05 Usage: the title row on top like the results card; the copy buttons can't sit inside a link, so only the title row links -->
+  <div class="ch-use" id="quick" style="--acc:var(--usage)">
+    <a class="txt" href="#usage" aria-label="Go to the Usage chapter"><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <div class="pic">
+    <div class="qs-cards">
+      <div class="qs-card">
+        <div class="qs-top"><h3>Start in 8 Lines</h3><button class="copy" type="button" data-copy="qs-start"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button></div>
+        <pre id="qs-start"><code><span class="c-k">import</span> torch, open_clip <span class="c-k">as</span> oc, soundfile <span class="c-k">as</span> sf
+hub = <span class="c-s">&quot;hf-hub:laion/clap2-medium-audioxl-s1B&quot;</span>
+m, prep = oc.create_model_from_pretrained(hub)
+w, sr = sf.read(<span class="c-s">&quot;dog.wav&quot;</span>, dtype=<span class="c-s">&quot;float32&quot;</span>)
+x = prep(m.audio.cfg.audio_seq_len)((torch.from_numpy(w.T), sr))
+a = m.encode_audio({k: v[<span class="c-k">None</span>] <span class="c-k">for</span> k, v <span class="c-k">in</span> x.items()})
+t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</span>]))
+<span class="c-f">print</span>(torch.cosine_similarity(a, t))</code></pre>
+      </div>
+      <div class="qs-card">
+        <div class="qs-top"><h3>Need Another Size? Swap One ID</h3><button class="copy" type="button" data-copy="qs-new"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button></div>
+        <pre class="qs-diff" aria-label="Change the model ID from CLAP2-M to CLAP2-XXS"><code><span class="del">hub = <span class="c-s">&quot;hf-hub:laion/clap2-medium-audioxl-s1B&quot;</span></span><span class="add">hub = <span class="c-s">&quot;hf-hub:laion/clap2-xxs-audioxl-s1B&quot;</span></span><span class="c-c"># sizes: xxs, xs, small, medium, large</span></code></pre>
+        <span id="qs-new" hidden>hub = &quot;hf-hub:laion/clap2-xxs-audioxl-s1B&quot;</span>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 1 DATASET ============ -->
+<section class="sec" id="dataset" style="--acc:var(--s-365)">
+  <header class="row sec-head">
+    <div class="sec-title">
+      <h2><span class="sec-n" aria-hidden="true">1</span>The LAION-Audio-XL Dataset</h2>
+      <p>We collect 1.48B audio samples from YouTube, Common Crawl, web collections and 338 academic datasets, clean and deduplicate them, select for coverage with a 3,718-class taxonomy, and generate short and long captions for clips that lack them.</p>
+    </div>
+  </header>
+
+  <div class="row" id="flow">
+    <div class="fig"><svg id="flow-svg" role="img" aria-label="LAION-Audio-XL curation pipeline: 1.48B collected clips are cleaned to a 1.28B deduplicated pool, 500M are selected and captioned into LAION-Audio-XL-500M, and its clips up to 30 seconds form LAION-Audio-XL."></svg>
+    </div>
+  </div>
+
+  <div class="row" id="taxonomy">
+    <aside class="side">
+      <h3>Taxonomy</h3>
+      <p>A classifier sorts every clip into 3,718 sound classes in 11 groups. Selection thins the common ones: speech falls from 75.3% of the pool to <span data-tax="speech">45.3%</span>. <button class="info" type="button" aria-expanded="false" aria-controls="i-tax" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <div class="info-more" id="i-tax" hidden><p>Claude Sonnet 4.5 grew the hierarchy by assigning captions to leaves and proposing new categories; merging removed duplicates and categories that combine several events. It has 4,416 nodes up to five levels deep, with 837 categories below the 11 groups. The classifier, an MLP on frozen Dasheng-0.6B features, predicts the 3,718 classes of the first three levels and assigns 85.6% of held-out clips to the right group. Clip counts are by predicted label.</p></div>
+    </aside>
+  </div>
+
+  <div class="row" id="captioning">
+    <div class="cap-top">
+      <div class="cap-title">
+        <h3>How Each Clip Is Captioned</h3>
+        <p>Expert models annotate every clip, and its predicted category decides which specialists run. The captioning model hears the audio, reads the annotations as raw JSON and writes a short and a long caption. Hover or tap an expert or a caption to trace its path.</p>
+      </div>
+    </div>
+    <div class="fig cap-scroll"><div class="ff-fig"><svg id="cap-svg" role="img" aria-label="Caption generation for one clip: the audio goes to expert models (taxonomy and signal statistics for every clip, then speech, music or animal specialists chosen by the predicted category); their annotations and the audio go to the captioning model (Qwen3-Omni or MOSS-Audio, prompted with the raw metadata JSON), which writes a short and a long caption. The LAION-Audio-XL sample keeps the audio, the annotations and both captions."></svg></div></div>
+  </div>
+
+  <div class="row" id="compare">
+    <aside class="side">
+      <h3>Compared with Other Corpora <button class="info" type="button" aria-expanded="false" aria-controls="i-cmp" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></h3>
+      <div class="info-more" id="i-cmp" hidden><p>Bars share one linear scale per measure. Captions count the text entries each source reports: GLAP's are mostly ASR transcripts, and SALMONN-2 and Audio Flamingo 3 report training samples without clip counts. Dasheng's mix is audio only.</p></div>
+      <div class="toggle" id="cmp-toggle" role="group" aria-label="Metric">
+        <button class="on" data-k="hours">Duration</button>
+        <button data-k="captions">Captions</button>
+        <button data-k="audio">Clips</button>
+      </div>
+      <div class="legend static access">
+        <span><i class="sw plan"></i>LAION-Audio-XL, release planned</span>
+        <span><i class="sw"></i>Public dataset</span>
+        <span><svg class="lock" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Not released</span>
+      </div>
+    </aside>
+    <div class="fig"><div class="bars" id="cmp-bars"></div></div>
+  </div>
+</section>
+
+<!-- ============ 2 ARCHITECTURE ============ -->
+<section class="sec" id="model" style="--acc:var(--aud)">
+  <header class="row sec-head">
+    <div class="sec-title">
+      <h2><span class="sec-n" aria-hidden="true">2</span>Model Architecture</h2>
+      <p>A dual encoder in the CLAP family. The audio tower turns a clip of any length up to 30 s into one vector, the text tower does the same for any text, and the cosine similarity between the two vectors says how well they match: for search, zero-shot classification or as features.</p>
+    </div>
+  </header>
+
+  <div class="row" id="arch">
+    <aside class="side">
+      <h3>Dual Encoder</h3>
+      <div class="arch-lead">
+        <p>Two separate towers, one for audio and one for text, map into one shared space. Because they run independently, audio is embedded once and can then be searched with any text. Hover a block for details. <button class="info" type="button" aria-expanded="false" aria-controls="i-arch" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+        <div class="arch-detail" id="arch-detail" aria-live="polite" hidden></div>
+      </div>
+      <div class="budget arch-size">
+        <label for="arch-range">Model size <output id="arch-out">–</output></label>
+        <input type="range" id="arch-range" min="0" max="4" step="1" value="3">
+        <div class="arch-ticks" id="arch-ticks"></div>
+      </div>
+      <div class="info-more" id="i-arch" hidden><p>Block heights follow each tower's width. Widths and depths follow common small ViT shapes and stay hardware-aligned. Both towers use pre-norm RMSNorm blocks with SwiGLU and rotary position embeddings.</p></div>
+    </aside>
+    <div class="fig">
+      <svg id="arch-svg" role="img" aria-label="Audio passes through log-mel patches, a NaFlex transformer, attention pooling and an MLP head; text passes through a BPE tokenizer, a text transformer, attention pooling and a linear layer; in training, the CLIP loss scores every clip against every caption in the batch, with the matched pairs on the diagonal."></svg>
+    </div>
+  </div>
+
+  <div class="row" id="patches">
+    <aside class="side">
+      <h3>Flexible Length Encoding</h3>
+      <p>No fixed window: each clip is read at its own length, without padding or cropping. Every 16 × 16 spectrogram patch becomes one token, so a short clip stays short. <button class="info" type="button" aria-expanded="false" aria-controls="i-patch" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <div class="info-more" id="i-patch" hidden><p>128 mel bins at 100 frames per second: 8 tokens every 160 ms. Training clips are at most 30 s (1,504 tokens); longer inputs work but are outside the training range. Attention cost grows with the square of the token count.</p></div>
+      <label class="budget pt-len">
+        <span>Clip length <output id="pt-s">–</output></span>
+        <input type="range" id="pt-range" min="1" max="218" step="1" value="62" aria-label="Clip length in 160 ms steps">
+      </label>
+    </aside>
+    <div class="fig"><div class="pt-wrap" id="pt-wrap"><canvas id="pt-canvas" role="img" aria-label="Waveform and log-mel spectrogram of LAION-Audio-XL audio, cut into 16 by 16 patches that move into a token sequence; lengths beyond 30 seconds are marked as outside the training range."></canvas><div class="tip" id="pt-tip"></div></div></div>
+  </div>
+</section>
+
+<!-- ============ 3 SCALING ============ -->
+<section class="sec" id="scaling" style="--acc:var(--s-dedup)">
+  <header class="row sec-head">
+    <div class="sec-title">
+      <h2><span class="sec-n" aria-hidden="true">3</span>Scaling Laws</h2>
+      <p>We train five model sizes from scratch, each on 1M to 1,024M samples seen, and fit how the error on MAEB-30 falls with training compute. MAEB-30 is the Massive Audio Embedding Benchmark: 30 tasks across speech, music and environmental sound.</p>
+    </div>
+  </header>
+
+  <div class="row" id="scale-fig">
+    <aside class="side">
+      <h3>Error Falls Predictably with Compute</h3>
+      <p>Each line is one model size, moving right as it sees more samples. Each doubling of compute lowers the error by 4.1%, about +1.9 MAEB-30 points at the largest budget. <button class="info" type="button" aria-expanded="false" aria-controls="i-scale" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <div class="info-more" id="i-scale" hidden><p>Runs see 1M to 1,024M samples. The dashed line marks the lowest error reached so far. The fit shows its 95% bootstrap interval, all runs as faint dots, and the compute-optimal runs behind it as solid dots. Fitted exponent: α = 0.0603.</p></div>
+      <div class="play-ctl">
+        <div class="seen-head"><span>Training compute</span><output id="sc-val" for="sc-range"></output></div>
+        <div class="seen">
+          <button class="play" id="sc-play" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M7 5l12 7-12 7z"/></svg></button>
+          <span class="sc-track"><input type="range" id="sc-range" min="0" max="125" step="1" value="125" aria-label="Training compute budget in GFLOPs; the last stop shows the fitted scaling law"><i class="sc-gap" aria-hidden="true"></i><i class="sc-fit-stop" aria-hidden="true"></i></span>
+        </div>
+      </div>
+      <div class="sizes" id="size-row"></div>
+      <div class="legend" id="sc-legend"></div>
+    </aside>
+    <div class="fig"><svg id="scale-chart" viewBox="0 0 820 440" role="img" aria-label="MAEB-30 error against training compute for five model sizes. Error falls steadily with compute; the fitted law predicts about 1.9 MAEB-30 points per doubling of compute at the largest budget."></svg></div>
+  </div>
+
+  <div class="row" id="alloc">
+    <aside class="side">
+      <h3>Spend Compute on Data First</h3>
+      <p>The optimal sample count grows about 1.4× faster than the optimal model size. <button class="info" type="button" aria-expanded="false" aria-controls="i-alloc" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <div class="info-more" id="i-alloc" hidden><p>For each compute budget we take the best run and fit power laws to its model size N and samples seen D. Past the largest run the fits are extrapolated, and they assume repeated samples are as useful as new ones, which holds for only a few passes over the data.</p></div>
+      <div class="formula">
+        <span><i style="background:var(--n)"></i><span>N<sub>opt</sub> ∝ C<sup>0.405</sup></span></span>
+        <span><i style="background:var(--d)"></i><span>D<sub>opt</sub> ∝ C<sup>0.583</sup></span></span>
+      </div>
+      <label class="budget">
+        <span>Compute budget <output id="al-c">–</output> <em id="al-x">extrapolated</em></span>
+        <input type="range" id="al-range" min="0" max="1000" value="772">
+      </label>
+      <dl class="readout">
+        <div><dt>model size N<sub>opt</sub></dt><dd id="al-n">–</dd></div>
+        <div><dt>samples seen D<sub>opt</sub></dt><dd id="al-d">–</dd></div>
+        <div><dt>passes over LAION-Audio-XL</dt><dd id="al-e">–</dd></div>
+      </dl>
+    </aside>
+    <div class="fig"><svg id="alloc-svg" viewBox="0 0 820 400" role="img" aria-label="Compute-optimal model size N_opt and samples seen D_opt against compute. D_opt grows as C to the 0.583, N_opt as C to the 0.405, so extra compute should go mostly to more data."></svg></div>
+  </div>
+</section>
+
+<!-- ============ 4 RESULTS ============ -->
+<section class="sec" id="results" style="--acc:var(--ours)">
+  <header class="row sec-head">
+    <div class="sec-title">
+      <h2><span class="sec-n" aria-hidden="true">4</span>Benchmark Results</h2>
+      <p>LAION-5B and OpenCLIP gave vision open web-scale data and reproducible scaling laws. LAION-Audio-XL and CLAP2 bring the same to audio, with the best MAEB-30 score of any model trained from scratch.</p>
+    </div>
+  </header>
+
+  <div class="row" id="progress-fig">
+    <aside class="side">
+      <h3>A Step Change for CLAP</h3>
+      <p>MAEB-30 scores of CLAP-style models by release date. Four years raised the best score by 16 points, from 28.1% to 44.1%. CLAP2 adds 8.2 more. <button class="info" type="button" aria-expanded="false" aria-controls="i-progress" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <div class="info-more" id="i-progress" hidden><p>Dates are first public releases (paper or checkpoint). Omni-embedding models with 1B to 9B parameters, which are not drop-in CLAP replacements, reach up to 53.5% (LCO-Embedding-Omni-7B); they appear in the size comparison below.</p></div>
+      <div class="legend static">
+        <span><i class="lg-ours"></i>CLAP2<span class="ours-tag">ours</span></span>
+        <span><i class="lg-clap"></i>Earlier CLAP-style model</span>
+        <span><i class="lg-best"></i>Best score so far</span>
+      </div>
+    </aside>
+    <div class="fig"><svg id="progress-chart" viewBox="0 0 820 380" role="img" aria-label="Best MAEB-30 score of CLAP-style models by release date: wav2clip 28.1% in 2021, LAION-CLAP 32.7% in 2022, LAION Larger CLAP 35.2% in 2023, M2D-CLAP 38.0% in 2024, GLAP 44.1% in 2025, and CLAP2 46.2% to 52.3% in 2026."></svg></div>
+  </div>
+
+  <div class="row" id="sota-fig">
+    <aside class="side">
+      <h3>State of the Art for Its Size</h3>
+      <p>Average score against parameters. On MAEB-30, our CLAP2-XXS to CLAP2-M models (27M to 153M parameters) are only beaten by models with at least 8× more parameters. <button class="info" type="button" aria-expanded="false" aria-controls="i-sota" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <div class="info-more" id="i-sota" hidden><p>Triangles mark other contrastive audio–text models like CLAP; the strongest, GLAP, reaches 44.1% on MAEB-30 with 855M parameters. On HEAR (Holistic Evaluation of Audio Representations, 17 tasks), CLAP2-S to CLAP2-L (104M to 340M parameters) score higher than every other audio–text model; audio-only encoders such as USAD 2.0 reach 86.8.</p></div>
+      <div class="toggle" id="sota-toggle" role="group" aria-label="Benchmark">
+        <button class="on" data-k="maeb">MAEB-30</button>
+        <button data-k="hear">HEAR</button>
+      </div>
+      <div class="legend static">
+        <span><i class="lg-ours"></i>CLAP2<span class="ours-tag">ours</span></span>
+        <span><i class="lg-clap"></i>Contrastive audio–text (CLAP-style)</span>
+        <span><i class="lg-at"></i>Other audio–text</span>
+        <span class="only-hear"><i class="lg-ao"></i>Audio only</span>
+        <span><i class="lg-front"></i>Pareto front</span>
+      </div>
+    </aside>
+    <div class="fig chart-wrap">
+      <svg id="sota-chart" viewBox="0 0 820 440" role="img" aria-label="Average benchmark score against parameter count. CLAP2 models from CLAP2-XXS (27M parameters) to CLAP2-L (340M) lie on the Pareto front of audio–text models; CLAP2-M (153M) reaches 52.3% on MAEB-30."></svg>
+      <div class="tip" id="sota-tip"></div>
+    </div>
+  </div>
+
+  <div class="row" id="table-fig">
+    <aside class="side">
+      <h3>Compact Models on MAEB-30</h3>
+      <p>MAEB-30 scores (%) of audio–text models below 1B parameters, overall and per domain.</p>
+    </aside>
+    <div class="fig table-wrap">
+      <table class="booktabs" id="maeb-table">
+        <caption class="sr-only">MAEB-30 scores in percent for audio–text models below 1B parameters: mean and per domain.</caption>
+        <thead>
+          <tr><th>Model</th><th class="p">Params</th><th class="mean">Mean</th><th>Speech</th><th>Music</th><th>Sound</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============ 5 USAGE ============ -->
+<section class="sec" id="usage" style="--acc:var(--usage)">
+  <header class="row sec-head">
+    <div class="sec-title">
+      <h2><span class="sec-n" aria-hidden="true">5</span>Usage</h2>
+      <p>Use CLAP2 and LAION-Audio-XL with only a few lines of code.</p>
+    </div>
+  </header>
+
+  <div class="row" id="use">
+    <aside class="side">
+      <h3>Use CLAP2</h3>
+      <div class="code-tabs" role="tablist" aria-label="Examples"><button type="button" role="tab" aria-selected="true" aria-controls="code-embed">OpenCLIP Package</button><button type="button" role="tab" aria-selected="false" aria-controls="code-batch" tabindex="-1">Several Clips</button></div>
+    </aside>
+    <div class="fig"><div class="code-box"><div class="code-head"><button class="copy" type="button" data-copy="code-embed"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button></div><div class="code-body"><pre id="code-embed" role="tabpanel"><code><span class="c-c"># pip install torchaudio tiktoken soundfile</span>
+<span class="c-c"># pip install "open_clip_torch[audio] @ git+https://github.com/mlfoundations/open_clip@refs/pull/1230/head"</span>
+<span class="c-k">import</span> torch, open_clip <span class="c-k">as</span> oc, soundfile <span class="c-k">as</span> sf
+
+hub = <span class="c-s">&quot;hf-hub:laion/clap2-medium-audioxl-s1B&quot;</span>
+m, prep = oc.create_model_from_pretrained(hub)
+tok = oc.get_tokenizer(hub)
+
+w, sr = sf.read(<span class="c-s">&quot;dog.wav&quot;</span>, dtype=<span class="c-s">&quot;float32&quot;</span>)
+x = prep(m.audio.cfg.audio_seq_len)((torch.from_numpy(w.T), sr))
+a = m.encode_audio({k: v[<span class="c-k">None</span>] <span class="c-k">for</span> k, v <span class="c-k">in</span> x.items()})
+t = m.encode_text(tok([<span class="c-s">&quot;a dog barks&quot;</span>, <span class="c-s">&quot;rain falls&quot;</span>]))
+<span class="c-f">print</span>(torch.cosine_similarity(a, t))</code></pre><pre id="code-batch" role="tabpanel" hidden><code><span class="c-k">from</span> torch.nn.utils.rnn <span class="c-k">import</span> pad_sequence
+
+xs = []
+<span class="c-k">for</span> f <span class="c-k">in</span> [<span class="c-s">&quot;dog.wav&quot;</span>, <span class="c-s">&quot;rain.wav&quot;</span>]:
+    w, sr = sf.read(f, dtype=<span class="c-s">&quot;float32&quot;</span>)
+    xs.append(prep(m.audio.cfg.audio_seq_len)((torch.from_numpy(w.T), sr)))
+<span class="c-c"># clips differ in length: pad to the longest, the padding is masked</span>
+batch = {k: pad_sequence([x[k] <span class="c-k">for</span> x <span class="c-k">in</span> xs], batch_first=<span class="c-k">True</span>) <span class="c-k">for</span> k <span class="c-k">in</span> xs[<span class="c-n">0</span>]}
+a = m.encode_audio(batch)
+<span class="c-f">print</span>(torch.cosine_similarity(a[:, <span class="c-k">None</span>], t[<span class="c-k">None</span>], dim=-<span class="c-n">1</span>))</code></pre></div></div></div>
+  </div>
+
+  <div class="row" id="use-data">
+    <aside class="side">
+      <h3>Use LAION-Audio-XL</h3>
+      <p>Three configs by licence: open (the default), sharealike and noncommercial. Clips we crawled ourselves are listed as links in the gated <a href="https://huggingface.co/datasets/laion/laion-audio-xl-links" target="_blank" rel="noopener">laion/laion-audio-xl-links</a>.</p>
+      <div class="code-tabs" role="tablist" aria-label="Examples"><button type="button" role="tab" aria-selected="true" aria-controls="code-stream">Stream and Inspect</button><button type="button" role="tab" aria-selected="false" aria-controls="code-filter" tabindex="-1">Filter</button></div>
+    </aside>
+    <div class="fig"><div class="code-box"><div class="code-head"><button class="copy" type="button" data-copy="code-stream"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button></div><div class="code-body"><pre id="code-stream" role="tabpanel"><code><span class="c-k">from</span> datasets <span class="c-k">import</span> load_dataset
+
+name = <span class="c-s">&quot;laion/laion-audio-xl&quot;</span>
+ds = load_dataset(name, streaming=<span class="c-k">True</span>)
+<span class="c-k">for</span> s <span class="c-k">in</span> ds[<span class="c-s">&quot;train&quot;</span>].take(<span class="c-n">3</span>):
+    <span class="c-f">print</span>(s[<span class="c-s">&quot;short_caption&quot;</span>], s[<span class="c-s">&quot;duration&quot;</span>])</code></pre><pre id="code-filter" role="tabpanel" hidden><code><span class="c-k">def</span> is_music(s):
+    <span class="c-k">return</span> s[<span class="c-s">&quot;tax_l1&quot;</span>] == <span class="c-s">&quot;Music&quot;</span>
+
+music = ds[<span class="c-s">&quot;train&quot;</span>].filter(is_music)
+<span class="c-k">for</span> s <span class="c-k">in</span> music.take(<span class="c-n">3</span>):
+    <span class="c-f">print</span>(s[<span class="c-s">&quot;pred_tempo_bpm&quot;</span>], s[<span class="c-s">&quot;music_key&quot;</span>])</code></pre></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="bib-sec" id="bibtex">
+  <div class="row">
+    <!-- the page's closer: two big statements (js/punchline.js) -->
+    <div class="pl" id="punchline"></div>
+    <div class="share-row" data-share-row><span>Share this work</span></div>
+    <div class="bib-head">
+      <h2>BibTeX</h2>
+    </div>
+    <div class="bib-box">
+    <button class="copy" id="bib-copy" type="button"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button>
+    <pre id="bib"><code>@inproceedings{wijngaard2027laionaudioxl,
+  title     = {{LAION-Audio-XL}: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining},
+  author    = {Wijngaard, Gijs and F{\"o}rster, Felix and Wightman, Ross and Nezhurina, Marianna
+               and Schuhmann, Christoph and Jitsev, Jenia and Koepke, A. Sophia},
+  year      = {2027},
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+</main>
+
+
+<footer class="band">
+<div class="band-in">
+  <nav class="logo-track" aria-label="Affiliations and supporters">
+    <div class="logo-row">
+      <h2>Affiliations</h2>
+      <div class="logo-set">
+        <a href="https://laion.ai" target="_blank" rel="noopener"><img loading="lazy" decoding="async" class="keep" src="assets/logos/laion-white.svg" style="--s:0.7" alt="LAION"></a>
+        <a href="https://www.tum.de/en" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/logos/tum.svg" style="--s:0.85" alt="Technical University of Munich"></a>
+        <a href="https://www.fz-juelich.de/en" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/logos/fzj.svg" style="--s:1" alt="Forschungszentrum Jülich"></a>
+        <a href="https://mcml.ai" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/logos/mcml.png" style="--s:1" alt="Munich Center for Machine Learning"></a>
+        <a href="https://uni-tuebingen.de/en/" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/logos/tuebingen.png" style="--s:1.05" alt="University of Tübingen"></a>
+        <a href="https://tuebingen.ai" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/logos/tueai.svg" style="--s:1.3" alt="Tübingen AI Center"></a>
+      </div>
+    </div>
+    <div class="logo-row">
+      <h2>Supported By</h2>
+      <div class="logo-set">
+        <a href="https://www.gauss-centre.eu" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/logos/gcs.png" style="--s:0.95" alt="Gauss Centre for Supercomputing"></a>
+        <a href="https://eurohpc-ju.europa.eu/index_en" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/logos/eurohpc.svg" style="--s:1.1" alt="EuroHPC Joint Undertaking"></a>
+        <a href="https://www.bmftr.bund.de/EN/Home/home_node.html" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/logos/bmftr.svg" style="--s:1.15" alt="German Federal Ministry of Research, Technology and Space"></a>
+        <a href="https://www.mkw.nrw" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="assets/logos/mkw-nrw.png" style="--s:1.2" alt="Ministry of Culture and Science of North Rhine-Westphalia"></a>
+      </div>
+    </div>
+  </nav>
+  <a class="paper-thumb" href="#" aria-disabled="true" title="Coming soon"><img src="assets/paper-preview.webp" width="700" height="906" loading="lazy" decoding="async" alt=""><span class="paper-cta">Read the paper<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+</div>
+<div class="band-legal">
+  <p>© 2026 The authors. Text and figures licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="license noopener">CC BY 4.0</a>. Audio clips and logos keep their own licences. Page design by Felix Förster.</p>
+</div>
+</footer>
+
+<script src="js/data.js"></script>
+<!-- the takeaway cards are the first thing under the title, so they are filled before the chapter figures load -->
+<script src="js/takeaways.js"></script>
+<script src="js/model-links.js"></script>
+<script src="js/scaling-data.js"></script>
+<script src="js/util.js"></script>
+<script src="js/pipeline-flow.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/taxonomy.js"></script>
+<script src="js/arch.js"></script>
+<script src="js/scale-link.js"></script>
+<script src="js/flowkit.js"></script>
+<script src="js/caption-flow.js"></script>
+<script src="js/caption-flow-m.js"></script>
+<script src="js/figure-export.js"></script>
+<script src="js/main.js"></script>
+<script src="js/share.js"></script>
+<script src="js/punchline.js"></script>
+<script src="js/qa-seeds.js"></script>
+<script src="js/qa-seeds-more.js"></script>
+<script src="js/qa-seeds-facts.js"></script>
+<script src="js/qa.js"></script>
+<script src="js/paper-links.js"></script>
+<script src="js/ask.js"></script>
+</body>
+</html>

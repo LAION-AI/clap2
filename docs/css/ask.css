@@ -1,0 +1,431 @@
+/* ---------- Ask Lio: LAION's cub pinned to the bottom-right corner (js/ask.js) ---------- */
+/* the card, the cub (an 80 × 72 button) below it */
+.ask {
+  --a-acc: #1d374e;   /* accent text and filled buttons */
+  --a-on-acc: #fff;
+  --a-card: #fff;
+  --a-edge: #e2ddd2;
+  --a-soft: #f2efe9;  /* chips and small buttons */
+  --a-field: #f6f4ef;
+  position: fixed; z-index: 40; right: 16px; bottom: 16px;
+  width: min(380px, calc(100vw - 32px));
+  height: 72px;
+  font-family: var(--sans); pointer-events: none;
+  /* lifted above the architecture details while they're pinned to the bottom on phones (js/arch.js sets --lio-lift) */
+  translate: 0 calc(-1 * var(--lio-lift, 0px)); transition: translate .3s cubic-bezier(.3, 1.3, .5, 1);
+  /* his own compositor layer: when the phone's browser bar slides in or out (a change of scroll direction),
+     the browser just moves the layer instead of repainting him, drop shadow and all, at each step */
+  will-change: transform;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ask { --a-acc: #9fc0e6; --a-on-acc: #10202e; --a-card: #1e2227; --a-edge: #363c44; --a-soft: #2a3038; --a-field: #262b31; }
+}
+:root[data-theme="dark"] .ask { --a-acc: #9fc0e6; --a-on-acc: #10202e; --a-card: #1e2227; --a-edge: #363c44; --a-soft: #2a3038; --a-field: #262b31; }
+.ask :where(button) { all: unset; cursor: pointer; box-sizing: border-box; }
+.ask > *, .ask .ask-btn { pointer-events: auto; } /* after the unset, which would inherit "none" */
+.ask button:focus-visible { outline: 2px solid var(--ours); outline-offset: 2px; }
+.ask-card svg { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* the card opens above it */
+.ask-card {
+  order: 1; width: 100%; max-height: calc(100vh - 130px); overflow-y: auto; box-sizing: border-box;
+  background: var(--a-card); border-radius: 16px; border: 1.5px solid var(--a-edge);
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .35);
+  padding: 10px 14px 12px;
+  transform-origin: 100% 100%;
+  opacity: 0; transform: scale(.95) translateY(8px); visibility: hidden; position: absolute; bottom: 72px;
+  transition: opacity .2s, transform .2s, visibility 0s .2s;
+}
+.ask.open .ask-card { opacity: 1; transform: none; visibility: visible; transition: opacity .2s, transform .25s; }
+.ask-top { display: flex; align-items: center; gap: 8px; min-height: 20px; }
+.ask-tag { flex: 1; min-width: 0; font: 600 12px/1.3 var(--mono); letter-spacing: .02em; color: var(--a-acc); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ask-close { width: 24px; height: 24px; margin-right: -6px; display: grid; place-items: center; border-radius: 50%; color: var(--muted); }
+.ask-close:hover { background: var(--bg-soft); color: var(--ink); }
+.ask-close svg { width: 14px; height: 14px; }
+
+.ask-text { margin-top: 8px; font-size: 14px; line-height: 1.5; color: var(--ink); }
+.ask-text:empty { display: none; }
+.ask-text p + p { margin-top: 8px; }
+.ask-text b { font-weight: 600; color: var(--a-acc); }
+.ask-text sup { font-size: .7em; line-height: 0; }
+.ask-text .ask-q { font: italic 14px/1.45 var(--sans); color: var(--muted); }
+.ask-text .ask-hint { font-size: 13px; color: var(--muted); }
+.ask-text .ask-cite { margin-top: 6px; font: 500 11.5px/1.4 var(--mono); color: var(--muted); }
+/* citations link into the paper PDF */
+.ask-text .ask-cite a { color: var(--ours); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 2px; }
+.ask-text .ask-cite a:hover { text-decoration-style: solid; }
+/* "See it on the page": scrolls to the figure an answer is about */
+.ask .ask-jump { font: 600 12.5px var(--sans); color: var(--a-acc); background: var(--a-soft); padding: 3px 9px; border-radius: 999px; }
+.ask .ask-jump:hover { background: var(--a-acc); color: var(--a-on-acc); }
+/* every reply: open the question in Claude or ChatGPT */
+.ask-text .ask-ext { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--a-edge); display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font: 500 12px/1.3 var(--sans); color: var(--muted); }
+.ask-text .ask-ext span { margin-right: 2px; }
+.ask-text .ask-ext a { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--a-acc); text-decoration: none; font-weight: 600; }
+.ask .ask-ext .ask-logo { width: 14px; height: 14px; stroke: none; }
+.ask-text .ask-ext a:hover .ask-logo path { fill: currentColor; }
+.ask-text .ask-ext a:hover { background: var(--a-acc); border-color: var(--a-acc); color: var(--a-on-acc); }
+/* "See it on the page" targets, clear of the sticky top bar */
+#flow, #compare, #arch, #scale-fig, #alloc, #game, #sota-fig, #table-fig, #bibtex { scroll-margin-top: 80px; }
+
+/* question box and example questions */
+.ask-form { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
+.ask-form input {
+  flex: 1; min-width: 0; font: 14px var(--sans); color: var(--ink); background: var(--a-field);
+  border: 1.5px solid transparent; border-radius: 999px; padding: 7px 12px; outline: none; transition: border-color .2s, background .2s;
+}
+.ask-form input::placeholder { color: var(--muted); }
+.ask-form input:focus { border-color: var(--a-acc); background: var(--a-card); }
+.ask-form button { width: 32px; height: 32px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--a-acc); color: var(--a-on-acc); transition: transform .2s; }
+.ask-form button:hover { transform: translateX(2px); }
+.ask-form button svg { width: 14px; height: 14px; }
+.ask-chips { display: none; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.ask-chips.on { display: flex; }
+.ask-chips button { font: 12.5px/1.2 var(--sans); color: var(--a-acc); background: var(--a-soft); padding: 5px 9px; border-radius: 999px; }
+.ask-chips button:hover { background: var(--a-acc); color: var(--a-on-acc); }
+
+/* ---------- the cub ---------- */
+.g-cub { position: absolute; right: 0; bottom: 0; width: 80px; height: 72px; transition: opacity .4s, transform .5s cubic-bezier(.3, 1.6, .5, 1); }
+.ask.pre .g-cub { opacity: 0; transform: translateY(16px); }
+.g-cub-svg { width: 80px; height: 72px; overflow: visible; display: block; filter: drop-shadow(0 4px 10px rgba(29, 55, 78, .35)); transform-origin: 50% 100%; }
+.g-cub:focus-visible { outline: 2px solid var(--ours); outline-offset: 2px; border-radius: 12px; }
+/* closed: a small "Ask me" bubble beside him */
+.ask:not(.open) .g-cub::after { content: 'Ask me'; position: absolute; right: 74px; top: 22px; padding: 4px 9px; border-radius: 10px 10px 3px 10px; background: var(--a-acc); color: var(--a-on-acc); font: 600 12px/1.2 var(--sans); white-space: nowrap;
+  box-shadow: 0 0 0 1.5px var(--a-card), 0 4px 12px rgba(0, 0, 0, .18); } /* the ring keeps it apart from dark figures */
+.g-head { transform-box: view-box; transform-origin: 60px 90px; transition: transform .5s cubic-bezier(.3, 1.4, .5, 1); }
+/* a slow, barely-there breath through the mane */
+.g-mane { animation: g-sway 10s ease-in-out infinite; transform-box: view-box; transform-origin: 60px 60px; }
+@keyframes g-sway { 0%, 100% { transform: rotate(-.35deg); } 50% { transform: rotate(.35deg) scale(1.008); } }
+.talking .g-head { animation: g-bob 1.8s ease-in-out infinite; }
+@keyframes g-bob { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-.8px) rotate(-1deg); } }
+.g-rings path { fill: none; stroke: #8a929c; stroke-width: 1.4; stroke-linecap: round; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.g-rings path { animation: g-ring 1.6s ease-out infinite; }
+@keyframes g-ring { 0% { opacity: 0; transform: scale(.8); } 35% { opacity: .55; } 100% { opacity: 0; transform: scale(1.15); } }
+.g-blush { fill: #ff8b9a; opacity: .5; }
+.g-eyes { transition: transform .25s ease-out; }
+.g-eyes-open { transform-box: fill-box; transform-origin: center; }
+/* blinks come at random from js/ask.js, now and then two in a row */
+.blink .g-eyes-open { animation: g-blink .17s ease-in-out; }
+@keyframes g-blink { 50% { transform: scaleY(.08); } }
+.g-eyes-happy, .g-eyes-shut, .g-mouth-o { opacity: 0; }
+.g-ear { transform-box: fill-box; transform-origin: 50% 90%; }
+.g-ear-l { transform-origin: 80% 90%; }
+.g-ear-r { transform-origin: 20% 90%; }
+.twitch .g-ear-r { animation: g-twitch .45s ease; }
+@keyframes g-twitch { 30% { transform: rotate(18deg); } 60% { transform: rotate(-6deg); } }
+.g-paw { transform-box: view-box; transition: transform .45s cubic-bezier(.3, 1.5, .5, 1); }
+.g-note { transform-box: view-box; }
+/* talking: the mouth opens and closes, little notes float off the headphones */
+.talking .g-mouth-w { animation: g-mouth-w .26s steps(1) infinite; }
+.talking .g-mouth-o { animation: g-mouth-o .26s steps(1) infinite; }
+@keyframes g-mouth-w { 50% { opacity: 0; } }
+@keyframes g-mouth-o { 0% { opacity: 0; } 50% { opacity: 1; } }
+.talking .g-rings, .talking .g-notes { opacity: 1; }
+.g-note.n1 { animation: g-note 1.6s ease-out infinite; }
+.g-note.n2 { animation: g-note 1.6s ease-out .8s infinite backwards; }
+@keyframes g-note { from { transform: translate(-6px, 8px); opacity: 0; } 30% { opacity: 1; } to { transform: translate(4px, -14px); opacity: 0; } }
+/* listening and impressed ease in and out: the motion is scaled by --nod and --hop, which
+   transition between 0 and 1, and the extras (rings, notes, sparkles) fade as a group */
+@property --nod { syntax: '<number>'; inherits: true; initial-value: 0; }
+@property --hop { syntax: '<number>'; inherits: true; initial-value: 0; }
+/* (on the cub's svg, since .ask and .g-cub transition their transform elsewhere) */
+.g-cub-svg { --nod: 0; --hop: 0; transition: --nod .6s ease, --hop .5s ease; }
+.listening .g-cub-svg { --nod: 1; }
+.wow .g-cub-svg { --hop: 1; }
+.g-rings, .g-notes, .g-stars { opacity: 0; transition: opacity .5s; }
+.g-blush, .g-mouth-w, .g-mouth-o, .g-eyes-open { transition: opacity .25s; }
+.g-brows { transition: transform .35s ease; }
+.g-ear { transition: transform .4s cubic-bezier(.3, 1.5, .5, 1); }
+/* listening (a clip on the page is playing): head nodding, paws tapping, notes rising off the headphones */
+.g-head { animation: g-nod .9s ease-in-out infinite; }
+@keyframes g-nod {
+  0%, 100% { rotate: calc(var(--nod) * -4deg); translate: 0 0; }
+  25%, 75% { rotate: 0deg; translate: 0 calc(var(--nod) * 1.2px); }
+  50% { rotate: calc(var(--nod) * 4deg); translate: 0 0; }
+}
+.g-paw-l { animation: g-tap .9s ease-in-out infinite; }
+.g-paw-r { animation: g-tap .9s ease-in-out .45s infinite; }
+@keyframes g-tap { 0%, 60%, 100% { translate: 0 0; rotate: 0deg; } 30% { translate: 0 calc(var(--nod) * -4px); rotate: calc(var(--nod) * -4deg); } }
+.listening .g-blush { opacity: .75; }
+.listening .g-rings, .listening .g-notes { opacity: 1; }
+.ask.listening:not(.open) .g-cub::after { content: attr(data-listen); } /* a synonym picked in js/ask.js */
+/* impressed (a figure animation is running): wide eyes, raised brows, an "oh!" mouth, perked ears, little hops and sparkles */
+.g-eyes-open { scale: calc(1 + var(--hop) * .22); }
+.wow .g-brows { transform: translateY(-3px); }
+.wow .g-mouth-w { opacity: 0; }
+.wow .g-mouth-o { opacity: 1; }
+.wow .g-blush { opacity: .8; }
+.wow .g-ear-l { transform: rotate(-12deg); }
+.wow .g-ear-r { transform: rotate(12deg); }
+.g-cub-svg { animation: g-hop 1.1s ease-in-out infinite; }
+@keyframes g-hop {
+  0%, 55%, 100% { translate: 0 0; scale: 1; }
+  20% { translate: 0 calc(var(--hop) * -5px); scale: calc(1 + var(--hop) * .03) calc(1 - var(--hop) * .03); }
+  38% { translate: 0 0; scale: calc(1 - var(--hop) * .02) calc(1 + var(--hop) * .02); }
+}
+.g-stars { position: absolute; left: 0; top: 0; width: 80px; height: 72px; pointer-events: none; }
+.wow .g-stars { opacity: 1; }
+.g-stars i { position: absolute; font-style: normal; color: #f5b82e; font-size: 12px; opacity: 0; animation: g-star 1.4s ease-in-out infinite; }
+.g-stars i:nth-child(1) { left: -4px; top: 10px; }
+.g-stars i:nth-child(2) { left: 70px; top: 2px; font-size: 10px; animation-delay: .45s; }
+.g-stars i:nth-child(3) { left: 8px; top: -8px; font-size: 9px; animation-delay: .9s; }
+@keyframes g-star { 0%, 100% { opacity: 0; transform: scale(.4) rotate(0); } 50% { opacity: 1; transform: scale(1.1) rotate(45deg); } }
+.ask.wow:not(.open) .g-cub::after { content: attr(data-wow); }
+/* these loops are paused unless their state shows (js/ask.js adds run-nod and run-hop, and keeps them
+   a moment after the state ends so the motion can ease out), so an idle Lio costs nothing */
+.g-head, .g-paw-l, .g-paw-r, .g-rings path, .g-note.n1, .g-note.n2, .g-cub-svg, .g-stars i { animation-play-state: paused; }
+.run-nod :is(.g-head, .g-paw-l, .g-paw-r, .g-rings path, .g-note.n1, .g-note.n2),
+.run-hop :is(.g-cub-svg, .g-stars i) { animation-play-state: running; }
+/* eager (lots of reading, no questions yet): brows up, ears perked, rosy cheeks, and his idle
+   fidgets (waves included) carry on. Music, a figure animation or the end-of-page pitch take over while they last */
+.g-brows, .g-mouth-grin { transition: opacity .3s, transform .35s ease; }
+.g-mouth-grin { opacity: 0; transform-box: fill-box; transform-origin: 50% 0; }
+/* at rest (js/ask.js sets .rest while nothing else is on): content and calm. A closed smile with upturned corners
+   instead of the "w", eyes a touch softer (not a wide stare), brows relaxed, cheeks a little warmer */
+.g-mouth-smile { opacity: 0; transition: opacity .3s; }
+.ask.rest .g-mouth-smile { opacity: 1; }
+.ask.rest .g-mouth-w { opacity: 0; }
+.ask.rest .g-blush { opacity: .6; }
+.ask.rest .g-brows { transform: translateY(.5px); }
+.g-eyes-open { transition: opacity .25s, scale .35s ease; }
+.ask.rest .g-eyes-open { scale: 1 .9; }
+.eager:not(.listening):not(.wow):not(.pitch):not(.react) .g-brows { transform: translateY(-2.5px); }
+.eager:not(.listening):not(.wow):not(.pitch):not(.react) .g-blush { opacity: .85; }
+.eager:not(.listening):not(.wow):not(.pitch):not(.react) .g-ear-l { transform: rotate(-12deg); }
+.eager:not(.listening):not(.wow):not(.pitch):not(.react) .g-ear-r { transform: rotate(12deg); }
+.ask.eager:not(.open):not(.listening):not(.wow):not(.pitch) .g-cub::after { content: attr(data-eager); }
+/* jamming (a minute without the reader doing anything): happy eyes, humming, a gentle nod, notes floating off */
+.jam .g-cub-svg { --nod: .4; }
+.jam .g-eyes-open { opacity: 0; }
+.jam .g-eyes-happy { opacity: 1; }
+.jam .g-blush { opacity: .75; }
+.jam .g-notes { opacity: 1; }
+.jam .g-mouth-w { animation: g-mouth-w .9s steps(1) infinite; }
+.jam .g-mouth-o { animation: g-mouth-o .9s steps(1) infinite; }
+.ask.jam:not(.open):not(.listening):not(.wow) .g-cub::after { content: attr(data-jam); }
+/* no ready answer: curious, not let down. Head tilted, brows up, eyes up, a paw at the chin and a "?" popping up */
+.curious .g-paw-r { transform: translate(-8px, -20px) rotate(-20deg); }
+.curious .g-brows { transform: translateY(-2.5px); }
+.curious .g-eyes { transform: translate(1.5px, -2px) !important; }
+.curious .g-head { transform: rotate(8deg) !important; }
+.curious .g-ear-r { transform: rotate(10deg); }
+.g-quest { position: absolute; left: 64px; top: -14px; pointer-events: none; }
+.g-quest i { display: block; font: 700 18px/1 var(--sans); font-style: normal; color: var(--a-acc); opacity: 0; }
+.curious .g-quest i { animation: g-quest 1.8s cubic-bezier(.3, 1.5, .5, 1); }
+@keyframes g-quest { 0% { opacity: 0; transform: translateY(8px) scale(.4); } 20%, 80% { opacity: 1; transform: rotate(10deg); } 50% { transform: translateY(-2px) rotate(-6deg); } 100% { opacity: 0; transform: translateY(-6px); } }
+/* a ready answer: a cheer, both paws up, a big grin and a burst of sparkles */
+.cheer .g-paw-l { animation: g-cheer-l 1.3s cubic-bezier(.3, 1.4, .5, 1); }
+.cheer .g-paw-r { animation: g-cheer-r 1.3s cubic-bezier(.3, 1.4, .5, 1); }
+@keyframes g-cheer-l { 0%, 100% { transform: none; } 20%, 75% { transform: translate(-24px, -40px) rotate(-20deg); } 45% { transform: translate(-26px, -44px) rotate(-28deg); } }
+@keyframes g-cheer-r { 0%, 100% { transform: none; } 20%, 75% { transform: translate(24px, -40px) rotate(20deg); } 45% { transform: translate(26px, -44px) rotate(28deg); } }
+.cheer .g-mouth-w { opacity: 0; }
+.cheer .g-mouth-grin { opacity: 1; }
+.cheer .g-ear-l { transform: rotate(-12deg); }
+.cheer .g-ear-r { transform: rotate(12deg); }
+.g-burst { position: absolute; left: 40px; top: 30px; pointer-events: none; }
+.g-burst i { position: absolute; font-style: normal; font-size: 12px; color: #f5b82e; opacity: 0; }
+.cheer .g-burst i { animation: g-burst 1.1s ease-out .1s backwards; }
+.g-burst i:nth-child(1) { --bx: -46px; --by: -30px; }
+.g-burst i:nth-child(2) { --bx: -16px; --by: -52px; font-size: 10px; color: #ff6b85; }
+.g-burst i:nth-child(3) { --bx: 18px; --by: -50px; }
+.g-burst i:nth-child(4) { --bx: 40px; --by: -26px; font-size: 10px; color: #2f6fde; }
+@keyframes g-burst { 0% { opacity: 0; transform: translate(0, 0) scale(.3); } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--bx), var(--by)) scale(1.1) rotate(90deg); } }
+/* the first time the card opens: a hello wave */
+.hello .g-paw-r { animation: g-wave 1.2s ease-in-out; }
+.hello .g-ear-r { transform: rotate(10deg); }
+/* ---------- idle fidgets (js/ask.js picks one every few seconds, never the same twice in a row) ---------- */
+.g-eyes-happy { transition: opacity .25s; }
+.g-mouth-o { transform-box: fill-box; transform-origin: 50% 20%; }
+/* both ears, one after the other */
+.f-ears .g-ear-l { animation: g-twitch-l .45s ease; }
+.f-ears .g-ear-r { animation: g-twitch .45s ease .45s; }
+@keyframes g-twitch-l { 30% { transform: rotate(-18deg); } 60% { transform: rotate(6deg); } }
+/* noticing something: brows up while he looks up */
+.f-brows .g-brows { transform: translateY(-2.5px); }
+/* a happy moment */
+.f-smile .g-eyes-open { opacity: 0; }
+.f-smile .g-eyes-happy { opacity: 1; }
+.f-smile .g-blush { opacity: .85; }
+/* humming along to nothing: a gentle sway, slow mouth, a note or two */
+.f-hum .g-cub-svg { --nod: .35; }
+.f-hum .g-notes { opacity: 1; }
+.f-hum .g-mouth-w { animation: g-mouth-w .6s steps(1) infinite; }
+.f-hum .g-mouth-o { animation: g-mouth-o .6s steps(1) infinite; }
+/* straightening his headphones */
+.f-phones .g-paw-r { transform: translate(27px, -36px) rotate(-18deg); }
+.f-phones .g-ear-r { transform: rotate(10deg); }
+/* drumming his paws on the card */
+.f-drum .g-paw-l { animation: g-drum .3s ease-in-out 3; }
+.f-drum .g-paw-r { animation: g-drum .3s ease-in-out .15s 3; }
+@keyframes g-drum { 50% { transform: translateY(-7px); } }
+/* a friendly wave */
+.f-wave .g-paw-r { animation: g-wave 1.2s ease-in-out; }
+.f-wave .g-eyes-open { opacity: 0; }
+.f-wave .g-eyes-happy { opacity: 1; }
+.f-wave .g-blush { opacity: .8; }
+/* an ear wiggle: both ears, quick and together */
+.f-wiggle .g-ear-l { animation: g-wiggle-l .3s ease-in-out 3; }
+.f-wiggle .g-ear-r { animation: g-wiggle-r .3s ease-in-out 3; }
+@keyframes g-wiggle-l { 50% { transform: rotate(-14deg); } }
+@keyframes g-wiggle-r { 50% { transform: rotate(14deg); } }
+/* a happy little bounce, with a grin */
+.f-bounce .g-cub-svg { animation: g-bounce .5s ease-in-out 2 running; }
+@keyframes g-bounce { 0%, 100% { translate: 0 0; scale: 1; } 40% { translate: 0 -6px; scale: 1.03 .97; } 70% { translate: 0 0; scale: .98 1.02; } }
+.f-bounce .g-mouth-w { opacity: 0; }
+.f-bounce .g-mouth-grin { opacity: 1; }
+.f-bounce .g-eyes-open { opacity: 0; }
+.f-bounce .g-eyes-happy { opacity: 1; }
+/* petting: giggle and hearts */
+.giggle .g-eyes-open { opacity: 0; }
+.giggle .g-eyes-happy { opacity: 1; }
+.giggle .g-blush { opacity: .8; }
+.giggle .g-cub-svg { animation: g-giggle .8s ease; }
+@keyframes g-giggle { 15% { transform: translateY(-8px) scale(1.05, .95); } 30% { transform: translateY(0) scale(.95, 1.05) rotate(-4deg); } 50% { transform: translateY(-4px) rotate(4deg); } 70% { transform: rotate(-2deg); } }
+.g-hearts { position: absolute; left: 46px; top: 2px; pointer-events: none; }
+.g-hearts i { position: absolute; font-style: normal; color: #ff6b85; font-size: 14px; opacity: 0; }
+.g-hearts i + i { left: 14px; top: 8px; font-size: 11px; }
+.giggle .g-hearts i { animation: g-heart .9s ease-out; }
+.giggle .g-hearts i + i { animation-delay: .12s; }
+@keyframes g-heart { from { opacity: 0; transform: translateY(6px) scale(.6); } 25% { opacity: 1; } to { opacity: 0; transform: translateY(-26px) scale(1.1); } }
+/* go away: he waves bye, then sinks below the edge with only his ears peeking out (js/ask.js) */
+.ask.bye .g-paw-r { animation: g-wave 1.2s ease-in-out; }
+.ask.bye .g-eyes-open { opacity: 0; }
+.ask.bye .g-eyes-happy { opacity: 1; }
+.ask.bye:not(.open) .g-cub::after { content: attr(data-bye); }
+.ask.gone .g-cub { transform: translateY(66px); transition: transform .7s cubic-bezier(.5, -.4, .6, 1); }
+.ask.gone .g-cub:hover, .ask.gone .g-cub:focus-visible { transform: translateY(56px); transition: transform .3s ease; }
+.ask.gone .g-cub::after { display: none; }
+/* "Hide Lio" in the card's top bar */
+.ask .ask-hide { font: 500 12px/1 var(--sans); color: var(--muted); padding: 4px 8px; border-radius: 999px; }
+.ask .ask-hide:hover { background: var(--bg-soft); color: var(--ink); }
+/* thinking: eyes up, head tilted, paw at the chin */
+.thinking .g-eyes { transform: translate(1.5px, -2.5px) !important; }
+.thinking .g-head { transform: rotate(-6deg) !important; }
+.thinking .g-paw-r { transform: translate(-8px, -20px) rotate(-20deg); }
+
+/* ---------- reactions (js/ask.js): 2.4 s each, three for a theme switch and three for a share ---------- */
+.g-x { opacity: 0; pointer-events: none; }
+.ask.react:not(.open) .g-cub::after { content: attr(data-react); display: block; }
+/* sit still for these, whatever else is going on */
+.ask.react .g-cub-svg { animation: none; }
+/* theme: the sun (or the moon) crosses the sky over him while he watches it go */
+.g-orb { transform-box: view-box; }
+.to-dark .g-sun, .ask:not(.to-dark) .g-moon { display: none; }
+.ask.react.r-orb .g-orb { animation: r-orb 2.4s linear; }
+@keyframes r-orb {
+  0% { opacity: 0; transform: translate(-6px, 52px) rotate(0); } 12% { opacity: 1; } 28% { transform: translate(14px, 10px) rotate(40deg); }
+  50% { transform: translate(60px, -10px) rotate(90deg); } 72% { transform: translate(106px, 10px) rotate(140deg); } 88% { opacity: 1; } 100% { opacity: 0; transform: translate(126px, 52px) rotate(180deg); }
+}
+.ask.react.r-orb:not(.to-dark) .g-eyes-open { opacity: 0; }
+.ask.react.r-orb:not(.to-dark) .g-eyes-happy { opacity: 1; }
+.ask.react.r-orb.to-dark .g-eyes-open { opacity: 0; }
+.ask.react.r-orb.to-dark .g-eyes-happy { opacity: 1; }
+/* theme: both paws rubbing his eyes, then a double blink */
+.ask.react.r-rub .g-paw-l { animation: r-rub-l 2.4s ease-in-out; }
+.ask.react.r-rub .g-paw-r { animation: r-rub-r 2.4s ease-in-out; }
+@keyframes r-rub-l { 0%, 90%, 100% { transform: none; } 15%, 35%, 55% { transform: translate(6px, -34px) rotate(10deg); } 25%, 45%, 65% { transform: translate(8px, -36px) rotate(-8deg); } 75% { transform: translate(6px, -34px); } }
+@keyframes r-rub-r { 0%, 90%, 100% { transform: none; } 15%, 35%, 55% { transform: translate(-6px, -34px) rotate(-10deg); } 25%, 45%, 65% { transform: translate(-8px, -36px) rotate(8deg); } 75% { transform: translate(-6px, -34px); } }
+.ask.react.r-rub .g-eyes-open { animation: r-rub-open 2.4s; }
+.ask.react.r-rub .g-eyes-shut { animation: r-rub-shut 2.4s; }
+@keyframes r-rub-open { 10%, 76% { opacity: 0; } 0%, 6%, 80%, 100% { opacity: 1; } }
+@keyframes r-rub-shut { 10%, 76% { opacity: 1; } 0%, 6%, 80%, 100% { opacity: 0; } }
+/* theme: pupils shrink to dots in the light, or go big and shiny in the dark */
+.ask.react.r-pupils:not(.to-dark) .g-eyes-open { opacity: 0; }
+.ask.react.r-pupils:not(.to-dark) .g-eyes-tiny { opacity: 1; }
+.ask.react.r-pupils:not(.to-dark) .g-brows { transform: translateY(-3px); }
+.ask.react.r-pupils:not(.to-dark) .g-mouth-w { opacity: 0; }
+.ask.react.r-pupils:not(.to-dark) .g-mouth-o { opacity: 1; }
+.ask.react.r-pupils.to-dark .g-eyes-open { animation: r-big 2.4s cubic-bezier(.3, 1.4, .5, 1); }
+@keyframes r-big { 0%, 100% { transform: none; } 15%, 85% { transform: scale(1.38); } }
+.ask.react.r-pupils.to-dark .g-shine { animation: r-shine 2.4s; }
+@keyframes r-shine { 0%, 8%, 92%, 100% { opacity: 0; } 18%, 82% { opacity: 1; } }
+.ask.react.r-pupils.to-dark .g-blush { opacity: .85; }
+/* share: a bluebird flies in, perches on his headband and chirps, then flies off */
+.ask.react.r-bird .g-bird { animation: r-bird 2.4s ease-in-out; }
+@keyframes r-bird {
+  0% { opacity: 0; transform: translate(70px, -46px); } 6% { opacity: 1; } 26% { transform: none; } 30% { transform: translateY(-2px); } 34%, 74% { transform: none; }
+  94% { opacity: 1; } 100% { opacity: 0; transform: translate(-80px, -40px); }
+}
+.g-wing { transform-box: fill-box; transform-origin: 0 50%; }
+.ask.react.r-bird .g-wing { animation: r-flap .14s ease-in-out infinite alternate; }
+@keyframes r-flap { to { transform: rotate(-35deg) scaleY(.6); } }
+.ask.react.r-bird .g-chirp { animation: r-chirp 2.4s steps(1); }
+@keyframes r-chirp { 0%, 34%, 44%, 52%, 62%, 100% { opacity: 0; } 38%, 56% { opacity: 1; } }
+.ask.react.r-bird .g-mouth-w { opacity: 0; }
+.ask.react.r-bird .g-mouth-o { opacity: 1; }
+/* share: the repost arrows spin above him while he does a full turn */
+.g-repost { transform-box: fill-box; transform-origin: center; }
+.ask.react.r-repost .g-repost { animation: r-repost 2.4s cubic-bezier(.4, 0, .2, 1); }
+@keyframes r-repost { 0% { opacity: 0; transform: scale(.3); } 12% { opacity: 1; transform: scale(1.1); } 20% { transform: none; } 60% { transform: rotate(360deg); } 85% { opacity: 1; transform: rotate(360deg); } 100% { opacity: 0; transform: rotate(360deg) scale(.6); } }
+.ask.react.r-repost .g-cub-svg { animation: r-turn 2.4s cubic-bezier(.4, 0, .2, 1); }
+@keyframes r-turn { 0%, 20% { transform: none; } 60%, 100% { transform: rotateY(360deg); } }
+.ask.react.r-repost .g-eyes-open { opacity: 0; }
+.ask.react.r-repost .g-eyes-happy { opacity: 1; }
+/* share: he shouts it through a megaphone */
+.g-mega { transform-box: fill-box; transform-origin: 0 50%; }
+.ask.react.r-mega .g-mega { animation: r-mega 2.4s cubic-bezier(.3, 1.4, .5, 1); }
+@keyframes r-mega { 0% { opacity: 0; transform: scale(.2); } 14%, 84% { opacity: 1; transform: none; } 100% { opacity: 0; transform: scale(.6); } }
+.g-waves path { opacity: 0; }
+.ask.react.r-mega .g-waves path { animation: r-wave .5s ease-out .35s 3 backwards; }
+.ask.react.r-mega .g-waves path + path { animation-delay: .5s; }
+@keyframes r-wave { 0% { opacity: 0; transform: translateX(-4px); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateX(3px); } }
+.ask.react.r-mega .g-paw-r { animation: r-hold 2.4s cubic-bezier(.3, 1.3, .5, 1); }
+@keyframes r-hold { 0%, 100% { transform: none; } 14%, 84% { transform: translate(-1px, -5px) rotate(-6deg); } }
+.ask.react.r-mega .g-mouth-w { opacity: 0; }
+.ask.react.r-mega .g-mouth-o { opacity: 1; }
+.ask.react.r-mega .g-brows { transform: translateY(-2px); }
+
+/* ---------- the end of the page: a speech bubble that makes the case for the paper ---------- */
+.ask-pitch {
+  position: absolute; right: 8px; bottom: 82px; width: min(270px, 100%); box-sizing: border-box;
+  padding: 12px 14px; border-radius: 14px 14px 4px 14px; background: var(--a-card); border: 1.5px solid var(--a-edge);
+  box-shadow: 0 14px 32px -12px rgba(0, 0, 0, .35);
+  font: 14px/1.5 var(--sans); color: var(--ink);
+  transform-origin: calc(100% - 30px) 100%;
+  opacity: 0; transform: scale(.85) translateY(8px); visibility: hidden;
+  transition: opacity .2s, transform .2s, visibility 0s .2s;
+}
+.ask.pitch:not(.open) .ask-pitch { opacity: 1; transform: none; visibility: visible; transition: opacity .25s, transform .4s cubic-bezier(.3, 1.5, .5, 1); }
+.ask-pitch::after { content: ''; position: absolute; right: 26px; bottom: -7px; width: 12px; height: 12px; background: var(--a-card); border: solid var(--a-edge); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
+.ask-pitch b { font-weight: 600; color: var(--a-acc); }
+.ask-pitch p { margin: 0; padding-right: 14px; }
+.ask-pitch .ask-close { position: absolute; top: 6px; right: 6px; margin: 0; }
+.ask-pitch .ask-close svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.ask-pitch .ask-pitch-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; padding: 0; }
+.ask-pitch-share { all: unset; box-sizing: border-box; cursor: pointer; padding: 6px 12px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px var(--a-acc); color: var(--a-acc); font: 600 13px/1.2 var(--sans); transition: background .2s; }
+.ask-pitch-share:hover, .ask-pitch-share[aria-expanded="true"] { background: var(--a-soft); }
+.ask-pitch-share:focus-visible { outline: 2px solid var(--a-acc); outline-offset: 2px; }
+.ask-pitch-go { display: inline-block; padding: 6px 12px; border-radius: 999px; background: var(--a-acc); color: var(--a-on-acc); font: 600 13px/1.2 var(--sans); text-decoration: none; transition: transform .2s; }
+.ask-pitch-go:hover { transform: translateX(2px); }
+/* he walks over next to the footer's paper thumbnail (--walk is set in js/ask.js) */
+.ask { transition: transform .6s cubic-bezier(.4, 0, .2, 1); }
+.ask.pitch:not(.open) { transform: translateX(var(--walk, 0)); }
+/* meanwhile he waves, happy, and the "Ask me" bubble steps aside */
+.ask.pitch:not(.open) .g-cub::after { display: none; }
+.ask.pitch:not(.open) .g-paw-r { animation: g-wave 1.2s ease-in-out; }
+@keyframes g-wave { 0%, 100% { transform: translate(0, 0) rotate(0); } 20%, 60% { transform: translate(8px, -26px) rotate(-28deg); } 40%, 80% { transform: translate(10px, -26px) rotate(8deg); } }
+.ask.pitch:not(.open) .g-eyes-open { opacity: 0; }
+.ask.pitch:not(.open) .g-eyes-happy { opacity: 1; }
+.ask.pitch:not(.open) .g-blush { opacity: .8; }
+
+@media (max-width: 600px) {
+  .ask { right: 12px; bottom: 12px; width: calc(100vw - 24px); }
+  /* phones: the idle "Ask me" stays away so he covers less of the page */
+  .ask:not(.open):not(.listening):not(.wow):not(.eager):not(.jam):not(.bye):not(.react) .g-cub::after { display: none; }
+}
+/* short screens (a phone on its side): a smaller cub without the idle "Ask me", so he doesn't sit on the header
+   buttons or take a fifth of the screen height */
+@media (max-height: 500px) {
+  .ask:not(.open) { scale: .75; transform-origin: 100% 100%; right: 10px; bottom: 10px; }
+  .ask:not(.open):not(.listening):not(.wow):not(.eager):not(.jam):not(.bye):not(.react) .g-cub::after { display: none; }
+}
+/* touch screens: no always-on mane sway and no drop shadow, so an idle Lio needs no repainting at all and
+   can't fall behind the page while the browser bar slides in and out on a change of scroll direction */
+@media (hover: none) {
+  .g-mane { animation: none; }
+  .g-cub-svg { filter: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ask *, .ask *::after { animation: none !important; transition: none !important; }
+  /* no motion, but his moods still show: sparkles and the "?" stand still instead of floating */
+  .wow .g-stars i, .curious .g-quest i { opacity: .85; }
+}
