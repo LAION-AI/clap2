@@ -21,6 +21,7 @@
     'OmniEmbed-v0.1': HF('Tevatron/OmniEmbed-v0.1'),
     'fusion-embedding-2-2b': HF('EximiusLabs/fusion-embedding-2-2b-preview'),
     'Qwen2-Audio-7B': HF('Qwen/Qwen2-Audio-7B'),
+    'Qwen2.5-Omni-7B': HF('Qwen/Qwen2.5-Omni-7B'),
     'Qwen2.5-Omni-3B': HF('Qwen/Qwen2.5-Omni-3B'),
     'EBind': HF('encord-team/ebind-full'),
     'LAION Larger CLAP': HF('laion/larger_clap_general'),

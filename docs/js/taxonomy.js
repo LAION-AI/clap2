@@ -163,7 +163,7 @@ const MAXN = 24;  // items drawn per level; the rest share one "+N smaller" tile
 function explorer(row, ROOT, makeFigure) {
   // numbers in the side text come from the data
   const nCats = ROOT.kids.reduce((s, g) => s + g.kids.length, 0);
-  const fill = { classes: nf(ROOT.classes), cats: nf(nCats), speech: pct(ROOT.kids[0].clips, ROOT.clips) };
+  const fill = { classes: nf(ROOT.classes), cats: nf(nCats), speech: DATA.taxonomy.mix.final.speech.toFixed(1) + '%' };
   row.querySelectorAll('[data-tax]').forEach(el => { el.textContent = fill[el.dataset.tax]; });
   const nAll = ROOT.kids.reduce((s, g) => s + 1 + g.kids.length + g.kids.reduce((t, c) => t + c.kids.length, 0), 0);
   // the side column (title, text, details) is written in index.html; the list goes below it

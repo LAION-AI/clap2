@@ -6,7 +6,7 @@
   <!-- apply a saved theme before the first paint, so there is no flash -->
   <script>try { var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}</script>
   <title>LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining</title>
-  <meta name="description" content="LAION-Audio-XL is a web-scale corpus of 365M audio clips with 703M captions for contrastive language-audio pretraining (CLAP), with compute scaling laws and the CLAP2 models (CLAP2-XXS to CLAP2-L, 27M–340M parameters); CLAP2-M (153M parameters) reaches 52.3% on MAEB-30.">
+  <meta name="description" content="LAION-Audio-XL is a web-scale corpus of 365M audio clips with 707M captions for contrastive language-audio pretraining (CLAP), with compute scaling laws and the CLAP2 models (CLAP2-XXS to CLAP2-L, 27M–340M parameters); CLAP2-L (340M parameters) reaches 53.6% on MAEB-30.">
   <meta name="author" content="Gijs Wijngaard, Felix Förster, Ross Wightman, Marianna Nezhurina, Christoph Schuhmann, Jenia Jitsev, A. Sophia Koepke">
   <meta name="keywords" content="contrastive language-audio pretraining, CLAP, audio-text dataset, audio captioning, scaling laws, compute-optimal, audio embeddings, MAEB, HEAR, NaFlex, LAION">
   <meta name="robots" content="index, follow">
@@ -22,7 +22,7 @@
   <meta name="citation_author" content="Jenia Jitsev">
   <meta name="citation_author" content="A. Sophia Koepke">
   <meta name="citation_publication_date" content="2026">
-  <meta name="citation_abstract" content="Recent advances in contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.47 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our models outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks. As a result, our models can serve as a drop-in replacement for CLAP in downstream applications. We will publicly release our dataset, captions, model checkpoints, and code.">
+  <meta name="citation_abstract" content="Recent advances in contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.48 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our models outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks. As a result, our models can serve as a drop-in replacement for CLAP in downstream applications. We release our dataset, captions, model checkpoints, and code.">
   <link rel="icon" href="assets/logos/laion-audio-icon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#111315" media="(prefers-color-scheme: dark)">
@@ -32,7 +32,7 @@
   <meta property="og:site_name" content="LAION Audio XL">
   <meta property="og:type" content="website">
   <meta property="og:title" content="LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining">
-  <meta property="og:description" content="365M audio–text pairs, compute scaling laws for contrastive language–audio pretraining, and CLAP2-M (153M parameters) reaching 52.3% on MAEB-30.">
+  <meta property="og:description" content="365M audio–text pairs, compute scaling laws for contrastive language–audio pretraining, and CLAP2-L (340M parameters) reaching 53.6% on MAEB-30.">
   <meta property="og:image" content="https://projects.laion.ai/clap2/assets/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -53,8 +53,8 @@
    "@id": "#paper",
    "headline": "LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining",
    "name": "LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining",
-   "abstract": "Recent advances in contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.47 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our models outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks. As a result, our models can serve as a drop-in replacement for CLAP in downstream applications. We will publicly release our dataset, captions, model checkpoints, and code.",
-   "description": "LAION-Audio-XL is a web-scale corpus of 365M audio clips with 703M captions for contrastive language-audio pretraining (CLAP), with compute scaling laws and the CLAP2 models (CLAP2-XXS to CLAP2-L, 27M–340M parameters); CLAP2-M (153M parameters) reaches 52.3% on MAEB-30.",
+   "abstract": "Recent advances in contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.48 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our models outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks. As a result, our models can serve as a drop-in replacement for CLAP in downstream applications. We release our dataset, captions, model checkpoints, and code.",
+   "description": "LAION-Audio-XL is a web-scale corpus of 365M audio clips with 707M captions for contrastive language-audio pretraining (CLAP), with compute scaling laws and the CLAP2 models (CLAP2-XXS to CLAP2-L, 27M–340M parameters); CLAP2-L (340M parameters) reaches 53.6% on MAEB-30.",
    "author": [
     {
      "@type": "Person",
@@ -178,7 +178,7 @@
    "alternateName": [
     "LAION-Audio-XL-500M"
    ],
-   "description": "A web-scale audio-text corpus of 365M audio clips up to 30 s (1.38M hours) with 703M short and long captions, curated from 1.48B clips collected from YouTube, Common Crawl, web collections and 338 academic datasets. The larger LAION-Audio-XL-500M keeps clips up to 120 s (500M clips, 966M captions, 3.34M hours). Release of indices, captions and metadata is planned.",
+   "description": "A web-scale audio-text corpus of 365M audio clips up to 30 s (1.39M hours) with 707M short and long captions, curated from 1.48B clips collected from YouTube, Common Crawl, web collections and 316 academic datasets. The larger LAION-Audio-XL-500M keeps clips up to 120 s (500M clips, 970M captions, 3.35M hours). Release of indices, captions and metadata is planned.",
    "keywords": [
     "audio",
     "audio captions",
@@ -389,7 +389,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
   <header class="row sec-head">
     <div class="sec-title">
       <h2><span class="sec-n" aria-hidden="true">1</span>The LAION-Audio-XL Dataset</h2>
-      <p>We collect 1.48B audio samples from YouTube, Common Crawl, web collections and 338 academic datasets, clean and deduplicate them, select for coverage with a 3,718-class taxonomy, and generate short and long captions for clips that lack them.</p>
+      <p>We collect 1.48B audio samples from YouTube, Common Crawl, web collections and 316 academic datasets, clean and deduplicate them, select for coverage with a 3,718-class taxonomy, and generate short and long captions for clips that lack them.</p>
     </div>
   </header>
 
@@ -539,7 +539,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
   <div class="row" id="progress-fig">
     <aside class="side">
       <h3>A Step Change for CLAP</h3>
-      <p>MAEB-30 scores of CLAP-style models by release date. Four years raised the best score by 16 points, from 28.1% to 44.1%. CLAP2 adds 8.2 more. <button class="info" type="button" aria-expanded="false" aria-controls="i-progress" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <p>MAEB-30 scores of CLAP-style models by release date. Four years raised the best score by 16 points, from 28.3% to 44.1%. CLAP2 adds 9.5 more. <button class="info" type="button" aria-expanded="false" aria-controls="i-progress" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
       <div class="info-more" id="i-progress" hidden><p>Dates are first public releases (paper or checkpoint). Omni-embedding models with 1B to 9B parameters, which are not drop-in CLAP replacements, reach up to 53.5% (LCO-Embedding-Omni-7B); they appear in the size comparison below.</p></div>
       <div class="legend static">
         <span><i class="lg-ours"></i>CLAP2<span class="ours-tag">ours</span></span>
@@ -547,7 +547,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
         <span><i class="lg-best"></i>Best score so far</span>
       </div>
     </aside>
-    <div class="fig"><svg id="progress-chart" viewBox="0 0 820 380" role="img" aria-label="Best MAEB-30 score of CLAP-style models by release date: wav2clip 28.1% in 2021, LAION-CLAP 32.7% in 2022, LAION Larger CLAP 35.2% in 2023, M2D-CLAP 38.0% in 2024, GLAP 44.1% in 2025, and CLAP2 46.2% to 52.3% in 2026."></svg></div>
+    <div class="fig"><svg id="progress-chart" viewBox="0 0 820 380" role="img" aria-label="Best MAEB-30 score of CLAP-style models by release date: wav2clip 28.3% in 2021, LAION-CLAP 35.2% in 2022, LAION Larger CLAP 36.2% and MS-CLAP 2023 37.3% in 2023, M2D-CLAP 38.0% in 2024, GLAP 44.1% in 2025, and CLAP2 46.2% to 53.6% in 2026."></svg></div>
   </div>
 
   <div class="row" id="sota-fig">
@@ -568,7 +568,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
       </div>
     </aside>
     <div class="fig chart-wrap">
-      <svg id="sota-chart" viewBox="0 0 820 440" role="img" aria-label="Average benchmark score against parameter count. CLAP2 models from CLAP2-XXS (27M parameters) to CLAP2-L (340M) lie on the Pareto front of audio–text models; CLAP2-M (153M) reaches 52.3% on MAEB-30."></svg>
+      <svg id="sota-chart" viewBox="0 0 820 440" role="img" aria-label="Average benchmark score against parameter count. CLAP2 models from CLAP2-XXS (27M parameters) to CLAP2-L (340M) lie on the Pareto front of audio–text models; CLAP2-L (340M) reaches 53.6% on MAEB-30."></svg>
       <div class="tip" id="sota-tip"></div>
     </div>
   </div>

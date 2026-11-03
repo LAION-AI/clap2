@@ -32,9 +32,10 @@
     rel.forEach(r => out.push({ t: 'dot', x: X(r.y), y: Y(r.s), r: 3, c: 'neutral' }));
     const glap = rel.find(r => r.n === 'GLAP');
     out.push({ t: 'text', x: X(glap.y) - 6, y: Y(glap.s) - 7, s: 9.5, c: 'ink2', v: 'GLAP 44.1', a: 'end' });
-    out.push({ t: 'line', x1: X(D.oursRelease), y1: Y(D.ours[0].maeb), x2: X(D.oursRelease), y2: Y(52.3), c: 'acc', w: 1.5 });
+    const top = Math.max(...D.ours.map(o => o.maeb));
+    out.push({ t: 'line', x1: X(D.oursRelease), y1: Y(D.ours[0].maeb), x2: X(D.oursRelease), y2: Y(top), c: 'acc', w: 1.5 });
     D.ours.forEach(o => out.push({ t: 'dot', x: X(D.oursRelease), y: Y(o.maeb), r: 3.4, c: 'acc' }));
-    out.push({ t: 'text', x: X(D.oursRelease) - 8, y: Y(52.3) + 3.5, s: 10, c: 'acc', v: 'CLAP2 52.3', a: 'end', b: 1 });
+    out.push({ t: 'text', x: X(D.oursRelease) - 8, y: Y(top) + 3.5, s: 10, c: 'acc', v: 'CLAP2 ' + fmt1(top), a: 'end', b: 1 });
     return { prims: out, cap: 'Best MAEB-30 (%) of CLAP-style models by release' };
   }
 
@@ -74,7 +75,7 @@
   }
 
   /* ---------- the three cards ---------- */
-  const ours153 = D.ours[3], glap = byName(D.maeb, 'GLAP');
+  const oursL = byName(D.ours, 'CLAP2-L'), glap = byName(D.maeb, 'GLAP');
   const aw = D.datasets.find(d => d.name === 'LAION-Audio-XL');
 
   const CARDS = [
@@ -86,9 +87,9 @@
       head: 'faster data growth than model growth',
       line: 'Given more compute, grow the data first.',
       chart: chartAlloc },
-    { href: '#results', kick: 'Benchmark', acc: 'var(--ours)', big: fmt1(ours153.maeb) + '%',
-      head: 'MAEB-30 for CLAP2-M (153M)',
-      line: `${fmt1(ours153.maeb - glap.s)} points above the best earlier CLAP model.`,
+    { href: '#results', kick: 'Benchmark', acc: 'var(--ours)', big: fmt1(oursL.maeb) + '%',
+      head: 'MAEB-30 for CLAP2-L (340M)',
+      line: `${fmt1(oursL.maeb - glap.s)} points above the best earlier CLAP model.`,
       chart: chartProgress },
   ];
 

@@ -28,29 +28,29 @@
 
   const SOURCES = [
     { name: 'YouTube', n: 1.18e9, label: '1,180M', icon: 'youtube' },
-    { name: 'Web & Common Crawl', n: 185e6, label: '185M', icon: 'web' },
+    { name: 'Web & Common Crawl', n: 159e6, label: '159M', icon: 'web' },
     { name: 'Academic datasets', n: 84e6, label: '84M', icon: 'academic' },
-    { name: 'Internet datasets', n: 12e6, label: '12M', icon: 'internet' },
+    { name: 'Internet datasets', n: 10e6, label: '10M', icon: 'internet' },
   ];
-  const SOURCES_INFO = 'YouTube audio comes from 32.66M Creative Commons videos, web audio from Common Crawl, plus 338 academic datasets. Everything is converted to 32 kHz, 16-bit mono and cut at silence into clips of up to 120 s.';
+  const SOURCES_INFO = 'YouTube audio comes from 32.66M Creative Commons videos, web audio from Common Crawl, plus 316 academic datasets. Everything is converted to 32 kHz, 16-bit mono and cut at silence into clips of up to 120 s.';
   // stages in order; `out` is what the following step removes
   const STAGES = [
     { name: 'Collected', n: 1.48e9, hours: '11.2M h', c: '--s-collect', out: { n: 200e6, label: 'silent, duplicate or eval data' } },
     { name: 'Deduplicated pool', n: 1.28e9, hours: '7.96M h', c: '--s-dedup', out: { n: 780e6, label: 'not selected' } },
     { name: 'Selected', n: 500e6, hours: '3.38M h', c: '--s-select' },
-    { name: 'LAION-Audio-XL-500M', n: 500e6, hours: '3.34M h', c: '--s-500', out: { n: 135e6, label: 'longer than 30 s' }, release: true },
-    { name: 'LAION-Audio-XL', n: 365e6, hours: '1.38M h', c: '--s-365', release: true },
+    { name: 'LAION-Audio-XL-500M', n: 500e6, hours: '3.35M h', c: '--s-500', out: { n: 135e6, label: 'longer than 30 s' }, release: true },
+    { name: 'LAION-Audio-XL', n: 365e6, hours: '1.39M h', c: '--s-365', release: true },
   ];
   // the step between stage i and i+1: title, one-line detail, and the longer note behind the info button
   const STEPS = [
     ['Clean', 'silence, duplicates, eval', 'Silent or unreadable audio is dropped, exact duplicates are found by hash and audio fingerprint, near-duplicates with SemDeDup, and clips that overlap evaluation sets are removed.'],
     ['Annotate & select', '3,718-class taxonomy', 'Each clip gets taxonomy, language, speaker, emotion, music and species annotations. Selection then keeps 500M clips that cover the 3,718 classes, thinning common content and protecting rare categories.'],
-    ['Caption', 'Qwen3-Omni, MOSS-Audio', 'Prompted with the annotations, Qwen3-Omni and MOSS-Audio write a short (12 ± 3 words) and a long (28 ± 10 words) caption for the 470M clips without text. The other 30M already had captions.'],
+    ['Caption', 'Qwen3-Omni, MOSS-Audio', 'Prompted with the annotations, Qwen3-Omni and MOSS-Audio write a short (12 ± 3 words) and a long (29 ± 11 words) caption for the 471M clips without text.'],
     ['Keep ≤ 30 s', '', 'LAION-Audio-XL-500M keeps every selected clip up to 120 s. Training uses its ≤ 30 s subset, LAION-Audio-XL: +4.1 MAEB-30 points at 3.5× less compute.'],
   ];
 
   // LAION-Audio-XL by predicted category
-  const MIX = [['Speech', 44.9, '--speech'], ['Music', 22.5, '--music'], ['Sound effects', 16.4, '--sfx'], ['Other', 16.2, '--other']];
+  const MIX = [['Speech', 44.8, '--speech'], ['Music', 22.4, '--music'], ['Sound effects', 16.6, '--sfx'], ['Other', 16.2, '--other']];
   const MIX_RUN = 110;   // length of the band over which the domains separate
 
   // ---------- layout per screen ----------
