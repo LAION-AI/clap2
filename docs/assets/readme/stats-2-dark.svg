@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="380" height="92" viewBox="0 0 380 92" role="img" aria-label="5 sizes 27M–340M parameters · 53.6% MAEB-30, CLAP2-L">
+  <style>
+    :root { --a: #ff6b7f; --b: #3fc5c1; --c: #6aa1ff; --d: #9fc2e6; --label: #8b949e; }
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; text-anchor: middle; dominant-baseline: central; }
+    .n { font-size: 34px; font-weight: 700; letter-spacing: -0.5px; }
+    .l { font-size: 15px; fill: var(--label); }
+  </style>
+  <text class="n" x="95.0" y="34" style="fill: var(--c)">5 sizes</text>
+  <text class="l" x="95.0" y="70">27M–340M parameters</text>
+  <text class="n" x="285.0" y="34" style="fill: var(--d)">53.6%</text>
+  <text class="l" x="285.0" y="70">MAEB-30, CLAP2-L</text>
+</svg>
