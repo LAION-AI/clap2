@@ -17,7 +17,7 @@ def model(dev):
     emo = AutoModel(model="emotion2vec/emotion2vec_plus_large", hub="hf", device=str(dev), disable_update=True)
 
     def infer(x):
-        clips = [np.trim_zeros(r, "b") for r in x.numpy()]
+        clips = [np.trim_zeros(r, "b") if r.any() else r for r in x.numpy()]  # an all-zero window stays 5 s long
         out = emo.generate(clips, granularity="utterance", extract_embedding=False)
         assert all(len(o["scores"]) == len(LABELS) for o in out)
         return {"emo_label": [LABELS[int(np.argmax(o["scores"]))] for o in out]}

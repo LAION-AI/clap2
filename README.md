@@ -32,7 +32,8 @@ ds = load_dataset("laion/laion-audio-xl", streaming=True)   # configs: open (def
 ```
 
 Clips that cannot be redistributed are in the gated links repository `laion/laion-audio-xl-links`;
-`0_download/web_youtube.py` and `0_download/web_links.py` download and cut them into the same WebDataset format.
+`0_download/web_youtube.py` and `0_download/web_links.py` stream its rows and download and cut the clips into
+WebDataset tars, one folder per source dataset, ready as input `IN` of the pipeline.
 
 ## Pipeline
 

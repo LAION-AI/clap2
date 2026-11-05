@@ -10,8 +10,9 @@ import soxr
 SR = 32000
 
 
-def decode(src, max_seconds=None):
-    """(frames x channels float32, sample rate) of the first audio stream of a path or bytes; 0 frames if it has none."""
+def decode(src, max_seconds=None, until=None):
+    """(frames x channels float32, sample rate) of the first audio stream of a path or bytes; 0 frames if it has none.
+    ValueError if longer than max_seconds; decoding stops once `until` seconds are decoded."""
     with av.open(io.BytesIO(src) if isinstance(src, bytes) else src, metadata_errors="ignore") as c:
         if not c.streams.audio:
             return np.zeros((0, 1), np.float32), 0
@@ -19,8 +20,13 @@ def decode(src, max_seconds=None):
         if max_seconds is not None and (c.duration or 0) > max_seconds * av.time_base:
             raise ValueError(f"longer than {max_seconds} s")
         r = av.AudioResampler(format="flt")  # packed: planar frames with > 8 channels crash to_ndarray
-        x = [g.to_ndarray().reshape(-1, g.layout.nb_channels) for f in itertools.chain(c.decode(s), [None]) for g in r.resample(f)]
-        rate = s.codec_context.sample_rate
+        rate, x, n = s.codec_context.sample_rate, [], 0
+        for f in itertools.chain(c.decode(s), [None]):
+            for g in r.resample(f):
+                x.append(g.to_ndarray().reshape(-1, g.layout.nb_channels))
+                n += len(x[-1])
+            if until is not None and n >= until * rate:
+                break
     return (np.concatenate(x) if x else np.zeros((0, 1), np.float32)), rate
 
 

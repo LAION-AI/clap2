@@ -81,12 +81,13 @@
     'MAEST': HF('mtg-upf/discogs-maest-30s-pw-129e'),
     'CREPE pitch': 'https://github.com/marl/crepe',
   };
-  // datasets: ours (laion/laion-audio-xl-<size>), the dataset comparison, and the retrieval test sets
+  // datasets: ours (one repo, laion/laion-audio-xl: clips up to 120 s, in_laion_audio_xl marks the 30 s corpus), the
+  // dataset comparison, and the retrieval test sets
   const HFD = id => 'https://huggingface.co/datasets/' + id;
   const arxiv = id => 'https://arxiv.org/abs/' + id;
   Object.assign(L, {
     'LAION-Audio-XL': HFD('laion/laion-audio-xl'),
-    'LAION-Audio-XL-500M': HFD('laion/laion-audio-xl-500m'),
+    'LAION-Audio-XL-500M': HFD('laion/laion-audio-xl'),
     'Clotho': 'https://zenodo.org/records/4783391',
     'AudioCaps': 'https://audiocaps.github.io/',
     'WavCaps': HFD('cvssp/WavCaps'),

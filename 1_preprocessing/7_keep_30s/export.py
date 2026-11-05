@@ -19,8 +19,11 @@ PER_TAR = 4096
 def plan(work, base, max_seconds, seed, units, holdout):
     """Split (lowest audio ids: valid, then test) and seeded position of every selected clip <= max_seconds with text
     or a caption; one plan file per split and unit."""
-    root = base / "plan"
-    if not root.exists():
+    root, params = base / "plan", {"max_seconds": max_seconds, "seed": seed, "units": units, "holdout": holdout}
+    if root.exists():
+        old = json.loads((root / "params.json").read_text()) if (root / "params.json").exists() else params
+        assert old == params, f"{root} was planned with {old}; delete it to plan with {params}"
+    else:
         captioned = pl.scan_parquet(work / "captions" / "**" / "*.parquet").select("clip_id", captioned=True)
         df = (pl.scan_parquet(work / "selection.parquet").select("clip_id")
               .join(pl.scan_parquet(work / "stats" / "**" / "*.parquet").select("clip_id", "audio_id", "tar", "key", "duration", "text_len"),
@@ -37,8 +40,9 @@ def plan(work, base, max_seconds, seed, units, holdout):
             (tmp / split).mkdir(parents=True, exist_ok=True)
             for (u,), rows in part.with_columns(pl.Series("pos", rng.permutation(part.height))).partition_by("unit", as_dict=True).items():
                 rows.drop("unit", "split").write_parquet(tmp / split / f"{u:05d}.parquet")
+        (tmp / "params.json").write_text(json.dumps(params))
         os.replace(tmp, root)
-    return {d.name: sorted(d.glob("*.parquet")) for d in sorted(root.iterdir())}
+    return {d.name: sorted(d.glob("*.parquet")) for d in sorted(root.iterdir()) if d.is_dir()}
 
 
 def fields(work, rel):

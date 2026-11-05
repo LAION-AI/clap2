@@ -20,7 +20,6 @@ PARTS = re.compile(r"(.+\.(?:zip|7z|tar|tar\.gz|tgz))\.?(\d{3}|a[a-z])", re.I)
 OPENSLR = ["*.tar.gz", "*.tgz", "*.zip", "*.tar", "*.tar.bz2", "*.txt", "*.tsv", "*.csv"]
 LINKS = {"youtube", "commoncrawl", "web"}  # rebuilt by youtube.py, commoncrawl.py and ../web_youtube.py, ../web_links.py
 S = requests.Session()
-S.headers["User-Agent"] = "clap2-download (+https://github.com/LAION-AI/clap2)"
 
 
 def get(url, **kw):

@@ -19,7 +19,7 @@ def decode(audio):
     try:
         sr, channels, frames = info(audio)
         x = load(audio) if frames else None
-    except sf.LibsndfileError:
+    except (sf.LibsndfileError, AssertionError):  # unreadable, or a header with frames but no samples
         return None
     return (x, sr, channels, frames) if x is not None and np.isfinite(x).all() else None
 

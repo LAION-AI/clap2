@@ -88,7 +88,7 @@ window.LIO_SEEDS_FACTS = [
     src: "Paper · Table 1" },
   { id: "s1-table1-glap",
     q: ["How big is the GLAP training mix?","GLAP mix data size","how many sources and hours in GLAP's data","GLAP training data","how many clips in the GLAP training mix","how many hours of audio did GLAP train on","GLAP 445M clips","does GLAP have more clips than LAION-Audio-XL","What is the size of GLAP's training data?","how many sources in the GLAP mix"],
-    a: "GLAP's training mix has <b>12 sources</b>, 445M clips with 445M captions and about 435K hours, more clips than LAION-Audio-XL (365M) but under a third of its 1.39M hours.",
+    a: "GLAP's training mix has <b>12 sources</b>, 445M clips with 445M captions and about 435K hours, more clips than LAION-Audio-XL (365M) but under a third of its 1.38M hours.",
     src: "Paper · Table 1",
     not: ["score","scores","perform","performance","parameters","maeb","hear"] },
   // ---------- §3 LAION-Audio-XL dataset ----------

@@ -12,7 +12,7 @@ from pathlib import Path
 import polars as pl
 
 AUDIO = {"flac", "wav"}
-CPUS = len(os.sched_getaffinity(0))  # cores this process may use (taskset-aware)
+CPUS = len(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else os.cpu_count()  # taskset-aware on Linux
 
 
 def samples(path):

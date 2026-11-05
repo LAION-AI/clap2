@@ -39,7 +39,7 @@
     { name: 'Deduplicated pool', n: 1.28e9, hours: '7.96M h', c: '--s-dedup', out: { n: 780e6, label: 'not selected' } },
     { name: 'Selected', n: 500e6, hours: '3.38M h', c: '--s-select' },
     { name: 'LAION-Audio-XL-500M', n: 500e6, hours: '3.35M h', c: '--s-500', out: { n: 135e6, label: 'longer than 30 s' }, release: true },
-    { name: 'LAION-Audio-XL', n: 365e6, hours: '1.39M h', c: '--s-365', release: true },
+    { name: 'LAION-Audio-XL', n: 365e6, hours: '1.38M h', c: '--s-365', release: true },
   ];
   // the step between stage i and i+1: title, one-line detail, and the longer note behind the info button
   const STEPS = [

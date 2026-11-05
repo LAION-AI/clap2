@@ -6,8 +6,8 @@ requires-python = ">=3.12"
 license = "MIT"
 dependencies = [
     "numpy", "scipy", "polars>=1.37", "pyarrow", "pyyaml", "requests", "zstandard",
-    "soundfile", "soxr", "av", "librosa", "torch", "torchaudio", "triton", "safetensors", "huggingface_hub",
-    "warcio", "yt-dlp",                              # 0_download
+    "soundfile", "soxr", "av<19", "librosa", "torch", "torchaudio", "triton", "safetensors", "huggingface_hub",
+    "warcio", "yt-dlp", "datasets",                  # 0_download
     "cffi", "dasheng", "faiss-gpu-cu12",             # 2_deduplication (plus the Olaf build)
     "mteb[audio]==2.21.0",                           # 3_remove_eval_data registry (MAEB tasks)
     "transformers", "torchcrepe", "funasr",          # 4_annotation

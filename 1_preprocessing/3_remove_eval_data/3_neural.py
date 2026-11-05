@@ -182,8 +182,9 @@ def main():
             ci, st, z = embedded(model, pcm, store.offset[g] - store.offset[g[0]], store.n[g], EVAL_HOP, dev)
             E.append(z.cpu().numpy()), AID.append(g[ci]), T.append(st / SR)
         idx.mkdir(parents=True, exist_ok=True)
-        np.savez(part.with_suffix(".tmp.npz"), emb=np.concatenate(E), aid=np.concatenate(AID).astype(np.int32), t=np.concatenate(T))
-        return part.with_suffix(".tmp.npz").replace(part)
+        tmp = idx / f"tmp_{part.name}"  # outside the part*of*.npz glob below
+        np.savez(tmp, emb=np.concatenate(E), aid=np.concatenate(AID).astype(np.int32), t=np.concatenate(T))
+        return tmp.replace(part)
     files = sorted(idx.glob("part*of*.npz"))
     assert files and len(files) == int(files[0].stem.split("of")[1]), "run `embed` on every part first"
     parts = [np.load(p) for p in files]
@@ -193,6 +194,8 @@ def main():
     eval_dur = store.n / SR
 
     def compute(t):
+        if not len(t.clips["n"]):  # a collected tar without clips
+            return []
         ci, st, z = embedded(model, torch.from_numpy(t.pcm).to(dev), t.clips["offset"], t.clips["n"], CORPUS_HOP, dev)
         q, e, s = (y.cpu().numpy() for y in search(z, E, TAU))
         return chains(ci[q], st[q] // CORPUS_HOP, eval_t[e] - st[q] / SR, s, st[q] / SR, eval_aid[e], eval_dur)

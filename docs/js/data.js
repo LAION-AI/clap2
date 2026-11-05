@@ -25,7 +25,7 @@ window.DATA = {
 
   // Audio-text datasets (Table: LAION-Audio-XL compared to existing datasets)
   // access: 'public' = public (audio, captions with links to the audio, or a mix of public datasets),
-  // 'closed' = not released, 'planned' = ours
+  // 'closed' = not released, 'released' = ours (laion/laion-audio-xl)
   datasets: [
     { name: 'Clotho', hours: 37, captions: 30e3, audio: 6e3, access: 'public' },
     { name: 'AudioCaps', hours: 143, captions: 57e3, audio: 51e3, access: 'public' },
@@ -40,8 +40,8 @@ window.DATA = {
     { name: 'SLAP (MovieGen Audio)', hours: 1e6, captions: 109e6, audio: 109e6, access: 'closed' },
     { name: 'Bagpiper', hours: 933e3, captions: 392e6, audio: 392e6, access: 'public' },
     { name: 'GLAP mix', hours: 435e3, captions: 445e6, audio: 445e6, access: 'public' },
-    { name: 'LAION-Audio-XL-500M', hours: 3.35e6, captions: 970e6, audio: 500e6, ours: true, access: 'planned' },
-    { name: 'LAION-Audio-XL', hours: 1.39e6, captions: 707e6, audio: 365e6, ours: true, access: 'planned' },
+    { name: 'LAION-Audio-XL-500M', hours: 3.35e6, captions: 970e6, audio: 500e6, ours: true, access: 'released' },
+    { name: 'LAION-Audio-XL', hours: 1.38e6, captions: 707e6, audio: 365e6, ours: true, access: 'released' },
   ],
 
   // Sound taxonomy (thesis, appendix C.1 and its radial figure): 4,416 nodes, 4,085 leaves, 11 top-level groups,
