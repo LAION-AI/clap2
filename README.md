@@ -37,7 +37,10 @@ WebDataset tars, one folder per source dataset, ready as input `IN` of the pipel
 
 ## Pipeline
 
-![Pipeline](docs/assets/pipeline.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/pipeline_dark.png">
+  <img alt="Pipeline" src="docs/assets/pipeline.png">
+</picture>
 
 ```bash
 pip install -e .
