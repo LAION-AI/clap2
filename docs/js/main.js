@@ -17,27 +17,22 @@ document.querySelectorAll('a[aria-disabled="true"]').forEach(a => {
   const label = btn.querySelector('span');
   let t;
   async function copyBib() {
-    const text = document.getElementById('bib').innerText;
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch (e) {
-      // fallback for non-secure contexts
-      const ta = document.createElement('textarea');
-      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
-    }
-    label.textContent = 'Copied';
-    btn.classList.add('done');
+    const pre = document.getElementById('bib');
+    const ok = await U.copyText(pre.innerText);
+    label.textContent = ok ? 'Copied' : U.selectForCopy(pre);
+    return ok;
+    btn.classList.toggle('done', ok);
     clearTimeout(t);
-    t = setTimeout(() => { label.textContent = 'Copy'; btn.classList.remove('done'); }, 2500);
+    t = setTimeout(() => { label.textContent = 'Copy'; btn.classList.remove('done'); }, ok ? 2500 : 5000);
   }
   btn.addEventListener('click', copyBib);
   // the top-bar link still scrolls to the entry; it copies on the way and says so
   const link = document.querySelector('.tb-links a[href="#bibtex"]');
   let lt;
   link.title = 'Copy the BibTeX entry and jump to it';
-  link.addEventListener('click', () => {
-    copyBib();
+  link.addEventListener('click', async () => {
+    // if the copy failed, the entry's own button now says how to copy it by hand
+    if (!await copyBib()) return;
     link.textContent = 'BibTeX copied';
     link.classList.add('done');
     clearTimeout(lt);
@@ -75,16 +70,13 @@ document.querySelectorAll('.copy[data-copy]').forEach(btn => {
   const label = btn.querySelector('span');
   let t;
   btn.addEventListener('click', async () => {
-    const text = document.getElementById(btn.dataset.copy).innerText;
-    try { await navigator.clipboard.writeText(text); } catch (e) {
-      const ta = document.createElement('textarea');
-      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
-    }
-    label.textContent = 'Copied';
-    btn.classList.add('done');
+    const src = document.getElementById(btn.dataset.copy);
+    const ok = await U.copyText(src.innerText);
+    // the swap snippet copies a hidden line; on failure select the visible block it stands for
+    label.textContent = ok ? 'Copied' : U.selectForCopy(src.hidden ? btn.closest('.qs-card, .code-box').querySelector('pre') : src);
+    btn.classList.toggle('done', ok);
     clearTimeout(t);
-    t = setTimeout(() => { label.textContent = 'Copy'; btn.classList.remove('done'); }, 2500);
+    t = setTimeout(() => { label.textContent = 'Copy'; btn.classList.remove('done'); }, ok ? 2500 : 5000);
   });
 });
 

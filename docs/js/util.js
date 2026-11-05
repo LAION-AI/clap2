@@ -195,5 +195,25 @@ const U = (() => {
   });
   const onWidth = fn => widthFns.push(fn);
 
-  return { busy, solo, onWidth, el, rng, ease, clamp, lerp, hex, mix, rgba, onView, watchView, countUp, fmt, reduced, audioPeaks, clampText, modelUrl, modelLink, svgModelLink };
+  // copy text to the clipboard; resolves true only if it really got there (plain http, a denied permission and
+  // Safari after an await all make the async API fail; the old execCommand fallback reports its own result)
+  async function copyText(text) {
+    try { await navigator.clipboard.writeText(text); return true; } catch (e) {}
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.readOnly = true; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    ta.remove();
+    return ok;
+  }
+  // when copying fails, select the text instead so the reader can copy it by hand; returns what to tell them
+  function selectForCopy(el) {
+    const r = document.createRange(); r.selectNodeContents(el);
+    const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    if (matchMedia('(hover: none)').matches) return 'Selected, tap Copy';
+    return /Mac|iPhone|iPad/.test(navigator.userAgent) ? 'Selected, press \u2318C' : 'Selected, press Ctrl+C';
+  }
+
+  return { copyText, selectForCopy, busy, solo, onWidth, el, rng, ease, clamp, lerp, hex, mix, rgba, onView, watchView, countUp, fmt, reduced, audioPeaks, clampText, modelUrl, modelLink, svgModelLink };
 })();

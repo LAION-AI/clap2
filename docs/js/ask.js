@@ -145,7 +145,8 @@
     if (open) { flash('giggle', 900); if (first && !U.reduced) flash('hello', 1300); }   // the first time, he waves hello
   });
   $('.ask-close').addEventListener('click', () => { setOpen(false); btn.focus(); });
-  addEventListener('keydown', e => { if (e.key === 'Escape' && box.classList.contains('open')) { setOpen(false); btn.focus(); } });
+  // Escape closes his card only when focus is in it (or nowhere): elsewhere it belongs to that control (search, menus)
+  addEventListener('keydown', e => { if (e.key === 'Escape' && box.classList.contains('open') && (box.contains(document.activeElement) || document.activeElement === document.body)) { setOpen(false); btn.focus(); } });
 
   // ---------- example questions for the section in view (js/qa-seeds.js) ----------
   const EXAMPLES = ['Where does the data come from?', 'Will the dataset be released?', 'Why only clips up to 30 s?'];
@@ -547,13 +548,16 @@
 
   // ---------- go away: asked to leave (typed, or "Hide Lio"), he waves bye and sinks below the edge until only
   // his ears peek out; tapping them brings him back. Remembered for the rest of the visit ----------
-  const GO_AWAY = /^\s*(please\s+)?(go away|leave( me alone)?|bye|good ?bye|hide|shoo|get lost|disappear|go home|be quiet)\b/i;
+  // the whole message has to be the request, so questions like "Leave-one-out results?" or "Hide speech?" still get answers
+  const GO_AWAY = /^\s*(please\s+)?(go away|leave( me alone)?|bye|good ?bye|hide|shoo|get lost|disappear|go home|be quiet)(\s+(now|lio|please))*[\s.!]*$/i;
   let leaving;
   function goAway() {
     clearTimeout(leaving);
     chips.classList.remove('on');
     live.textContent = 'Lio is hidden. Tap his ears at the bottom of the screen to bring him back.';
+    const hadFocus = box.contains(document.activeElement);
     setOpen(false);
+    if (hadFocus) btn.focus({ preventScroll: true });   // focus stays on his ears instead of falling back to the page top
     box.classList.remove('eager', 'jam');
     say('bye');
     box.classList.add('bye');

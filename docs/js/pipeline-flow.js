@@ -473,6 +473,9 @@
   }, 1);  // start as soon as the figure's top enters the screen, so there is no empty gap on load
   let rt;
   U.onWidth(() => { clearTimeout(rt); rt = setTimeout(() => { build(); sizeCanvas(); }, 150); });
+  // label widths (info buttons, the hyphen break) are measured at build time: on a cold load the web font arrives
+  // later, so measure again with it
+  if (document.fonts && document.fonts.status !== 'loaded') document.fonts.ready.then(() => { build(); sizeCanvas(); });
   // the gradients and dots take their colours from CSS at build time, so a theme switch rebuilds the figure
   window.addEventListener('themechange', () => { mode = null; build(); sizeCanvas(); });
 })();

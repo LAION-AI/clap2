@@ -25,12 +25,11 @@
   };
   const NAMES = { x: 'Post on X', bluesky: 'Post on Bluesky', linkedin: 'Share on LinkedIn' };
 
+  // copies a link; if the clipboard refuses, the browser's own prompt shows the link ready to copy by hand
   async function copy(text) {
-    try { await navigator.clipboard.writeText(text); } catch (e) {
-      const ta = document.createElement('textarea');
-      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
-    }
+    if (await U.copyText(text)) return true;
+    window.prompt('Copy this link:', text);
+    return false;
   }
   const open = url => window.open(url, '_blank', 'noopener,width=620,height=640');
   // Lio (js/ask.js) does a little bit whenever the reader shares
@@ -63,7 +62,7 @@
     Object.keys(targets).forEach(k => item(k, NAMES[k], () => { open(targets[k](current.text, current.url)); close(); }));
     menu.append(document.createElement('hr'));
     item('link', 'Copy link', async b => {
-      await copy(current.url);
+      if (!await copy(current.url)) { close(); return; }
       b.setAttribute('aria-label', 'Link copied');
       b.title = 'Link copied';
       b.classList.add('done');
@@ -132,7 +131,7 @@
     Object.keys(targets).forEach(k => add(k, NAMES[k], () => open(targets[k](TEXT, pageUrl()))));
     let t;
     add('link', 'Copy link', async b => {
-      await copy(pageUrl());
+      if (!await copy(pageUrl())) return;
       b.classList.add('done');
       b.title = 'Link copied';
       clearTimeout(t);
@@ -162,9 +161,10 @@
     b.title = label;
     let t;
     b.addEventListener('click', async () => {
-      await copy(pageUrl('#' + id));
+      const ok = await copy(pageUrl('#' + id));
       history.replaceState(null, '', '#' + id);
       shared();
+      if (!ok) return;
       b.classList.add('done');
       clearTimeout(t);
       t = setTimeout(() => b.classList.remove('done'), 1600);
