@@ -283,8 +283,15 @@ function explorer(row, ROOT, makeFigure) {
     const how = n.parent === from ? 'down' : from.parent === n ? 'up' : 'side';
     st.cur = n; tip.hide();
     if (n.depth >= 0) explored = true;
+    const hadFocus = row.contains(document.activeElement) && document.activeElement !== input;
     refresh();
     fig.render({ cur: n, key: keyOf(), items: figItems(n, keyOf()), how, from });
+    // the focused row, crumb or bubble was just rebuilt: keep keyboard and screen-reader users at the new level
+    if (hadFocus && !row.contains(document.activeElement)) {
+      const visible = el => el && el.getClientRects().length;
+      const t = [list.querySelector('.row-b:not([disabled])'), canvas.querySelector('[tabindex="0"]'), crumb.querySelector('button')].find(visible);
+      if (t) t.focus({ preventScroll: true });
+    }
     if (then) setTimeout(then, U.reduced ? 0 : 800);
   }
   function up() { if (st.cur.depth >= 0) go(st.cur.parent); }
@@ -316,7 +323,7 @@ function explorer(row, ROOT, makeFigure) {
     hits = q ? ALL.filter(n => n.lc.includes(q)).sort((a, b) => (b.lc.startsWith(q) - a.lc.startsWith(q)) || (a.depth - b.depth) || (b.clips - a.clips)).slice(0, 8) : [];
     at = hits.length ? 0 : -1;
     sug.innerHTML = '';
-    if (q && !hits.length) sug.innerHTML = '<li class="none">Nothing matches</li>';
+    if (q && !hits.length) { const li = document.createElement('li'); li.className = 'none'; li.textContent = `No sound named \u201c${input.value.trim()}\u201d. Try a shorter or more general word, like \u201cbird\u201d.`; sug.appendChild(li); }
     hits.forEach(n => {
       const li = document.createElement('li');
       li.setAttribute('role', 'option');
@@ -402,7 +409,7 @@ function bubbles(canvas, api) {
   const cw = canvas.clientWidth || 820;
   const W = cw >= 700 ? 820 : Math.max(320, Math.round(cw)), H = cw >= 700 ? 520 : Math.round(W * 1.05);
   const C = { x: W / 2, y: H / 2 }, RF = Math.min(W, H) / 2 - 10;
-  const svg = U.el('svg', { class: 'bd', viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Bubble chart of the sound taxonomy: groups, their categories and their classes, sized by clips in LAION-Audio-XL.' }, canvas);
+  const svg = U.el('svg', { class: 'bd', viewBox: `0 0 ${W} ${H}`, role: 'group', 'aria-label': 'Bubble chart of the sound taxonomy: groups, their categories and their classes, sized by clips in LAION-Audio-XL.' }, canvas);
   // the neighbours of an opened node peek in at the frame edge; a soft mask fades them out towards the border so
   // the edge of the frame never shows as a hard line
   const uid = Math.random().toString(36).slice(2, 8), defsP = U.el('defs', {}, svg);
@@ -663,5 +670,19 @@ function bubbles(canvas, api) {
   };
 }
 
-fetch('assets/data/taxonomy.json').then(r => r.json()).then(J => explorer(row, buildTree(J), bubbles));
+// the data loads with the page; if it can't (offline, a server error), the figure slot says so and offers a retry
+function load() {
+  row.querySelector('.tx-fail')?.remove();
+  fetch('assets/data/taxonomy.json')
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(J => explorer(row, buildTree(J), bubbles))
+    .catch(() => {
+      const f = document.createElement('div');
+      f.className = 'fig tx-fail'; f.setAttribute('role', 'status');
+      f.innerHTML = '<p>The taxonomy figure couldn\u2019t load. Check your connection, then try again.</p><button type="button" class="copy">Try again</button>';
+      f.querySelector('button').addEventListener('click', load);
+      row.appendChild(f);
+    });
+}
+load();
 })();

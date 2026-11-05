@@ -44,6 +44,13 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/ask.css">
+  <!-- without JavaScript the figures stay empty: hide their dead controls and show the summary instead -->
+  <noscript><style>
+    .copy, .share-row, .btn-share, .tb-share, #theme-btn, .menu-btn, .info, .toggle, .budget, .play-ctl, .sizes, .code-tabs, .arch-lead + .budget, #table-fig, .bib-sec .pl { display: none !important; }
+    #taxonomy > .side { contain: none !important; }   /* it takes its height from the figure, which stays empty */
+    .nojs { max-width: 68ch; padding: 20px 24px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); font-size: var(--fs-b); line-height: 1.6; color: var(--ink-2); }
+    .nojs a { color: var(--ours); }
+  </style></noscript>
   <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -359,6 +366,7 @@
 <section class="row chapters" id="chapters" aria-labelledby="chapters-h">
   <h2 class="sr-only" id="chapters-h">Key Takeaways</h2>
   <div class="tk-grid" id="takeaways"></div>
+  <noscript><p class="nojs">The figures on this page need JavaScript. In short: LAION-Audio-XL has 365M audio clips with 707M captions (1.38M hours), curated from 1.48B collected clips. CLAP2, five CLAP models from CLAP2-XXS to CLAP2-L (27M to 340M parameters), is trained on it; CLAP2-L reaches 53.6% on MAEB-30, the best score of any model trained from scratch. Compute-optimal training data grows about 1.4&times; faster than model size. All numbers and tables are in the <a href="llms.txt">plain-text summary</a>.</p></noscript>
   <!-- 05 Usage: the title row on top like the results card; the copy buttons can't sit inside a link, so only the title row links -->
   <div class="ch-use" id="quick" style="--acc:var(--usage)">
     <a class="txt" href="#usage" aria-label="Go to the Usage chapter"><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -366,7 +374,7 @@
     <div class="qs-cards">
       <div class="qs-card">
         <div class="qs-top"><h3>Start in 8 Lines</h3><button class="copy" type="button" data-copy="qs-start"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button></div>
-        <pre id="qs-start"><code><span class="c-k">import</span> torch, open_clip <span class="c-k">as</span> oc, soundfile <span class="c-k">as</span> sf
+        <pre tabindex="0" id="qs-start"><code><span class="c-k">import</span> torch, open_clip <span class="c-k">as</span> oc, soundfile <span class="c-k">as</span> sf
 hub = <span class="c-s">&quot;hf-hub:laion/clap2-medium-audioxl-s1B&quot;</span>
 m, prep = oc.create_model_from_pretrained(hub)
 w, sr = sf.read(<span class="c-s">&quot;dog.wav&quot;</span>, dtype=<span class="c-s">&quot;float32&quot;</span>)
@@ -377,7 +385,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
       </div>
       <div class="qs-card">
         <div class="qs-top"><h3>Need Another Size? Swap One ID</h3><button class="copy" type="button" data-copy="qs-new"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button></div>
-        <pre class="qs-diff" aria-label="Change the model ID from CLAP2-M to CLAP2-XXS"><code><span class="del">hub = <span class="c-s">&quot;hf-hub:laion/clap2-medium-audioxl-s1B&quot;</span></span><span class="add">hub = <span class="c-s">&quot;hf-hub:laion/clap2-xxs-audioxl-s1B&quot;</span></span><span class="c-c"># sizes: xxs, xs, small, medium, large</span></code></pre>
+        <pre tabindex="0" class="qs-diff" aria-label="Change the model ID from CLAP2-M to CLAP2-XXS"><code><span class="del">hub = <span class="c-s">&quot;hf-hub:laion/clap2-medium-audioxl-s1B&quot;</span></span><span class="add">hub = <span class="c-s">&quot;hf-hub:laion/clap2-xxs-audioxl-s1B&quot;</span></span><span class="c-c"># sizes: xxs, xs, small, medium, large</span></code></pre>
         <span id="qs-new" hidden>hub = &quot;hf-hub:laion/clap2-xxs-audioxl-s1B&quot;</span>
       </div>
     </div>
@@ -395,14 +403,14 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
   </header>
 
   <div class="row" id="flow">
-    <div class="fig"><svg id="flow-svg" role="img" aria-label="LAION-Audio-XL curation pipeline: 1.48B collected clips are cleaned to a 1.28B deduplicated pool, 500M are selected and captioned into LAION-Audio-XL-500M, and its clips up to 30 seconds form LAION-Audio-XL."></svg>
+    <div class="fig"><svg id="flow-svg" role="group" aria-label="LAION-Audio-XL curation pipeline: 1.48B collected clips are cleaned to a 1.28B deduplicated pool, 500M are selected and captioned into LAION-Audio-XL-500M, and its clips up to 30 seconds form LAION-Audio-XL."></svg>
     </div>
   </div>
 
   <div class="row" id="taxonomy">
     <aside class="side">
       <h3>Taxonomy</h3>
-      <p>A classifier sorts every clip into 3,718 sound classes in 11 groups. Selection thins the common ones: speech falls from 75.3% of the pool to <span data-tax="speech">45.3%</span>. <button class="info" type="button" aria-expanded="false" aria-controls="i-tax" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <p>A classifier sorts every clip into 3,718 sound classes in 11 groups. Selection thins the common ones: speech falls from 75.3% of the pool to <span data-tax="speech">45.3%</span>. <button class="info" type="button" aria-expanded="false" aria-controls="i-tax" aria-label="More about the taxonomy"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
       <div class="info-more" id="i-tax" hidden><p>Claude Sonnet 4.5 grew the hierarchy by assigning captions to leaves and proposing new categories; merging removed duplicates and categories that combine several events. It has 4,416 nodes up to five levels deep, with 837 categories below the 11 groups. The classifier, an MLP on frozen Dasheng-0.6B features, predicts the 3,718 classes of the first three levels and assigns 85.6% of held-out clips to the right group. Clip counts are by predicted label.</p></div>
     </aside>
   </div>
@@ -414,12 +422,12 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
         <p>Expert models annotate every clip, and its predicted category decides which specialists run. The captioning model hears the audio, reads the annotations as raw JSON and writes a short and a long caption. Hover or tap an expert or a caption to trace its path.</p>
       </div>
     </div>
-    <div class="fig cap-scroll"><div class="ff-fig"><svg id="cap-svg" role="img" aria-label="Caption generation for one clip: the audio goes to expert models (taxonomy and signal statistics for every clip, then speech, music or animal specialists chosen by the predicted category); their annotations and the audio go to the captioning model (Qwen3-Omni or MOSS-Audio, prompted with the raw metadata JSON), which writes a short and a long caption. The LAION-Audio-XL sample keeps the audio, the annotations and both captions."></svg></div></div>
+    <div class="fig cap-scroll"><div class="ff-fig"><svg id="cap-svg" role="group" aria-label="Caption generation for one clip: the audio goes to expert models (taxonomy and signal statistics for every clip, then speech, music or animal specialists chosen by the predicted category); their annotations and the audio go to the captioning model (Qwen3-Omni or MOSS-Audio, prompted with the raw metadata JSON), which writes a short and a long caption. The LAION-Audio-XL sample keeps the audio, the annotations and both captions."></svg></div></div>
   </div>
 
   <div class="row" id="compare">
     <aside class="side">
-      <h3>Compared with Other Corpora <button class="info" type="button" aria-expanded="false" aria-controls="i-cmp" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></h3>
+      <h3>Compared with Other Corpora <button class="info" type="button" aria-expanded="false" aria-controls="i-cmp" aria-label="More about this comparison"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></h3>
       <div class="info-more" id="i-cmp" hidden><p>Bars share one linear scale per measure. Captions count the text entries each source reports: GLAP's are mostly ASR transcripts, and SALMONN-2 and Audio Flamingo 3 report training samples without clip counts. Dasheng's mix is audio only.</p></div>
       <div class="toggle" id="cmp-toggle" role="group" aria-label="Metric">
         <button class="on" data-k="hours">Duration</button>
@@ -449,7 +457,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
     <aside class="side">
       <h3>Dual Encoder</h3>
       <div class="arch-lead">
-        <p>Two separate towers, one for audio and one for text, map into one shared space. Because they run independently, audio is embedded once and can then be searched with any text. Hover a block for details. <button class="info" type="button" aria-expanded="false" aria-controls="i-arch" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+        <p>Two separate towers, one for audio and one for text, map into one shared space. Because they run independently, audio is embedded once and can then be searched with any text. Hover or tap a block for details. <button class="info" type="button" aria-expanded="false" aria-controls="i-arch" aria-label="More about the dual encoder"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
         <div class="arch-detail" id="arch-detail" aria-live="polite" hidden></div>
       </div>
       <div class="budget arch-size">
@@ -460,14 +468,14 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
       <div class="info-more" id="i-arch" hidden><p>Block heights follow each tower's width. Widths and depths follow common small ViT shapes and stay hardware-aligned. Both towers use pre-norm RMSNorm blocks with SwiGLU and rotary position embeddings.</p></div>
     </aside>
     <div class="fig">
-      <svg id="arch-svg" role="img" aria-label="Audio passes through log-mel patches, a NaFlex transformer, attention pooling and an MLP head; text passes through a BPE tokenizer, a text transformer, attention pooling and a linear layer; in training, the CLIP loss scores every clip against every caption in the batch, with the matched pairs on the diagonal."></svg>
+      <svg id="arch-svg" role="group" aria-label="Audio passes through log-mel patches, a NaFlex transformer, attention pooling and an MLP head; text passes through a BPE tokenizer, a text transformer, attention pooling and a linear layer; in training, the CLIP loss scores every clip against every caption in the batch, with the matched pairs on the diagonal."></svg>
     </div>
   </div>
 
   <div class="row" id="patches">
     <aside class="side">
       <h3>Flexible Length Encoding</h3>
-      <p>No fixed window: each clip is read at its own length, without padding or cropping. Every 16 × 16 spectrogram patch becomes one token, so a short clip stays short. <button class="info" type="button" aria-expanded="false" aria-controls="i-patch" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <p>No fixed window: each clip is read at its own length, without padding or cropping. Every 16 × 16 spectrogram patch becomes one token, so a short clip stays short. <button class="info" type="button" aria-expanded="false" aria-controls="i-patch" aria-label="More about flexible length encoding"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
       <div class="info-more" id="i-patch" hidden><p>128 mel bins at 100 frames per second: 8 tokens every 160 ms. Training clips are at most 30 s (1,504 tokens); longer inputs work but are outside the training range. Attention cost grows with the square of the token count.</p></div>
       <label class="budget pt-len">
         <span>Clip length <output id="pt-s">–</output></span>
@@ -490,7 +498,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
   <div class="row" id="scale-fig">
     <aside class="side">
       <h3>Error Falls Predictably with Compute</h3>
-      <p>Each line is one model size, moving right as it sees more samples. Each doubling of compute lowers the error by 4.1%, about +1.9 MAEB-30 points at the largest budget. <button class="info" type="button" aria-expanded="false" aria-controls="i-scale" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <p>Each line is one model size, moving right as it sees more samples. Each doubling of compute lowers the error by 4.1%, about +1.9 MAEB-30 points at the largest budget. <button class="info" type="button" aria-expanded="false" aria-controls="i-scale" aria-label="More about the scaling fit"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
       <div class="info-more" id="i-scale" hidden><p>Runs see 1M to 1,024M samples. The dashed line marks the lowest error reached so far. The fit shows its 95% bootstrap interval, all runs as faint dots, and the compute-optimal runs behind it as solid dots. Fitted exponent: α = 0.0603.</p></div>
       <div class="play-ctl">
         <div class="seen-head"><span>Training compute</span><output id="sc-val" for="sc-range"></output></div>
@@ -508,7 +516,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
   <div class="row" id="alloc">
     <aside class="side">
       <h3>Spend Compute on Data First</h3>
-      <p>The optimal sample count grows about 1.4× faster than the optimal model size. <button class="info" type="button" aria-expanded="false" aria-controls="i-alloc" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <p>The optimal sample count grows about 1.4× faster than the optimal model size. <button class="info" type="button" aria-expanded="false" aria-controls="i-alloc" aria-label="More about compute allocation"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
       <div class="info-more" id="i-alloc" hidden><p>For each compute budget we take the best run and fit power laws to its model size N and samples seen D. Past the largest run the fits are extrapolated, and they assume repeated samples are as useful as new ones, which holds for only a few passes over the data.</p></div>
       <div class="formula">
         <span><i style="background:var(--n)"></i><span>N<sub>opt</sub> ∝ C<sup>0.405</sup></span></span>
@@ -540,7 +548,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
   <div class="row" id="progress-fig">
     <aside class="side">
       <h3>A Step Change for CLAP</h3>
-      <p>MAEB-30 scores of CLAP-style models by release date. Four years raised the best score by 16 points, from 28.3% to 44.1%. CLAP2 adds 9.5 more. <button class="info" type="button" aria-expanded="false" aria-controls="i-progress" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <p>MAEB-30 scores of CLAP-style models by release date. Four years raised the best score by 16 points, from 28.3% to 44.1%. CLAP2 adds 9.5 more. <button class="info" type="button" aria-expanded="false" aria-controls="i-progress" aria-label="More about the release dates"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
       <div class="info-more" id="i-progress" hidden><p>Dates are first public releases (paper or checkpoint). Omni-embedding models with 1B to 9B parameters, which are not drop-in CLAP replacements, reach up to 53.5% (LCO-Embedding-Omni-7B); they appear in the size comparison below.</p></div>
       <div class="legend static">
         <span><i class="lg-ours"></i>CLAP2<span class="ours-tag">ours</span></span>
@@ -548,13 +556,13 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
         <span><i class="lg-best"></i>Best score so far</span>
       </div>
     </aside>
-    <div class="fig"><svg id="progress-chart" viewBox="0 0 820 380" role="img" aria-label="Best MAEB-30 score of CLAP-style models by release date: wav2clip 28.3% in 2021, LAION-CLAP 35.2% in 2022, LAION Larger CLAP 36.2% and MS-CLAP 2023 37.3% in 2023, M2D-CLAP 38.0% in 2024, GLAP 44.1% in 2025, and CLAP2 46.2% to 53.6% in 2026."></svg></div>
+    <div class="fig"><svg id="progress-chart" viewBox="0 0 820 380" role="group" aria-label="Best MAEB-30 score of CLAP-style models by release date: wav2clip 28.3% in 2021, LAION-CLAP 35.2% in 2022, LAION Larger CLAP 36.2% and MS-CLAP 2023 37.3% in 2023, M2D-CLAP 38.0% in 2024, GLAP 44.1% in 2025, and CLAP2 46.2% to 53.6% in 2026."></svg></div>
   </div>
 
   <div class="row" id="sota-fig">
     <aside class="side">
       <h3>State of the Art for Its Size</h3>
-      <p>Average score against parameters. On MAEB-30, our CLAP2-XXS to CLAP2-M models (27M to 153M parameters) are only beaten by models with at least 8× more parameters. <button class="info" type="button" aria-expanded="false" aria-controls="i-sota" aria-label="More details"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <p>Average score against parameters. On MAEB-30, our CLAP2-XXS to CLAP2-M models (27M to 153M parameters) are only beaten by models with at least 8× more parameters. <button class="info" type="button" aria-expanded="false" aria-controls="i-sota" aria-label="More about the size comparison"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
       <div class="info-more" id="i-sota" hidden><p>Triangles mark other contrastive audio–text models like CLAP; the strongest, GLAP, reaches 44.1% on MAEB-30 with 855M parameters. On HEAR (Holistic Evaluation of Audio Representations, 17 tasks), CLAP2-S to CLAP2-L (104M to 340M parameters) score higher than every other audio–text model; audio-only encoders such as USAD 2.0 reach 86.8.</p></div>
       <div class="toggle" id="sota-toggle" role="group" aria-label="Benchmark">
         <button class="on" data-k="maeb">MAEB-30</button>
@@ -569,7 +577,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
       </div>
     </aside>
     <div class="fig chart-wrap">
-      <svg id="sota-chart" viewBox="0 0 820 440" role="img" aria-label="Average benchmark score against parameter count. CLAP2 models from CLAP2-XXS (27M parameters) to CLAP2-L (340M) lie on the Pareto front of audio–text models; CLAP2-L (340M) reaches 53.6% on MAEB-30."></svg>
+      <svg id="sota-chart" viewBox="0 0 820 440" role="group" aria-label="Average benchmark score against parameter count. CLAP2 models from CLAP2-XXS (27M parameters) to CLAP2-L (340M) lie on the Pareto front of audio–text models; CLAP2-L (340M) reaches 53.6% on MAEB-30."></svg>
       <div class="tip" id="sota-tip"></div>
     </div>
   </div>
@@ -606,7 +614,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
       <h3>Use CLAP2</h3>
       <div class="code-tabs" role="tablist" aria-label="Examples"><button type="button" role="tab" aria-selected="true" aria-controls="code-embed">OpenCLIP Package</button><button type="button" role="tab" aria-selected="false" aria-controls="code-batch" tabindex="-1">Several Clips</button></div>
     </aside>
-    <div class="fig"><div class="code-box"><div class="code-head"><button class="copy" type="button" data-copy="code-embed"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button></div><div class="code-body"><pre id="code-embed" role="tabpanel"><code><span class="c-c"># pip install torchaudio tiktoken soundfile</span>
+    <div class="fig"><div class="code-box"><div class="code-head"><button class="copy" type="button" data-copy="code-embed"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button></div><div class="code-body"><pre tabindex="0" id="code-embed" role="tabpanel"><code><span class="c-c"># pip install torchaudio tiktoken soundfile</span>
 <span class="c-c"># pip install "open_clip_torch[audio] @ git+https://github.com/mlfoundations/open_clip@refs/pull/1230/head"</span>
 <span class="c-k">import</span> torch, open_clip <span class="c-k">as</span> oc, soundfile <span class="c-k">as</span> sf
 
@@ -618,7 +626,7 @@ w, sr = sf.read(<span class="c-s">&quot;dog.wav&quot;</span>, dtype=<span class=
 x = prep(m.audio.cfg.audio_seq_len)((torch.from_numpy(w.T), sr))
 a = m.encode_audio({k: v[<span class="c-k">None</span>] <span class="c-k">for</span> k, v <span class="c-k">in</span> x.items()})
 t = m.encode_text(tok([<span class="c-s">&quot;a dog barks&quot;</span>, <span class="c-s">&quot;rain falls&quot;</span>]))
-<span class="c-f">print</span>(torch.cosine_similarity(a, t))</code></pre><pre id="code-batch" role="tabpanel" hidden><code><span class="c-k">from</span> torch.nn.utils.rnn <span class="c-k">import</span> pad_sequence
+<span class="c-f">print</span>(torch.cosine_similarity(a, t))</code></pre><pre tabindex="0" id="code-batch" role="tabpanel" hidden><code><span class="c-k">from</span> torch.nn.utils.rnn <span class="c-k">import</span> pad_sequence
 
 xs = []
 <span class="c-k">for</span> f <span class="c-k">in</span> [<span class="c-s">&quot;dog.wav&quot;</span>, <span class="c-s">&quot;rain.wav&quot;</span>]:
@@ -636,12 +644,12 @@ a = m.encode_audio(batch)
       <p>Three configs by licence: open (the default), sharealike and noncommercial. Clips we crawled ourselves are listed as links in the gated <a href="https://huggingface.co/datasets/laion/laion-audio-xl-links" target="_blank" rel="noopener">laion/laion-audio-xl-links</a>.</p>
       <div class="code-tabs" role="tablist" aria-label="Examples"><button type="button" role="tab" aria-selected="true" aria-controls="code-stream">Stream and Inspect</button><button type="button" role="tab" aria-selected="false" aria-controls="code-filter" tabindex="-1">Filter</button></div>
     </aside>
-    <div class="fig"><div class="code-box"><div class="code-head"><button class="copy" type="button" data-copy="code-stream"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button></div><div class="code-body"><pre id="code-stream" role="tabpanel"><code><span class="c-k">from</span> datasets <span class="c-k">import</span> load_dataset
+    <div class="fig"><div class="code-box"><div class="code-head"><button class="copy" type="button" data-copy="code-stream"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button></div><div class="code-body"><pre tabindex="0" id="code-stream" role="tabpanel"><code><span class="c-k">from</span> datasets <span class="c-k">import</span> load_dataset
 
 name = <span class="c-s">&quot;laion/laion-audio-xl&quot;</span>
 ds = load_dataset(name, streaming=<span class="c-k">True</span>)
 <span class="c-k">for</span> s <span class="c-k">in</span> ds[<span class="c-s">&quot;train&quot;</span>].take(<span class="c-n">3</span>):
-    <span class="c-f">print</span>(s[<span class="c-s">&quot;short_caption&quot;</span>], s[<span class="c-s">&quot;duration&quot;</span>])</code></pre><pre id="code-filter" role="tabpanel" hidden><code><span class="c-k">def</span> is_music(s):
+    <span class="c-f">print</span>(s[<span class="c-s">&quot;short_caption&quot;</span>], s[<span class="c-s">&quot;duration&quot;</span>])</code></pre><pre tabindex="0" id="code-filter" role="tabpanel" hidden><code><span class="c-k">def</span> is_music(s):
     <span class="c-k">return</span> s[<span class="c-s">&quot;tax_l1&quot;</span>] == <span class="c-s">&quot;Music&quot;</span>
 
 music = ds[<span class="c-s">&quot;train&quot;</span>].filter(is_music)
@@ -661,7 +669,7 @@ music = ds[<span class="c-s">&quot;train&quot;</span>].filter(is_music)
     </div>
     <div class="bib-box">
     <button class="copy" id="bib-copy" type="button"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button>
-    <pre id="bib"><code>@inproceedings{wijngaard2027laionaudioxl,
+    <pre tabindex="0" id="bib"><code>@inproceedings{wijngaard2027laionaudioxl,
   title     = {{LAION-Audio-XL}: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining},
   author    = {Wijngaard, Gijs and F{\"o}rster, Felix and Wightman, Ross and Nezhurina, Marianna
                and Schuhmann, Christoph and Jitsev, Jenia and Koepke, A. Sophia},

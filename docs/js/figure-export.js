@@ -438,9 +438,17 @@
     clearTimeout(tt);
     tt = setTimeout(() => toast.classList.remove('on'), 2400);
   }
-  function close() { menu.hidden = true; }
+  // focus goes back to where it was when the menu opened (a figure or table reached by keyboard)
+  let opener = null;
+  function close() {
+    if (menu.hidden) return;
+    const back = menu.contains(document.activeElement) ? opener : null;
+    menu.hidden = true; opener = null;
+    if (back && back.isConnected) back.focus({ preventScroll: true });
+  }
 
   function open(x, y, items) {
+    if (menu.hidden) opener = document.activeElement;
     menu.innerHTML = '';
     items.forEach(it => {
       const b = document.createElement('button');
@@ -455,7 +463,7 @@
         try { job = it.run(); } catch (err) { job = Promise.reject(err); }
         job.then(msg => say(msg, x, y), err => {
           console.warn('figure export:', err);
-          say('Not available in this browser', x, y);
+          say('Couldn\u2019t do that in this browser. Try another option in this menu.', x, y);
         });
       });
       menu.appendChild(b);
@@ -478,6 +486,7 @@
   document.addEventListener('keydown', e => {
     if (menu.hidden) return;
     if (e.key === 'Escape') { close(); return; }
+    if (e.key === 'Tab') { close(); return; }   // leaving by keyboard closes it, like a native context menu
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
       const bs = [...menu.querySelectorAll('button')], i = bs.indexOf(document.activeElement);

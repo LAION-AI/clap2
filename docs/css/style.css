@@ -1,14 +1,14 @@
 :root {
   --ink: #1b1b1b;
   --ink-2: #444;
-  --muted: #737373;
+  --muted: #6b6b6b;   /* 4.5:1 or better on every light surface (tint, card, bad-bg) */
   --line: #e2e2e2;
   --line-2: #cfcfcf;
   --bg: #fff;
   --bg-soft: #f6f6f4;
   --laion: #1d374e;   /* LAION navy, also the footer band */
   --usage: #1d374e;   /* accent of the Usage chapter; lighter in dark mode */
-  --ours: #2f6fde;
+  --ours: #2a66d2;
   --ours-soft: #edf3fd;
   --remove: #d6453d;
   /* domains: Okabe-Ito colors, as in the paper's per-domain figure */
@@ -551,6 +551,7 @@ table.booktabs { width: 100%; border-collapse: collapse; font: var(--fs-m)/1.4 v
 pre { margin: 0; background: var(--bg-soft); border-radius: 6px; padding: 16px 18px; overflow-x: auto; font: var(--fs-s)/1.6 var(--mono); color: var(--ink); }
 /* code keeps IBM Plex Mono instead of the browser's default monospace */
 pre code { font: inherit; }
+pre:focus-visible { outline: 2px solid var(--ours); outline-offset: 2px; }
 
 /* ---------- pipeline as one Sankey flow ---------- */
 .row#flow { grid-template-columns: minmax(0, 1fr); row-gap: 18px; }
@@ -755,11 +756,12 @@ pre code { font: inherit; }
 .gm-share:hover { filter: none; background: color-mix(in srgb, var(--ours) 10%, transparent); }
 
 /* ---------- info buttons: optional detail under a side paragraph ---------- */
-.info { all: unset; cursor: pointer; display: inline-flex; vertical-align: -3px; width: 18px; height: 18px; margin-left: 2px; color: var(--muted); border-radius: 50%; }
+.info { all: unset; position: relative; cursor: pointer; display: inline-flex; vertical-align: -3px; width: 18px; height: 18px; margin-left: 2px; color: var(--muted); border-radius: 50%; }
 .info svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
 .info svg .dot { fill: currentColor; stroke: none; }
 .info:hover, .info[aria-expanded="true"] { color: var(--ours); }
 .info:focus-visible { outline: 2px solid var(--ours); outline-offset: 2px; }
+.info::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; }
 /* floats over the content below it, so opening a note never moves the page */
 .side { position: relative; }
 .info-more { position: absolute; left: 0; right: 0; z-index: 20; margin-top: 8px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); box-shadow: 0 10px 28px rgba(0, 0, 0, .12); font-size: var(--fs-m); line-height: 1.55; color: var(--ink-2); }
@@ -814,6 +816,7 @@ pre code { font: inherit; }
 .fk-aud .play svg { width: 10px; height: 10px; }
 .fk-wave { display: block; width: 100%; height: 22px; fill: var(--neutral); }
 .fk-aud.playing .fk-wave { fill: var(--ours); }
+.fk-err { grid-column: 1 / -1; font: var(--fs-s)/1.4 var(--sans); color: var(--remove); }
 /* the captioning model: a navy box the dots pass behind */
 .cf-box { fill: var(--laion); }
 .cf-box-h { fill: #fff; }
@@ -907,8 +910,8 @@ pre code { font: inherit; }
 .fe-sec.gen .fe-sub i { background: linear-gradient(90deg, var(--s-500) 50%, var(--s-collect) 50%); }
 .fe-chips { display: flex; flex-wrap: wrap; gap: 5px; }
 /* several chips per line, each line stretched to the full width */
-.fe-chip { flex: 1 1 auto; display: flex; align-items: center; gap: 4px; padding: 4px 9px; border-radius: 7px; background: color-mix(in srgb, var(--s-dedup) 14%, var(--bg)); color: var(--s-dedup); font: 500 11.5px/1.35 var(--sans); transition: box-shadow .2s; }
-.fe-chip.a { background: color-mix(in srgb, var(--s-select) 14%, var(--bg)); color: var(--s-select); }
+.fe-chip { flex: 1 1 auto; display: flex; align-items: center; gap: 4px; padding: 4px 9px; border-radius: 7px; background: color-mix(in srgb, var(--s-dedup) 14%, var(--bg)); color: color-mix(in srgb, var(--s-dedup) 62%, var(--ink)); font: 500 11.5px/1.35 var(--sans); transition: box-shadow .2s; }
+.fe-chip.a { background: color-mix(in srgb, var(--s-select) 14%, var(--bg)); color: color-mix(in srgb, var(--s-select) 62%, var(--ink)); }
 .fe-chip.on { box-shadow: 0 0 0 2px var(--ours); }
 /* phones (caption-flow-m.js): the clip card above the figure, the sample card below it */
 .fe-h { margin: 0; font: 600 13px/1.3 var(--sans); color: var(--muted); }
@@ -921,8 +924,8 @@ pre code { font: inherit; }
 .fe-ci { width: 11px; height: 11px; flex: none; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 .fe-blk { margin: -4px -6px; padding: 4px 6px; border-radius: 6px; transition: background .2s; }
 .fe-blk.on { background: var(--ours-soft); }
-.fe-blk b { display: block; font: 600 11px/1.2 var(--sans); text-transform: uppercase; letter-spacing: .05em; color: var(--s-500); }
-.fe-blk.l b { color: var(--s-collect); }
+.fe-blk b { display: block; font: 600 11px/1.2 var(--sans); text-transform: uppercase; letter-spacing: .05em; color: color-mix(in srgb, var(--s-500) 62%, var(--ink)); }   /* stage hue, darkened to 4.5:1 for 11px text */
+.fe-blk.l b { color: color-mix(in srgb, var(--s-collect) 80%, var(--ink)); }
 .fe-blk b span { font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); }
 .fe-blk p { margin: 4px 0 0; font: 13px/1.5 var(--sans); color: var(--ink-2); }
 .fe-blk.s p { font: 500 14px/1.45 var(--sans); color: var(--ink); }
@@ -1161,6 +1164,7 @@ pre code { font: inherit; }
 
 /* ================= explorer shell, shared by both figures ================= */
 .xp { position: relative; min-width: 0; }
+.tx-fail { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 24px; border: 1px dashed var(--line-2); border-radius: 8px; font: var(--fs-m)/1.5 var(--sans); color: var(--ink-2); }
 .xp :focus-visible, .side :focus-visible { outline: 2px solid var(--ours); outline-offset: 2px; }
 .xbar { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; min-height: 36px; }
 .xcrumb { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; font-size: var(--fs-m); color: var(--muted); white-space: nowrap; overflow: hidden; }
@@ -1200,12 +1204,13 @@ pre code { font: inherit; }
 .xl li:hover, .xl li.is-hl { background: var(--card); }
 .xl .row-b { all: unset; box-sizing: border-box; min-width: 0; cursor: pointer; display: grid; grid-template-columns: 10px minmax(0, 1fr) auto 10px; align-items: center; column-gap: 6px; padding: 4px 4px 4px 8px; font-size: var(--fs-m); color: var(--ink-2); }
 .xl li:hover .row-b, .xl li.is-hl .row-b { color: var(--ink); }
+.xl .row-b:focus-visible, .xl .row-p:focus-visible { outline: 2px solid var(--ours); outline-offset: -2px; border-radius: 6px; }
 .xl .row-b > i { width: 10px; height: 10px; border-radius: 3px; background: var(--c); }
 .xl .row-b > i.ghost { background: none; box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--c) 60%, transparent); }
 .xl .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .xl .v { font-variant-numeric: tabular-nums; color: var(--muted); }
 .xl .chev { width: 10px; height: 10px; fill: none; stroke: var(--muted); stroke-width: 2.4; }
-.xl .row-p { all: unset; cursor: pointer; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; color: var(--muted); transition: background .12s, color .12s; }
+.xl .row-p { all: unset; cursor: pointer; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; color: var(--muted); transition: background .12s, color .12s; }
 .xl .row-p svg { width: 9px; height: 9px; fill: currentColor; }
 .xl li:hover .row-p, .xl li.playing .row-p, .xl .row-p:focus-visible { background: var(--c); color: var(--on-ink); }
 .xl li.playing .row-b { color: var(--ink); font-weight: 600; }

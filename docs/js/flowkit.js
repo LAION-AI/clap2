@@ -239,11 +239,27 @@ window.FK = (function () {
   let playing = null;
   const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>';
   const PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>';
-  function stop() { if (playing) { playing.classList.remove('playing'); playing.querySelector('.play').innerHTML = PLAY; } audio.pause(); playing = null; }
+  function stop() {
+    if (playing) { playing.classList.remove('playing'); const b = playing.querySelector('.play'); if (b) { b.innerHTML = PLAY; b.setAttribute('aria-label', 'Play the clip'); } }
+    audio.pause(); playing = null;
+  }
+  // a clip that can't play (missing file, offline, blocked) resets the button and says so for a moment
+  function failed() {
+    const box = playing; stop();
+    if (!box) return;
+    let note = box.querySelector('.fk-err');
+    if (!note) { note = document.createElement('span'); note.className = 'fk-err'; note.setAttribute('role', 'status'); box.appendChild(note); }
+    note.textContent = 'Couldn\u2019t play this clip. Check your connection and try again.';
+    clearTimeout(note._t); note._t = setTimeout(() => note.remove(), 4000);
+  }
   audio.addEventListener('ended', stop);
+  audio.addEventListener('error', () => { if (playing) failed(); });
+  // paused from outside the page (media keys, headphones unplugged, a phone call): the button follows
+  audio.addEventListener('pause', () => { if (playing && audio.paused && !audio.ended) stop(); });
   U.solo(audio, stop);
   // play button and waveform, filled into `box`
   function player(box, src, bars = 48) {
+    if (playing === box) stop();   // the box is being refilled with another clip: the old one stops first
     box.classList.add('fk-aud');
     box.innerHTML = `<button type="button" class="play" aria-label="Play the clip">${PLAY}</button>`;
     const w = U.el('svg', { class: 'fk-wave', viewBox: `0 0 ${bars * 4} 24`, preserveAspectRatio: 'none', 'aria-hidden': 'true' }, box);
@@ -251,8 +267,11 @@ window.FK = (function () {
     U.audioPeaks(base + src, bars).then(pk => pk.forEach((p, k) => { const h = Math.max(2, p * 22); rects[k].setAttribute('y', 12 - h / 2); rects[k].setAttribute('height', h); })).catch(() => {});
     box.querySelector('.play').addEventListener('click', () => {
       if (playing === box) { stop(); return; }
-      stop(); audio.src = base + src; audio.play().catch(() => {});
-      playing = box; box.classList.add('playing'); box.querySelector('.play').innerHTML = PAUSE;
+      stop(); audio.src = base + src;
+      playing = box; box.classList.add('playing');
+      const b = box.querySelector('.play'); b.innerHTML = PAUSE; b.setAttribute('aria-label', 'Pause the clip');
+      box.querySelector('.fk-err')?.remove();
+      audio.play().catch(e => { if (playing === box && e.name !== 'AbortError') failed(); });
     });
   }
   const playingIn = el => playing && el.contains(playing);

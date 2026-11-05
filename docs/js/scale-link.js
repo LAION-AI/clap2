@@ -137,13 +137,25 @@
     range2.value = Math.round(U.clamp((l - X0) / (X1 - X0), 0, 1) * 1000);
     range2.dispatchEvent(new Event('input'));
   }
+  // one pointer at a time; a cancelled gesture (a system swipe, a palm) or lost capture ends the drag too
+  let dragId = null;
   c.grab.addEventListener('pointerdown', ev => {
+    if (dragId !== null) return;
+    dragId = ev.pointerId;
     ov.classList.add('dragging');
     c.grab.setPointerCapture(ev.pointerId);
-    const mv = e => setBudget(e.clientX);
-    const up = () => { ov.classList.remove('dragging'); window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); };
+    const mv = e => { if (e.pointerId === dragId) setBudget(e.clientX); };
+    const up = e => {
+      if (e.pointerId !== dragId) return;
+      dragId = null;
+      ov.classList.remove('dragging');
+      ['pointermove', 'pointerup', 'pointercancel'].forEach(t => window.removeEventListener(t, t === 'pointermove' ? mv : up));
+      c.grab.removeEventListener('lostpointercapture', up);
+    };
     window.addEventListener('pointermove', mv);
     window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+    c.grab.addEventListener('lostpointercapture', up);
     ev.preventDefault();
   });
 
