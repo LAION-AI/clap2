@@ -14,7 +14,7 @@
   <a href="https://huggingface.co/models?search=laion/clap2"><img src="docs/assets/readme/badge-models.svg" alt="CLAP2" height="28"></a>
 </p>
 
-<p><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/stats-1-dark.svg"><img src="docs/assets/readme/stats-1.svg" alt="365M audio-text pairs · 1.38M hours of audio, 452 sources" width="380"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/stats-2-dark.svg"><img src="docs/assets/readme/stats-2.svg" alt="5 sizes, 27M–340M parameters · 53.6% MAEB-30 (CLAP2-L)" width="380"></picture></p>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/stats-1-dark.svg"><img src="docs/assets/readme/stats-1.svg" alt="365M audio-text pairs · 1.39M hours of audio, 425 sources" width="380"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/stats-2-dark.svg"><img src="docs/assets/readme/stats-2.svg" alt="5 sizes, 27M–340M parameters · 53.6% MAEB-30 (CLAP2-L)" width="380"></picture></p>
 
 </div>
 
@@ -70,7 +70,7 @@ server environments). The selection `target` and `budget` (`5_selection/config.y
 
 | Folder | Step |
 |---|---|
-| `0_download/raw/` | rebuild the collection: `sources.csv` (452 sources), download handlers, converter, text rules; Common Crawl WARC extraction; YouTube |
+| `0_download/raw/` | rebuild the collection: `sources.csv` (425 sources), download handlers, converter, text rules; Common Crawl WARC extraction; YouTube |
 | `1_preprocessing/0_convert/` | 32 kHz 16-bit mono, long recordings cut at silences |
 | `1_preprocessing/1_filter_silent/` | per-clip signal statistics, silence and duration gate |
 | `1_preprocessing/2_deduplication/` | `0_hash_matching` (PCM MD5), `1_fingerprint` (Olaf), `2_semdedup` (Dasheng, SemDeDup) |
