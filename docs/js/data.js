@@ -17,10 +17,10 @@ window.DATA = {
     XS: [[8.147, 0.2877], [8.448, 0.3092], [8.749, 0.329], [9.05, 0.3467], [9.351, 0.3623], [9.653, 0.3639], [9.954, 0.3878], [10.255, 0.4201], [10.556, 0.4633], [10.857, 0.48], [11.158, 0.4908]],
     S: [[8.491, 0.2972], [8.793, 0.3179], [9.093, 0.3307], [9.395, 0.3535], [9.696, 0.3585], [9.997, 0.3846], [10.298, 0.4022], [10.599, 0.4437], [10.9, 0.4683], [11.201, 0.5083], [11.502, 0.5181]],
     M: [[8.661, 0.2989], [8.962, 0.3105], [9.264, 0.3271], [9.565, 0.3493], [9.866, 0.3584], [10.167, 0.3708], [10.468, 0.4001], [10.769, 0.4494], [11.07, 0.4794], [11.371, 0.5025], [11.672, 0.5231]],
-    L: [[9.031, 0.2913], [9.332, 0.3067], [9.633, 0.326], [9.934, 0.3361], [10.235, 0.3522], [10.536, 0.3742], [10.837, 0.4043], [11.138, 0.4512], [11.439, 0.4888], [11.74, 0.522]],
+    L: [[9.031, 0.2913], [9.332, 0.3067], [9.633, 0.326], [9.934, 0.3361], [10.235, 0.3522], [10.536, 0.3742], [10.837, 0.4043], [11.138, 0.4512], [11.439, 0.4888], [11.74, 0.522], [12.041, 0.5358]],
   },
   // Fitted scaling law reported in the paper: L(C) = A (C + e^B)^-alpha + E, C in GFLOPs.
-  fit: { A: 2.38, B: 20.03, alpha: 0.0603, E: 0 },
+  fit: { A: 2.22, B: 19.76, alpha: 0.0574, E: 0 },
   samplesSeen: ['1M', '2M', '4M', '8M', '16M', '32M', '64M', '128M', '256M', '512M', '1024M'],
 
   // Audio-text datasets (Table: LAION-Audio-XL compared to existing datasets)
@@ -174,36 +174,33 @@ window.DATA = {
   },
   // taxonomy-audio:end
 
-  // MAEB-30 mean (Table: MAEB-30 results). params in millions.
+  // MAEB-30 mean (paper Table 2). params in millions: audio and text parts only, as in the paper.
   maeb: [
-    { n: 'LCO-Embedding-Omni-7B', p: 8900, s: 53.5 },
-    { n: 'e5-omni-7B', p: 8900, s: 52.5 },
-    { n: 'BidirLM-Omni-2.5B', p: 2400, s: 52.4 },
-    { n: 'LCO-Embedding-Omni-3B', p: 4700, s: 52.3 },
-    { n: 'jina-v5-omni-small', p: 1600, s: 50.4 },
-    { n: 'e5-omni-3B', p: 4700, s: 48.0 },
-    { n: 'OmniEmbed-v0.1', p: 8900, s: 43.9 },
-    { n: 'fusion-embedding-2-2b', p: 2800, s: 40.2 },
-    { n: 'Qwen2-Audio-7B', p: 7000, s: 34.5 },
-    { n: 'EBind', p: 1800, s: 32.8 },
-    { n: 'Qwen2.5-Omni-7B', p: 10700, s: 24.2 },
-    { n: 'Qwen2.5-Omni-3B', p: 5500, s: 23.4 },
-    { n: 'jina-v5-omni-nano', p: 986, s: 51.8 },
-    { n: 'EmbeddingGemma 2', p: 744, s: 49.4 },
+    { n: 'LCO-Embedding-Omni-7B', p: 7700, s: 53.5 },
+    { n: 'e5-omni-7B', p: 7700, s: 52.5 },
+    { n: 'BidirLM-Omni-2.5B', p: 2000, s: 52.4 },
+    { n: 'LCO-Embedding-Omni-3B', p: 3700, s: 52.3 },
+    { n: 'jina-v5-omni-small', p: 1300, s: 50.4 },
+    { n: 'e5-omni-3B', p: 3700, s: 48.0 },
+    { n: 'OmniEmbed-v0.1', p: 7800, s: 43.9 },
+    { n: 'fusion-embedding-2-2b', p: 2400, s: 40.2 },
+    { n: 'Qwen2-Audio-7B', p: 7800, s: 34.5 },
+    { n: 'Qwen2.5-Omni-7B', p: 7700, s: 24.2 },
+    { n: 'jina-v5-omni-nano', p: 855, s: 51.8 },
+    { n: 'EmbeddingGemma 2', p: 577, s: 49.4 },
     { n: 'GLAP', p: 855, s: 44.1 },
     { n: 'M2D-CLAP', p: 199, s: 38.0 },
     { n: 'MS-CLAP 2023', p: 160, s: 37.3 },
     { n: 'TP-CLAP', p: 198, s: 37.2 },
     { n: 'CLAP-IPA small', p: 174, s: 36.5 },
     { n: 'LAION Larger CLAP', p: 194, s: 36.2 },
-    { n: 'AudioVerse CLAP', p: 144, s: 36.0 },
     { n: 'LAION-CLAP', p: 153, s: 35.2 },
     { n: 'MuQ-MuLan-large', p: 630, s: 28.9 },
-    { n: 'wav2clip', p: 163, s: 28.3 },
-    { n: 'SpeechT5 multimodal', p: 298, s: 26.7 },
+    { n: 'wav2clip', p: 75, s: 28.3 },
+    { n: 'SpeechT5', p: 180, s: 26.7 },
   ],
 
-  // HEAR mean over 17 tasks (Table: HEAR results). t: true = audio-text model.
+  // HEAR mean over 17 tasks (paper Table 13 and Fig. 6). t: true = audio-text model.
   hear: [
     { n: 'USAD 2.0-XXLarge+', p: 1000, s: 86.8 },
     { n: 'USAD 2.0-XLarge+', p: 695, s: 86.8 },
@@ -224,40 +221,34 @@ window.DATA = {
     { n: 'RedRice ced_small', p: 22, s: 77.1 },
     { n: 'BYOL-S/CvT', p: 5, s: 76.2 },
     { n: 'BEATs Iter3+', p: 90, s: 75.7 },
-    { n: 'RedRice ced_mini', p: 9.6, s: 75.4 },
-    { n: 'CP-JKU mn40_as', p: 68.4, s: 73.4 },
-    { n: 'Logitech SERAB BYOL-S', p: 5.3, s: 73.4 },
-    { n: 'GURA Fuse wav2vec2', p: 315, s: 73.2 },
     { n: 'OpenL3', p: 4.7, s: 70.8 },
     { n: 'CP-JKU PaSST', p: 86, s: 70.0 },
     { n: 'wav2vec2', p: 315, s: 67.7 },
-    { n: 'GURA Hubert', p: 963, s: 67.5 },
-    { n: 'RedRice EfficientNet-B2', p: 7.7, s: 66.0 },
     { n: 'CREPE', p: 22.2, s: 54.6 },
-    { n: 'AMAAI wav2vec2', p: 95, s: 48.6 },
-    { n: 'jina-v5-omni-nano', p: 986, s: 80.7, t: true },
+    { n: 'e5-omni-7B', p: 7700, s: 81.2, t: true },
+    { n: 'jina-v5-omni-nano', p: 855, s: 80.7, t: true },
     { n: 'M2D-CLAP', p: 199, s: 80.6, t: true },
-    { n: 'BidirLM-Omni-2.5B', p: 2400, s: 80.3, t: true },
-    { n: 'LCO-Embedding-Omni-7B', p: 8900, s: 79.8, t: true },
-    { n: 'LCO-Embedding-Omni-3B', p: 4700, s: 79.5, t: true },
-    { n: 'Qwen2-Audio-7B', p: 7000, s: 79.5, t: true },
-    { n: 'jina-v5-omni-small', p: 1600, s: 78.1, t: true },
-    { n: 'e5-omni-7B', p: 8900, s: 81.2, t: true },
-    { n: 'e5-omni-3B', p: 4700, s: 79.7, t: true },
-    { n: 'OmniEmbed-v0.1', p: 8900, s: 79.7, t: true },
-    { n: 'Qwen2.5-Omni-7B', p: 10700, s: 75.2, t: true },
-    { n: 'Qwen2.5-Omni-3B', p: 5500, s: 74.1, t: true },
+    { n: 'BidirLM-Omni-2.5B', p: 2000, s: 80.3, t: true },
+    { n: 'LCO-Embedding-Omni-7B', p: 7700, s: 79.8, t: true },
+    { n: 'OmniEmbed-v0.1', p: 7800, s: 79.7, t: true },
+    { n: 'e5-omni-3B', p: 3700, s: 79.7, t: true },
+    { n: 'LCO-Embedding-Omni-3B', p: 3700, s: 79.5, t: true },
+    { n: 'Qwen2-Audio-7B', p: 7800, s: 79.5, t: true },
+    { n: 'jina-v5-omni-small', p: 1300, s: 78.1, t: true },
+    { n: 'TP-CLAP', p: 198, s: 76.6, t: true },
+    { n: 'Qwen2.5-Omni-7B', p: 7700, s: 75.2, t: true },
     { n: 'MS-CLAP 2023', p: 160, s: 75.1, t: true },
+    { n: 'Qwen2.5-Omni-3B', p: 3700, s: 74.1, t: true },
     { n: 'GLAP', p: 855, s: 71.8, t: true },
-    { n: 'fusion-embedding-2-2b', p: 2800, s: 71.2, t: true },
-    { n: 'MuQ-MuLan-large', p: 630, s: 69.3, t: true },
-    { n: 'EmbeddingGemma 2', p: 744, s: 69.1, t: true },
-    { n: 'SpeechT5 multimodal', p: 298, s: 67.3, t: true },
-    { n: 'LAION-CLAP', p: 153, s: 69.2, t: true },
+    { n: 'fusion-embedding-2-2b', p: 2400, s: 71.2, t: true },
     { n: 'LAION Larger CLAP', p: 194, s: 69.5, t: true },
-    { n: 'EBind', p: 1800, s: 65.0, t: true },
+    { n: 'MuQ-MuLan-large', p: 630, s: 69.3, t: true },
+    { n: 'LAION-CLAP', p: 153, s: 69.2, t: true },
+    { n: 'EmbeddingGemma 2', p: 577, s: 69.1, t: true },
+    { n: 'CLAP-IPA small', p: 174, s: 67.4, t: true },
+    { n: 'SpeechT5', p: 180, s: 67.3, t: true },
     { n: 'MS-CLAP 2022', p: 196, s: 63.2, t: true },
-    { n: 'wav2clip', p: 163, s: 56.8, t: true },
+    { n: 'wav2clip', p: 75, s: 56.8, t: true },
   ],
 
   ours: [
@@ -270,7 +261,7 @@ window.DATA = {
 
   // First public release (paper or checkpoint) of the CLAP-style models in the MAEB-30 list, as a
   // fractional year, for the progress chart. VERIFY before publishing: filled in from the papers'
-  // arXiv dates as far as known. TP-CLAP and AudioVerse CLAP are left out until their dates are known.
+  // arXiv dates as far as known. TP-CLAP is left out until its date is known.
   releases: [
     ['wav2clip', 2021.8],
     ['LAION-CLAP', 2022.85],
@@ -285,19 +276,18 @@ window.DATA = {
 
   // Paper Table 2, audio-text models below 1B parameters: [name, params (M), mean, speech, music, sound]
   maebSmall: [
-    ['jina-embeddings-v5-omni-nano', 986, 51.8, 53.5, 73.8, 24.7],
-    ['EmbeddingGemma 2', 744, 49.4, 56.6, 61.4, 15.7],
+    ['jina-embeddings-v5-omni-nano', 855, 51.8, 53.5, 73.8, 24.7],
+    ['EmbeddingGemma 2', 577, 49.4, 56.6, 61.4, 15.7],
     ['GLAP', 855, 44.1, 42.4, 69.6, 23.4],
     ['M2D-CLAP', 199, 38.0, 30.0, 69.7, 29.9],
     ['MS-CLAP 2023', 160, 37.3, 29.2, 68.0, 30.9],
     ['TP-CLAP', 198, 37.2, 28.6, 67.0, 33.3],
     ['CLAP-IPA small', 174, 36.5, 41.4, 50.5, 8.1],
     ['LAION Larger CLAP', 194, 36.2, 27.1, 70.3, 29.6],
-    ['AudioVerse CLAP', 144, 36.0, 27.8, 64.2, 32.7],
     ['LAION-CLAP HTSAT unfused', 153, 35.2, 26.4, 68.4, 28.3],
     ['MuQ-MuLan-large', 630, 28.9, 23.1, 64.9, 10.6],
-    ['wav2clip', 163, 28.3, 24.1, 58.0, 11.3],
-    ['SpeechT5 multimodal', 298, 26.7, 26.0, 46.5, 9.1],
+    ['wav2clip', 75, 28.3, 24.1, 58.0, 11.3],
+    ['SpeechT5', 180, 26.7, 26.0, 46.5, 9.1],
   ],
   maebOurs: [
     ['CLAP2-XXS', 27, 46.2, 46.0, 69.2, 23.9],
@@ -310,7 +300,7 @@ window.DATA = {
   // Contribution radar, after paper Fig. 1 but with our M model: MAEB-30 task-type means from paper Table 2 (multilabel is
   // part of classification, reranking part of retrieval; clustering is left out). best: per axis, the best of the other models
   // below 500M parameters (CLAP-IPA small for retrieval and zero-shot, LAION Larger CLAP for classification,
-  // SpeechT5 multimodal for pair classification).
+  // SpeechT5 for pair classification).
   radar: {
     axes: ['Retrieval', 'Classification', 'Pair classification', 'Zero-shot'],
     sub: ['10 tasks', '12 tasks', '3 tasks', '2 tasks'],

@@ -34,7 +34,7 @@ window.LioQA = (() => {
     // chat filler: "so where did u get 1 billion audio files from lol", "ok cool"
     'ok okay cool lol haha nice wow hmm um uh pls plz thx btw guys hey yeah yep nope cheers awesome great sure hi hello thanks thank u ur r ya').split(' ')));
   // (the last few, "good", "best", ..., matter for the hand-written answers, which see all words)
-  // Greek letters by name, so "alpha" finds "α = 0.0603" and "tau" Kendall's "τ"
+  // Greek letters by name, so "alpha" finds "α = 0.0574" and "tau" Kendall's "τ"
   const GREEK = { α: 'alpha', β: 'beta', γ: 'gamma', δ: 'delta', ε: 'epsilon', η: 'eta', θ: 'theta', λ: 'lambda', μ: 'mu', ρ: 'rho', σ: 'sigma', τ: 'tau', φ: 'phi', ω: 'omega' };
   const words = s => (s.toLowerCase().replace(/[αβγδεηθλμρστφω]/g, c => ' ' + GREEK[c] + ' ').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/\^\{|_\{|\}/g, '').replace(/%/g, ' percent ').replace(/(\w)['’]s\b/g, '$1').match(/[a-z0-9]+/g) || []);
 
@@ -124,7 +124,7 @@ window.LioQA = (() => {
     tokenizer: 'vocabulary',
   }).reduce((m, [k, v]) => (m.set(stem(k), v.split(' ').map(x => x.split(':')).map(([w, f]) => [stem(w), f ? +f : .5]).filter(([w]) => w !== stem(k))), m), new Map());
 
-  // ---------- hand-written answers (js/qa-seeds.js and js/qa-seeds-more.js) ----------
+  // ---------- hand-written answers (js/qa-seeds.js) ----------
   // Each answer lists example phrasings `q`; a question is matched against all phrasings of all
   // answers (seedFor below). Function words and chat filler are dropped, but question words such as
   // "who", "why" and "work" are kept: "who are you?" and "how does it work?" have nothing else.
@@ -134,7 +134,7 @@ window.LioQA = (() => {
     'nope awesome sure tell explain know want wondering curious kind sort bit little').split(' '));
   const seedWords = s => words(s.replace(/([a-z])([A-Z]{3,})\b/g, '$1$2 $2')).flatMap(w => (/^[a-z]{4,}\d/.test(w) ? [w, w.match(/^[a-z]+/)[0]] : [w])).filter(w => !SEED_STOP.has(w));
   const seedToks = s => seedWords(s).map(stem);
-  const SEEDS = [...(window.LIO_SEEDS || []), ...(window.LIO_SEEDS_MORE || []), ...(window.LIO_SEEDS_FACTS || [])].filter(s => s && s.a && Array.isArray(s.q) && s.q.length)
+  const SEEDS = (window.LIO_SEEDS || []).filter(s => s && s.a && Array.isArray(s.q) && s.q.length)
     .map(s => ({ ...s, notSet: s.not && new Set(s.not.map(w => w.toLowerCase())) }));
   // ids used by more than one answer (tools/seed_check.js --lint reports them)
   const DUP_IDS = (() => { const seen = new Map(); SEEDS.forEach(s => seen.set(s.id, (seen.get(s.id) || 0) + 1)); return [...seen].filter(([, n]) => n > 1).map(([id]) => id); })();
@@ -560,7 +560,7 @@ window.LioQA = (() => {
   // the words of the hand-written answers' phrasings ("demo", "ring", "bibtex") are known too: they
   // name things on the page, not in the documents
   const SEEDWORDS = new Set(SEEDS.flatMap(s => s.q.flatMap(t => words(t))));
-  // numbers with a unit or magnitude ("84M", "1.38M" -> "38m", "30s", "8B", "10k", "2x") are values, not unknown words
+  // numbers with a unit or magnitude ("84M", "1.39M" -> "39m", "30s", "8B", "10k", "2x") are values, not unknown words
   const NUM_UNIT = /^\d+(k|m|b|bn|t|s|ms|h|hr|hrs|min|mins|sec|secs|gb|tb|mb|kb|x|d|hz|khz|th|st|nd|rd|p)$/;
   const known = (w, seedWords) => STOP.has(w) || (seedWords && SEEDWORDS.has(w)) || (/^[a-z]{4,}\d/.test(w) && PROSE.has(stem(w.match(/^[a-z]+/)[0]))) || /^\d+$/.test(w) || NUM_UNIT.test(w) || w.length <= 2 || PROSE.has(stem(w)) || ABBR.has(w) ||
     (SYN.get(stem(w)) || []).some(([x, f]) => f >= .5 && PROSE.has(x));

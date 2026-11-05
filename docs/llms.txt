@@ -1,21 +1,21 @@
 # LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining
 
-> Project page of the LAION-Audio-XL paper. LAION-Audio-XL is a corpus of 365M audio clips with 707M captions (1.38M hours), curated from 1.48B collected clips. The paper derives compute scaling laws for contrastive language-audio pretraining (CLAP) and releases CLAP2, a family of five CLAP models (CLAP2-XXS to CLAP2-L, 27M to 340M parameters). CLAP2-L (340M parameters) reaches 53.6% on MAEB-30, the best score of any model trained from scratch on the MAEB leaderboard.
+> Project page of the LAION-Audio-XL paper. LAION-Audio-XL is a corpus of 365M audio clips with 707M captions (1.39M hours), curated from 1.48B collected clips. The paper derives compute scaling laws for contrastive language-audio pretraining (CLAP) and releases CLAP2, a family of five CLAP models (CLAP2-XXS to CLAP2-L, 27M to 340M parameters). CLAP2-L (340M parameters) reaches 53.6% on MAEB-30, the best score of any model trained from scratch on the MAEB leaderboard.
 
 Authors: Gijs Wijngaard (Jülich Supercomputing Center (JSC), Forschungszentrum Jülich (FZJ); LAION; equal contribution, order decided by coin flip), Felix Förster (Technical University of Munich, MCML; equal contribution), Ross Wightman (LAION), Marianna Nezhurina (JSC, FZJ; LAION), Christoph Schuhmann (LAION), Jenia Jitsev (JSC, FZJ; LAION; senior advisor), A. Sophia Koepke (Technical University of Munich, MCML; University of Tübingen, Tübingen AI Center; senior advisor).
 
-Code: https://github.com/LAION-AI/clap2. Dataset: https://huggingface.co/datasets/laion/laion-audio-xl (configs open, sharealike, noncommercial; clips crawled from the web are listed as links in the gated laion/laion-audio-xl-links). Models: https://huggingface.co/laion/clap2-medium-audioxl-s1B; all five sizes are laion/clap2-{xxs,xs,small,medium,large}-audioxl-s1B, loaded with OpenCLIP. A paper link will follow.
+Code: https://github.com/LAION-AI/clap2. Dataset: https://huggingface.co/datasets/laion/laion-audio-xl (configs open, sharealike, noncommercial; clips crawled from the web are listed as links in the gated laion/laion-audio-xl-links). Models: https://huggingface.co/laion/clap2-medium-audioxl-s1B; all five sizes are laion/clap2-{xxs,xs,small,medium,large}-audioxl-s1B, loaded with OpenCLIP.
 
 ## Abstract
 
-Recent advances in contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.48 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our models outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks. As a result, our models can serve as a drop-in replacement for CLAP in downstream applications. We release our dataset, captions, model checkpoints, and code.
+Recent progress on contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.48 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture for the audio encoder. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our resulting models, CLAP2, outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks, and can serve as a drop-in replacement for CLAP in downstream applications. We release our dataset, captions, model checkpoints, and code.
 
 ## Key results
 
 - Headline: the smallest model, CLAP2-XXS (27M parameters), scores 46.2% on MAEB-30 and beats every earlier contrastive audio-text (CLAP-style) model, including GLAP (44.1%, 855M parameters, 31× larger).
-- Progress: from wav2clip (2021, 28.3%) to GLAP (2025, 44.1%), four years of CLAP-style models raised the best MAEB-30 score by 16 points; CLAP2-L (340M, 53.6%) adds 9.5 more. Omni-embedding models of 1B to 9B parameters, which are not drop-in CLAP replacements, reach up to 53.5%.
-- Dataset: LAION-Audio-XL has 365M clips of up to 30 s, 707M captions and 1.38M hours of audio. The larger 500M selection (clips up to 120 s) has 500M clips, 970M captions and 3.35M hours.
-- Scaling: MAEB-30 error follows L(C) = A (C + e^B)^(-α) + E with A = 2.38, B = 20.03, α = 0.0603, E = 0 (C in GFLOPs). Each doubling of compute lowers the error by 4.1%, about +1.9 MAEB-30 points at the largest budget.
+- Progress: from wav2clip (2021, 28.3%) to GLAP (2025, 44.1%), four years of CLAP-style models raised the best MAEB-30 score by 16 points; CLAP2-L (340M, 53.6%) adds 9.5 more. Omni-embedding models of 1B to 8B parameters, which are not drop-in CLAP replacements, reach up to 53.5%.
+- Dataset: LAION-Audio-XL has 365M clips of up to 30 s, 707M captions and 1.39M hours of audio. The larger 500M selection (clips up to 120 s) has 500M clips, 970M captions and 3.35M hours.
+- Scaling: MAEB-30 error follows L(C) = A (C + e^B)^(-α) + E with A = 2.22, B = 19.76, α = 0.0574, E = 0 (C in GFLOPs). Each doubling of compute lowers the error by 3.9%, about +1.8 MAEB-30 points at the largest budget.
 - Compute-optimal allocation: optimal model size N_opt ∝ C^0.405 and optimal samples seen D_opt ∝ C^0.583, so optimal data grows about 1.4× faster than model size. Extra compute should go mostly to more data.
 - Benchmarks: CLAP2-L scores 53.6% on MAEB-30 with 340M parameters, ahead of GLAP (44.1%, 855M) and LAION-CLAP (35.2%, 153M). On MAEB-30, CLAP2-XXS to CLAP2-M (27M to 153M) are only beaten by models with at least 8× more parameters. On HEAR (17 tasks), CLAP2-S to CLAP2-L (104M to 340M) score higher than every other audio-text model.
 
@@ -29,7 +29,7 @@ Sources (collected clips): YouTube 1,180M (from 32.66M Creative Commons videos),
 | Deduplicated pool | 1,280M | 7.96M | 780M not selected |
 | Selected | 500M | 3.38M | none (captioning) |
 | The 500M selection | 500M | 3.35M | 135M clips longer than 30 s |
-| LAION-Audio-XL | 365M | 1.38M | |
+| LAION-Audio-XL | 365M | 1.39M | |
 
 1. Clean: silent or unreadable audio is dropped; exact duplicates are found by hash and audio fingerprint, near-duplicates with SemDeDup; clips that overlap evaluation sets are removed.
 2. Annotate and select: each clip gets taxonomy, language, speaker, emotion, music and species annotations. Selection keeps 500M clips that cover a 3,718-class taxonomy, thinning common content and protecting rare categories.
@@ -40,7 +40,7 @@ Composition of LAION-Audio-XL by predicted category: speech 44.8%, music 22.4%, 
 
 ## Sound taxonomy
 
-Selection is driven by a sound taxonomy of 4,416 nodes (4,085 leaves) in up to five levels: 11 top-level groups and 837 second-level categories. Claude Sonnet 4.5 grew it by assigning captions to leaves and proposing new categories; merging removed duplicates and categories that combine several events. The classifier (an MLP on frozen Dasheng-0.6B features) predicts the 3,718 classes of the first three levels and assigns 85.6% of held-out clips to the correct top-level group. Selection thins common classes and protects rare ones: speech falls from 75.3% of the deduplicated pool to 44.8% of LAION-Audio-XL, music rises from 11.7% to 22.4%.
+Selection is driven by a sound taxonomy of 4,416 nodes (4,085 leaves) in up to five levels: 11 top-level groups and 837 second-level categories. An LLM grew it by assigning captions to leaves and proposing new categories; merging removed duplicates and categories that combine several events. The classifier (an MLP on frozen Dasheng-0.6B features) predicts the 3,718 classes of the first three levels and assigns 85.6% of held-out clips to the correct top-level group. Selection thins common classes and protects rare ones: speech falls from 75.3% of the deduplicated pool to 44.8% of LAION-Audio-XL, music rises from 11.7% to 22.4%.
 
 | Top-level group | Leaf classes | Largest categories (leaf classes) |
 |---|---:|---|
@@ -82,7 +82,7 @@ Each LAION-Audio-XL sample stores the audio (32 kHz mono, up to 30 s), a short a
 | Bagpiper | 933K | 392M | 392M | public |
 | GLAP mix | 435K | 445M | 445M | public |
 | 500M selection (ours) | 3.35M | 970M | 500M | released |
-| LAION-Audio-XL (ours) | 1.38M | 707M | 365M | released |
+| LAION-Audio-XL (ours) | 1.39M | 707M | 365M | released |
 
 ## Models: CLAP2
 
@@ -137,19 +137,18 @@ Selected queries from MAEB test sets (not averages). Rank = position of the corr
 | CLAP2-S (ours) | 104 | 51.8 | 52.4 | 74.2 | 27.6 |
 | CLAP2-M (ours) | 153 | 52.3 | 52.4 | 76.1 | 28.1 |
 | CLAP2-L (ours) | 340 | 53.6 | 54.6 | 76.2 | 27.9 |
-| jina-embeddings-v5-omni-nano | 986 | 51.8 | 53.5 | 73.8 | 24.7 |
-| EmbeddingGemma 2 | 744 | 49.4 | 56.6 | 61.4 | 15.7 |
+| jina-embeddings-v5-omni-nano | 855 | 51.8 | 53.5 | 73.8 | 24.7 |
+| EmbeddingGemma 2 | 577 | 49.4 | 56.6 | 61.4 | 15.7 |
 | GLAP | 855 | 44.1 | 42.4 | 69.6 | 23.4 |
 | M2D-CLAP | 199 | 38.0 | 30.0 | 69.7 | 29.9 |
 | MS-CLAP 2023 | 160 | 37.3 | 29.2 | 68.0 | 30.9 |
 | TP-CLAP | 198 | 37.2 | 28.6 | 67.0 | 33.3 |
 | CLAP-IPA small | 174 | 36.5 | 41.4 | 50.5 | 8.1 |
 | LAION Larger CLAP | 194 | 36.2 | 27.1 | 70.3 | 29.6 |
-| AudioVerse CLAP | 144 | 36.0 | 27.8 | 64.2 | 32.7 |
 | LAION-CLAP HTSAT unfused | 153 | 35.2 | 26.4 | 68.4 | 28.3 |
 | MuQ-MuLan-large | 630 | 28.9 | 23.1 | 64.9 | 10.6 |
-| wav2clip | 163 | 28.3 | 24.1 | 58.0 | 11.3 |
-| SpeechT5 multimodal | 298 | 26.7 | 26.0 | 46.5 | 9.1 |
+| wav2clip | 75 | 28.3 | 24.1 | 58.0 | 11.3 |
+| SpeechT5 | 180 | 26.7 | 26.0 | 46.5 | 9.1 |
 
 ## Citation
 

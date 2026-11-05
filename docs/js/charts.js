@@ -118,12 +118,12 @@ function fitLayer(svg, X, Y, data, f, color, c, x1) {
   if (!svg) return;
   let F, series = [], env, fit, rings = new Map(), compact = null, focus = null, hl = null, fitOn = false;
   // The animation sweeps a compute budget cx (log10 GFLOPs) from left to right.
-  const CMIN = 7.85, CMAX = 11.75;
+  const CMIN = 7.85, CMAX = 12.05;
   // slider: 0–100 sweeps the compute budget, then a dotted gap leads to a last stop (FIT_V)
   // that shows the fitted law and its CI; values in the gap snap to the nearer end
   const FIT_V = 125;
-  // past the largest budget of the allocation fit (just above the largest run) the law is drawn as an extrapolation
-  const XEXT = Math.log10(D.allocFit.hi);
+  // past the largest run (CLAP2-L at 1,024M samples) the law is drawn as an extrapolation
+  const XEXT = Math.max(...SC.all.pareto.map(p => p[0]));
   // start empty so nothing shows before the first sweep (reduced motion starts on the full chart)
   let cx = U.reduced ? CMAX : CMIN, playing = false, last = 0, cursor;
   const range = document.getElementById('sc-range');
@@ -172,7 +172,7 @@ function fitLayer(svg, X, Y, data, f, color, c, x1) {
     fit.line.setAttribute('stroke-width', c ? 3.4 : 2.6);
     fit.eq = U.el('text', { x: X(c ? 7.85 : 7.95), y: Y(.445), class: 'annot-sub halo', style: 'fill:var(--fit)' }, fit.g);
     const fs = c ? 14 : 11;
-    fit.eq.innerHTML = `L(C) = 2.38 (C + e<tspan dy="-6" font-size="${fs}">20.03</tspan><tspan dy="6">)</tspan><tspan dy="-6" font-size="${fs}">−0.0603</tspan>`;
+    fit.eq.innerHTML = `L(C) = 2.22 (C + e<tspan dy="-6" font-size="${fs}">19.76</tspan><tspan dy="6">)</tspan><tspan dy="-6" font-size="${fs}">−0.0574</tspan>`;
     // the extrapolation reaches as far as the allocation chart below
     fit.ext = U.el('path', { d: lawPath(D.fit, X, Y, XEXT, 12.35, 20), fill: 'none', stroke: 'var(--fit)', 'stroke-width': c ? 2.6 : 1.8, 'stroke-dasharray': '5 5', 'stroke-linecap': 'round' }, fit.g);
     fit.len = fit.line.getTotalLength();
@@ -248,7 +248,7 @@ function fitLayer(svg, X, Y, data, f, color, c, x1) {
 
   // The envelope is drawn from samples on a fixed compute grid that ease toward the
   // target envelope, so it glides instead of jumping when the frontier changes.
-  const EG = 160, EX0 = 7.85, EX1 = 11.8;
+  const EG = 160, EX0 = 7.85, EX1 = 12.1;
   const envY = new Array(EG + 1).fill(NaN);
   let envTarget = [], envEnd = EX0, envAnim = null;
   function envAt(x) {
@@ -526,7 +526,8 @@ function fitLayer(svg, X, Y, data, f, color, c, x1) {
     // N label below its marker, D label above: the measured points sit on the other side
     // near the axis ends the two labels are pushed apart and kept inside the plot
     const k = compact ? 1.4 : 1, gap = 16 * k, y0 = M.t + 12 * k, y1 = H - M.b - 6;
-    let ly = [yn + 18 * k, yd - 10 * k];
+    // left of the marker the rising N line runs below it, so there the N label goes above the line
+    let ly = [right ? yn + 18 * k : yn - 10 * k, yd - 10 * k];
     const lo = ly[0] < ly[1] ? 0 : 1, hi = 1 - lo;
     if (ly[hi] - ly[lo] < gap) { const m = (ly[0] + ly[1]) / 2; ly[lo] = m - gap / 2; ly[hi] = m + gap / 2; }
     if (ly[hi] > y1) { ly[lo] -= ly[hi] - y1; ly[hi] = y1; }
@@ -678,7 +679,7 @@ function sota(c) {
     o.hear = m.s; byName.set(m.n, o);
   });
   // other contrastive audio-text models (CLAP-style), the models ours is a drop-in replacement for
-  const CONTRASTIVE = new Set(['GLAP', 'M2D-CLAP', 'TP-CLAP', 'CLAP-IPA small', 'AudioVerse CLAP', 'LAION Larger CLAP',
+  const CONTRASTIVE = new Set(['GLAP', 'M2D-CLAP', 'TP-CLAP', 'CLAP-IPA small', 'LAION Larger CLAP',
     'MS-CLAP 2023', 'MS-CLAP 2022', 'LAION-CLAP', 'MuQ-MuLan-large', 'wav2clip']);
   const others = [...byName.values()].filter(o => o.p >= 4);
   const tri = r => `M0 ${-r * 1.25}L${r * 1.15} ${r * .8}L${-r * 1.15} ${r * .8}Z`;
@@ -844,8 +845,8 @@ function sota(c) {
   group('CLAP2', D.maebOurs.length, 'sizes', '<span class="ours-tag">ours</span>');
   D.maebOurs.forEach(r => row(r, true));
   group('Prior audio–text models under 1B parameters', D.maebSmall.length);
-  // the three weakest models and two niche ones fold away behind a button at the foot of the table
-  const FOLD = new Set(['CLAP-IPA small', 'AudioVerse CLAP', 'MuQ-MuLan-large', 'wav2clip', 'SpeechT5 multimodal']);
+  // the three weakest models and a niche one fold away behind a button at the foot of the table
+  const FOLD = new Set(['CLAP-IPA small', 'MuQ-MuLan-large', 'wav2clip', 'SpeechT5']);
   const extra = [];
   D.maebSmall.forEach(r => {
     row(r, false);
@@ -877,7 +878,7 @@ function sota(c) {
   const top = ours.reduce((a, b) => (b.s > a.s ? b : a)), low = ours.reduce((a, b) => (b.s < a.s ? b : a));
   const best = pts.reduce((a, b) => (b.s > a.s ? b : a));
   // label position per model: [dx, dy, anchor]; compact charts label only the models that set a new best
-  const LBL = { 'wav2clip': [8, 20, 'start'], 'LAION-CLAP': [8, 20, 'start'], 'LAION Larger CLAP': [-10, -10, 'end'], 'MS-CLAP 2023': [10, 14, 'start'],
+  const LBL = { 'wav2clip': [8, 20, 'start'], 'LAION-CLAP': [8, 20, 'start'], 'LAION Larger CLAP': [-10, -10, 'end'], 'MS-CLAP 2023': [6, 26, 'start'],
     'M2D-CLAP': [-10, -10, 'end'], 'CLAP-IPA small': [10, 14, 'start'], 'MuQ-MuLan-large': [10, 4, 'start'], 'GLAP': [-12, -10, 'end'] };
   let compact = null, shown = false, items = [];
 

@@ -46,8 +46,6 @@ function buildTree(J) {
       c.classes = c.kids.length || 1;
       // a category without a clip of its own borrows one from its classes
       c.clip = clipFor(`${g.id}/${name}`) || (c.kids.find(k => k.clip) || {}).clip || null;
-      // every category keeps a play button; without a clip yet it shows muted
-      c.pending = !c.clip;
       // clips labelled only at the category level, without a finer class
       const self = c.kids.length ? clips - c.kids.reduce((s, k) => s + k.clips, 0) : 0;
       if (self > 0) c.extra = [{ depth: 2, self: true, ghost: true, name: 'Not further classified', clips: self, classes: 0, parent: c, group: g, tone: g.tone, kids: [] }];
@@ -112,9 +110,8 @@ function tipFor(n) {
   if (n.self) return `<b>${n.parent.name}</b>, no finer class<br>${fc(n.clips)} clips · ${pct(n.clips, n.parent.clips)} of the category`;
   const of = n.depth === 0 ? `${pct(n.clips, n.parent.clips)} of LAION-Audio-XL` : `${pct(n.clips, n.parent.clips)} of ${n.parent.short || n.parent.name}`;
   const what = n.depth === 0 ? `${nf(n.classes)} classes in ${nf(n.kids.length)} categories` : n.kids.length ? `${nf(n.kids.length)} finer classes` : '';
-  const hint = n.depth === 0 ? 'Click to explore' : n.kids.length ? 'Click to open · ▶ plays a demo clip' : n.clip ? 'Click to play a demo clip' : '';
+  const hint = n.depth === 0 ? 'Click to explore' : n.kids.length ? (n.clip ? 'Click to open · ▶ plays a demo clip' : 'Click to open') : n.clip ? 'Click to play a demo clip' : '';
   const note = !n.clip || n.depth === 0 ? '' : n.clip.placeholder ? ' (placeholder audio)' : n.clip.example ? ' (example clip)' : '';
-  if (n.pending) return `<b>${n.name}</b><br>${fc(n.clips)} clips · ${of}${what ? `<br>${what}` : ''}<br><span>${n.kids.length ? 'Click to open · ' : ''}demo clip coming</span>`;
   return `<b>${n.name}</b><br>${fc(n.clips)} clips · ${of}${what ? `<br>${what}` : ''}${hint ? `<br><span>${hint}${note}</span>` : ''}`;
 }
 function tween(d, frame, done) {
@@ -241,11 +238,10 @@ function explorer(row, ROOT, makeFigure) {
       if (x.self) { b.disabled = true; b.style.cursor = 'default'; }
       b.addEventListener('click', () => activate(x));
       li.appendChild(b);
-      if (x.clip || x.depth === 0 || x.pending) {
+      if (x.clip || x.depth === 0) {
         const p = document.createElement('button');
-        p.type = 'button'; p.className = 'row-p' + (x.pending ? ' off' : ''); p.innerHTML = PLAY;
-        if (x.pending) { p.disabled = true; p.setAttribute('aria-label', `Demo clip coming: ${x.name}`); p.title = 'Demo clip coming'; }
-        else { p.setAttribute('aria-label', `Play a demo clip: ${playable(x).name}`); p.addEventListener('click', () => api.play(x)); }
+        p.type = 'button'; p.className = 'row-p'; p.innerHTML = PLAY;
+        p.setAttribute('aria-label', `Play a demo clip: ${playable(x).name}`); p.addEventListener('click', () => api.play(x));
         li.appendChild(p);
       }
       li.addEventListener('pointerenter', () => hover(x));
@@ -513,7 +509,7 @@ function bubbles(canvas, api) {
     } else if (r >= 34) {
       // name, value, and a play icon for categories with a clip
       const fs = U.clamp(r / 4.2, 12, 16), per = Math.floor(r * 1.35 / (fs * .55)), lh = fs * 1.18, vs = Math.max(11, fs * .86);
-      const icon = n.clip || n.pending ? 26 : 0, room = r * 1.7;
+      const icon = n.clip ? 26 : 0, room = r * 1.7;
       // fit the content to the bubble: fewer name lines first, then no value line
       let lines = wrap(n.name, per, r >= 55 ? 3 : 2), withV = true;
       const height = () => lines.length * lh + (withV ? vs + 2 : 0) + icon;
@@ -523,7 +519,7 @@ function bubbles(canvas, api) {
       lines.forEach((l, i) => T('t', y0 + i * lh, fs, l));
       if (withV) T('v', y0 + lines.length * lh + 2, vs, n.agg ? `${fc(n.clips)} clips` : fmtVal(n, key));
       if (icon) playBtn(`translate(0 ${(y0 + lines.length * lh + (withV ? vs + 2 : 0) + 12).toFixed(1)})`, 11);
-    } else if (r >= 10 && (n.clip || n.pending)) playBtn(`scale(${U.clamp(r / 16, .6, 1).toFixed(2)})`, 11);
+    } else if (r >= 10 && n.clip) playBtn(`scale(${U.clamp(r / 16, .6, 1).toFixed(2)})`, 11);
     g.addEventListener('click', e => { e.stopPropagation(); api.activate(n); });
     g.addEventListener('keydown', e => { if (e.target === g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); api.activate(n); } });
     g.addEventListener('pointermove', e => api.tip(n, e));

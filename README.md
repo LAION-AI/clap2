@@ -20,7 +20,7 @@
 
 <br>
 
-LAION-Audio-XL is a corpus of 365M audio-text pairs (1.38M hours), selected from 1.48B audio samples of academic
+LAION-Audio-XL is a corpus of 365M audio-text pairs (1.39M hours), selected from 1.48B audio samples of academic
 datasets, internet datasets, web collections, Common Crawl and YouTube. CLAP2 are contrastive audio-text models in five
 sizes (27M to 340M parameters) trained on it. This repository holds the data pipeline, the training and evaluation
 recipes, and the experiments.

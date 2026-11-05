@@ -396,6 +396,8 @@
 .ask-pitch-share:focus-visible { outline: 2px solid var(--a-acc); outline-offset: 2px; }
 .ask-pitch-go { display: inline-block; padding: 6px 12px; border-radius: 999px; background: var(--a-acc); color: var(--a-on-acc); font: 600 13px/1.2 var(--sans); text-decoration: none; transition: transform .2s; }
 .ask-pitch-go:hover { transform: translateX(2px); }
+.ask-pitch-go[aria-disabled="true"] { cursor: default; opacity: .6; }
+.ask-pitch-go[aria-disabled="true"]:hover { transform: none; }
 /* he walks over next to the footer's paper thumbnail (--walk is set in js/ask.js) */
 .ask { transition: transform .6s cubic-bezier(.4, 0, .2, 1); }
 .ask.pitch:not(.open) { transform: translateX(var(--walk, 0)); }

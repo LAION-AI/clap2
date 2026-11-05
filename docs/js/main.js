@@ -1,13 +1,11 @@
-// Links are placeholders until the paper, code and data are public.
-// a click says so instead of doing nothing
-document.querySelectorAll('a[aria-disabled="true"]').forEach(a => {
-  let t;
-  a.addEventListener('click', e => {
-    e.preventDefault();
-    a.classList.add('soon-show');
-    clearTimeout(t);
-    t = setTimeout(() => a.classList.remove('soon-show'), 1600);
-  });
+// The paper link is a placeholder until the arXiv version is out; a click says so instead of doing nothing
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[aria-disabled="true"]');
+  if (!a) return;
+  e.preventDefault();
+  a.classList.add('soon-show');
+  clearTimeout(a.soonT);
+  a.soonT = setTimeout(() => a.classList.remove('soon-show'), 1600);
 });
 
 // copy the BibTeX entry, from its own button or from the BibTeX link in the top bar

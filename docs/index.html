@@ -12,7 +12,7 @@
   <meta name="robots" content="index, follow">
   <!-- plain-text summary of the whole page (abstract, key numbers, tables) for language models and other tools that don't run JavaScript -->
   <link rel="alternate" type="text/markdown" href="llms.txt" title="LAION-Audio-XL summary (Markdown)">
-  <!-- Google Scholar / Highwire tags; add citation_pdf_url once the paper is public -->
+  <!-- Google Scholar / Highwire tags -->
   <meta name="citation_title" content="LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining">
   <meta name="citation_author" content="Gijs Wijngaard">
   <meta name="citation_author" content="Felix Förster">
@@ -22,7 +22,8 @@
   <meta name="citation_author" content="Jenia Jitsev">
   <meta name="citation_author" content="A. Sophia Koepke">
   <meta name="citation_publication_date" content="2026">
-  <meta name="citation_abstract" content="Recent advances in contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.48 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our models outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks. As a result, our models can serve as a drop-in replacement for CLAP in downstream applications. We release our dataset, captions, model checkpoints, and code.">
+  <!-- Google Scholar / Highwire tags; add citation_pdf_url once the paper is public -->
+  <meta name="citation_abstract" content="Recent progress on contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.48 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture for the audio encoder. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our resulting models, CLAP2, outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks, and can serve as a drop-in replacement for CLAP in downstream applications. We release our dataset, captions, model checkpoints, and code.">
   <link rel="icon" href="assets/logos/laion-audio-icon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#111315" media="(prefers-color-scheme: dark)">
@@ -60,7 +61,7 @@
    "@id": "#paper",
    "headline": "LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining",
    "name": "LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining",
-   "abstract": "Recent advances in contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.48 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our models outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks. As a result, our models can serve as a drop-in replacement for CLAP in downstream applications. We release our dataset, captions, model checkpoints, and code.",
+   "abstract": "Recent progress on contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.48 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture for the audio encoder. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our resulting models, CLAP2, outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks, and can serve as a drop-in replacement for CLAP in downstream applications. We release our dataset, captions, model checkpoints, and code.",
    "description": "LAION-Audio-XL is a web-scale corpus of 365M audio clips with 707M captions for contrastive language-audio pretraining (CLAP), with compute scaling laws and the CLAP2 models (CLAP2-XXS to CLAP2-L, 27M–340M parameters); CLAP2-L (340M parameters) reaches 53.6% on MAEB-30.",
    "author": [
     {
@@ -186,7 +187,7 @@
    "alternateName": [
     "LAION-Audio-XL-500M"
    ],
-   "description": "A web-scale audio-text corpus of 365M audio clips up to 30 s (1.38M hours) with 707M short and long captions, curated from 1.48B clips collected from YouTube, Common Crawl, web collections and 316 academic datasets. The larger LAION-Audio-XL-500M keeps clips up to 120 s (500M clips, 970M captions, 3.35M hours). Released on Hugging Face: laion/laion-audio-xl holds the audio of sources whose licence allows redistribution, and the gated laion/laion-audio-xl-links holds links, captions and metadata for the rest.",
+   "description": "A web-scale audio-text corpus of 365M audio clips up to 30 s (1.39M hours) with 707M short and long captions, curated from 1.48B clips collected from YouTube, Common Crawl, web collections and 316 academic datasets. The larger LAION-Audio-XL-500M keeps clips up to 120 s (500M clips, 970M captions, 3.35M hours). Released on Hugging Face: laion/laion-audio-xl holds the audio of sources whose licence allows redistribution, and the gated laion/laion-audio-xl-links holds links, captions and metadata for the rest.",
    "keywords": [
     "audio",
     "audio captions",
@@ -366,7 +367,7 @@
 <section class="row chapters" id="chapters" aria-labelledby="chapters-h">
   <h2 class="sr-only" id="chapters-h">Key Takeaways</h2>
   <div class="tk-grid" id="takeaways"></div>
-  <noscript><p class="nojs">The figures on this page need JavaScript. In short: LAION-Audio-XL has 365M audio clips with 707M captions (1.38M hours), curated from 1.48B collected clips. CLAP2, five CLAP models from CLAP2-XXS to CLAP2-L (27M to 340M parameters), is trained on it; CLAP2-L reaches 53.6% on MAEB-30, the best score of any model trained from scratch. Compute-optimal training data grows about 1.4&times; faster than model size. All numbers and tables are in the <a href="llms.txt">plain-text summary</a>.</p></noscript>
+  <noscript><p class="nojs">The figures on this page need JavaScript. In short: LAION-Audio-XL has 365M audio clips with 707M captions (1.39M hours), curated from 1.48B collected clips. CLAP2, five CLAP models from CLAP2-XXS to CLAP2-L (27M to 340M parameters), is trained on it; CLAP2-L reaches 53.6% on MAEB-30, the best score of any model trained from scratch. Compute-optimal training data grows about 1.4&times; faster than model size. All numbers and tables are in the <a href="llms.txt">plain-text summary</a>.</p></noscript>
   <!-- 05 Usage: the title row on top like the results card; the copy buttons can't sit inside a link, so only the title row links -->
   <div class="ch-use" id="quick" style="--acc:var(--usage)">
     <a class="txt" href="#usage" aria-label="Go to the Usage chapter"><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -410,8 +411,8 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
   <div class="row" id="taxonomy">
     <aside class="side">
       <h3>Taxonomy</h3>
-      <p>A classifier sorts every clip into 3,718 sound classes in 11 groups. Selection thins the common ones: speech falls from 75.3% of the pool to <span data-tax="speech">45.3%</span>. <button class="info" type="button" aria-expanded="false" aria-controls="i-tax" aria-label="More about the taxonomy"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
-      <div class="info-more" id="i-tax" hidden><p>Claude Sonnet 4.5 grew the hierarchy by assigning captions to leaves and proposing new categories; merging removed duplicates and categories that combine several events. It has 4,416 nodes up to five levels deep, with 837 categories below the 11 groups. The classifier, an MLP on frozen Dasheng-0.6B features, predicts the 3,718 classes of the first three levels and assigns 85.6% of held-out clips to the right group. Clip counts are by predicted label.</p></div>
+      <p>A classifier sorts every clip into 3,718 sound classes in 11 groups. Selection thins the common ones: speech falls from 75.3% of the pool to <span data-tax="speech">44.8%</span>. <button class="info" type="button" aria-expanded="false" aria-controls="i-tax" aria-label="More about the taxonomy"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <div class="info-more" id="i-tax" hidden><p>An LLM grew the hierarchy by assigning captions to leaves and proposing new categories; merging removed duplicates and categories that combine several events. It has 4,416 nodes up to five levels deep, with 837 categories below the 11 groups. The classifier, an MLP on frozen Dasheng-0.6B features, predicts the 3,718 classes of the first three levels and assigns 85.6% of held-out clips to the right group. Clip counts are by predicted label.</p></div>
     </aside>
   </div>
 
@@ -498,8 +499,8 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
   <div class="row" id="scale-fig">
     <aside class="side">
       <h3>Error Falls Predictably with Compute</h3>
-      <p>Each line is one model size, moving right as it sees more samples. Each doubling of compute lowers the error by 4.1%, about +1.9 MAEB-30 points at the largest budget. <button class="info" type="button" aria-expanded="false" aria-controls="i-scale" aria-label="More about the scaling fit"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
-      <div class="info-more" id="i-scale" hidden><p>Runs see 1M to 1,024M samples. The dashed line marks the lowest error reached so far. The fit shows its 95% bootstrap interval, all runs as faint dots, and the compute-optimal runs behind it as solid dots. Fitted exponent: α = 0.0603.</p></div>
+      <p>Each line is one model size, moving right as it sees more samples. Each doubling of compute lowers the error by 3.9%, about +1.8 MAEB-30 points at the largest budget. <button class="info" type="button" aria-expanded="false" aria-controls="i-scale" aria-label="More about the scaling fit"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
+      <div class="info-more" id="i-scale" hidden><p>Runs see 1M to 1,024M samples. The dashed line marks the lowest error reached so far. The fit shows its 95% bootstrap interval, all runs as faint dots, and the compute-optimal runs behind it as solid dots. Fitted exponent: α = 0.0574.</p></div>
       <div class="play-ctl">
         <div class="seen-head"><span>Training compute</span><output id="sc-val" for="sc-range"></output></div>
         <div class="seen">
@@ -510,7 +511,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
       <div class="sizes" id="size-row"></div>
       <div class="legend" id="sc-legend"></div>
     </aside>
-    <div class="fig"><svg id="scale-chart" viewBox="0 0 820 440" role="img" aria-label="MAEB-30 error against training compute for five model sizes. Error falls steadily with compute; the fitted law predicts about 1.9 MAEB-30 points per doubling of compute at the largest budget."></svg></div>
+    <div class="fig"><svg id="scale-chart" viewBox="0 0 820 440" role="img" aria-label="MAEB-30 error against training compute for five model sizes. Error falls steadily with compute; the fitted law predicts about 1.8 MAEB-30 points per doubling of compute at the largest budget."></svg></div>
   </div>
 
   <div class="row" id="alloc">
@@ -549,7 +550,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
     <aside class="side">
       <h3>A Step Change for CLAP</h3>
       <p>MAEB-30 scores of CLAP-style models by release date. Four years raised the best score by 16 points, from 28.3% to 44.1%. CLAP2 adds 9.5 more. <button class="info" type="button" aria-expanded="false" aria-controls="i-progress" aria-label="More about the release dates"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></p>
-      <div class="info-more" id="i-progress" hidden><p>Dates are first public releases (paper or checkpoint). Omni-embedding models with 1B to 9B parameters, which are not drop-in CLAP replacements, reach up to 53.5% (LCO-Embedding-Omni-7B); they appear in the size comparison below.</p></div>
+      <div class="info-more" id="i-progress" hidden><p>Dates are first public releases (paper or checkpoint). Omni-embedding models with 1B to 8B parameters, which are not drop-in CLAP replacements, reach up to 53.5% (LCO-Embedding-Omni-7B); they appear in the size comparison below.</p></div>
       <div class="legend static">
         <span><i class="lg-ours"></i>CLAP2<span class="ours-tag">ours</span></span>
         <span><i class="lg-clap"></i>Earlier CLAP-style model</span>
@@ -732,8 +733,6 @@ music = ds[<span class="c-s">&quot;train&quot;</span>].filter(is_music)
 <script src="js/share.js"></script>
 <script src="js/punchline.js"></script>
 <script src="js/qa-seeds.js"></script>
-<script src="js/qa-seeds-more.js"></script>
-<script src="js/qa-seeds-facts.js"></script>
 <script src="js/qa.js"></script>
 <script src="js/paper-links.js"></script>
 <script src="js/ask.js"></script>
