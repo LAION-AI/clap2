@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="92" viewBox="0 0 420 92" role="img" aria-label="365M audio-text pairs · 1.38M h of audio, 452 sources">
+  <style>
+    :root { --a: #a8102a; --b: #0b7472; --c: #1f5bd0; --d: #1d374e; --label: #4b545e; }
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; text-anchor: middle; dominant-baseline: central; }
+    .n { font-size: 34px; font-weight: 700; letter-spacing: -0.5px; }
+    .l { font-size: 15px; fill: var(--label); }
+  </style>
+  <text class="n" x="105.0" y="34" style="fill: var(--a)">365M</text>
+  <text class="l" x="105.0" y="70">audio-text pairs</text>
+  <text class="n" x="315.0" y="34" style="fill: var(--b)">1.38M h</text>
+  <text class="l" x="315.0" y="70">of audio, 452 sources</text>
+</svg>

@@ -1,16 +1,33 @@
-# LAION-Audio-XL
+<div align="center">
 
-**A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining**
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logos/laion-audio-xl-white.svg">
+  <img src="docs/assets/logos/laion-audio-xl.svg" alt="LAION Audio XL" width="380">
+</picture>
 
-[Project page](https://projects.laion.ai/clap2) · [Models](https://huggingface.co/laion/clap2-medium-audioxl-s1B) ·
-[Dataset](https://huggingface.co/datasets/laion/laion-audio-xl)
+<h4>A Web-Scale Corpus and Scaling Studies for Contrastive Language&#8209;Audio Pretraining</h4>
+
+<p>
+  <a href="https://projects.laion.ai/clap2"><img src="docs/assets/readme/badge-project-page.svg" alt="Project page" height="28"></a>
+  <a href="https://projects.laion.ai/clap2"><img src="docs/assets/readme/badge-paper.svg" alt="Paper" height="28"></a>
+  <a href="https://huggingface.co/datasets/laion/laion-audio-xl"><img src="docs/assets/readme/badge-dataset.svg" alt="LAION-Audio-XL" height="28"></a>
+  <a href="https://huggingface.co/models?search=laion/clap2"><img src="docs/assets/readme/badge-models.svg" alt="CLAP2" height="28"></a>
+</p>
+
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/stats-1-dark.svg"><img src="docs/assets/readme/stats-1.svg" alt="365M audio-text pairs · 1.38M hours of audio, 452 sources" width="420"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/stats-2-dark.svg"><img src="docs/assets/readme/stats-2.svg" alt="5 sizes, 27M–340M parameters · 53.6% MAEB-30 (CLAP2-L)" width="420"></picture></p>
+
+</div>
+
+<br>
 
 LAION-Audio-XL is a corpus of 365M audio-text pairs (1.38M hours), selected from 1.48B audio samples of academic
 datasets, internet datasets, web collections, Common Crawl and YouTube. CLAP2 are contrastive audio-text models in five
 sizes (27M to 340M parameters) trained on it. This repository holds the data pipeline, the training and evaluation
 recipes, and the experiments.
 
-## Use the models
+## Quickstart
+
+### Models
 
 ```python
 # pip install "open_clip_torch[audio] @ git+https://github.com/mlfoundations/open_clip@refs/pull/1230/head"
@@ -24,7 +41,7 @@ t = m.encode_text(oc.get_tokenizer(hub)(["a dog"]))
 print(torch.cosine_similarity(a, t))
 ```
 
-## Get the data
+### Dataset
 
 ```python
 from datasets import load_dataset

@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "If you use this code, the dataset or the models, please cite the paper."
+title: "LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining"
+type: software
+license: MIT
+repository-code: "https://github.com/LAION-AI/clap2"
+url: "https://projects.laion.ai/clap2"
+authors:
+  - family-names: Wijngaard
+    given-names: Gijs
+  - family-names: Förster
+    given-names: Felix
+  - family-names: Wightman
+    given-names: Ross
+  - family-names: Nezhurina
+    given-names: Marianna
+  - family-names: Schuhmann
+    given-names: Christoph
+  - family-names: Jitsev
+    given-names: Jenia
+  - family-names: Koepke
+    given-names: A. Sophia
+preferred-citation:
+  type: conference-paper
+  title: "LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining"
+  year: 2027
+  authors:
+    - family-names: Wijngaard
+      given-names: Gijs
+    - family-names: Förster
+      given-names: Felix
+    - family-names: Wightman
+      given-names: Ross
+    - family-names: Nezhurina
+      given-names: Marianna
+    - family-names: Schuhmann
+      given-names: Christoph
+    - family-names: Jitsev
+      given-names: Jenia
+    - family-names: Koepke
+      given-names: A. Sophia
