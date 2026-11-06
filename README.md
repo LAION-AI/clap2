@@ -30,7 +30,7 @@ recipes, and the experiments.
 ### Models
 
 ```python
-# pip install "open_clip_torch>=4.2.1.dev0" soundfile
+# pip install "open_clip_torch>=4.2.1" soundfile
 import torch, open_clip
 from open_clip.audio.io import load_audio
 
