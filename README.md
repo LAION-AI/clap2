@@ -30,15 +30,19 @@ recipes, and the experiments.
 ### Models
 
 ```python
-# pip install "open_clip_torch[audio] @ git+https://github.com/mlfoundations/open_clip@refs/pull/1230/head"
-import torch, open_clip as oc, soundfile as sf
-hub = "hf-hub:laion/clap2-medium-audioxl-s1B"   # sizes: xxs, xs, small, medium, large
-m, prep = oc.create_model_from_pretrained(hub)
-w, sr = sf.read("dog.wav", dtype="float32")
-x = prep(m.audio.cfg.audio_seq_len)((torch.from_numpy(w.T), sr))
-a = m.encode_audio({k: v[None] for k, v in x.items()})
-t = m.encode_text(oc.get_tokenizer(hub)(["a dog"]))
-print(torch.cosine_similarity(a, t))
+# pip install "open_clip_torch>=4.2.1.dev0" soundfile
+import torch, open_clip
+from open_clip.audio.io import load_audio
+
+hub = "hf-hub:laion/clap2-medium-audioxl-s1B"  # sizes: xxs, xs, small, medium, large
+model, preprocess = open_clip.create_model_from_pretrained(hub)
+tokenizer = open_clip.get_tokenizer(hub)
+
+audio = preprocess()(load_audio("dog.wav"))  # any sample rate and channel count
+texts = ["A dog barks.", "A door slams shut.", "People are applauding."]
+with torch.no_grad():
+    logits, _ = model.get_logits({k: v[None] for k, v in audio.items()}, tokenizer(texts))
+print({t: round(p, 3) for t, p in zip(texts, logits.softmax(-1)[0].tolist())})
 ```
 
 ### Dataset

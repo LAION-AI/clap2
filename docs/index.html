@@ -615,28 +615,26 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
       <h3>Use CLAP2</h3>
       <div class="code-tabs" role="tablist" aria-label="Examples"><button type="button" role="tab" aria-selected="true" aria-controls="code-embed">OpenCLIP Package</button><button type="button" role="tab" aria-selected="false" aria-controls="code-batch" tabindex="-1">Several Clips</button></div>
     </aside>
-    <div class="fig"><div class="code-box"><div class="code-head"><button class="copy" type="button" data-copy="code-embed"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button></div><div class="code-body"><pre tabindex="0" id="code-embed" role="tabpanel"><code><span class="c-c"># pip install torchaudio tiktoken soundfile</span>
-<span class="c-c"># pip install "open_clip_torch[audio] @ git+https://github.com/mlfoundations/open_clip@refs/pull/1230/head"</span>
-<span class="c-k">import</span> torch, open_clip <span class="c-k">as</span> oc, soundfile <span class="c-k">as</span> sf
+    <div class="fig"><div class="code-box"><div class="code-head"><button class="copy" type="button" data-copy="code-embed"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button></div><div class="code-body"><pre tabindex="0" id="code-embed" role="tabpanel"><code><span class=&quot;c-c&quot;># pip install &quot;open_clip_torch&gt;=4.2.1.dev0&quot; soundfile</span>
+<span class="c-k">import</span> torch, open_clip
+<span class="c-k">from</span> open_clip.audio.io <span class="c-k">import</span> load_audio
 
 hub = <span class="c-s">&quot;hf-hub:laion/clap2-medium-audioxl-s1B&quot;</span>
-m, prep = oc.create_model_from_pretrained(hub)
-tok = oc.get_tokenizer(hub)
+model, preprocess = open_clip.create_model_from_pretrained(hub)
+tokenizer = open_clip.get_tokenizer(hub)
 
-w, sr = sf.read(<span class="c-s">&quot;dog.wav&quot;</span>, dtype=<span class="c-s">&quot;float32&quot;</span>)
-x = prep(m.audio.cfg.audio_seq_len)((torch.from_numpy(w.T), sr))
-a = m.encode_audio({k: v[<span class="c-k">None</span>] <span class="c-k">for</span> k, v <span class="c-k">in</span> x.items()})
-t = m.encode_text(tok([<span class="c-s">&quot;a dog barks&quot;</span>, <span class="c-s">&quot;rain falls&quot;</span>]))
-<span class="c-f">print</span>(torch.cosine_similarity(a, t))</code></pre><pre tabindex="0" id="code-batch" role="tabpanel" hidden><code><span class="c-k">from</span> torch.nn.utils.rnn <span class="c-k">import</span> pad_sequence
+audio = preprocess()(load_audio(<span class="c-s">&quot;dog.wav&quot;</span>))  <span class="c-c"># any sample rate and channel count</span>
+texts = [<span class="c-s">&quot;A dog barks.&quot;</span>, <span class="c-s">&quot;A door slams shut.&quot;</span>, <span class="c-s">&quot;People are applauding.&quot;</span>]
+<span class="c-k">with</span> torch.no_grad():
+    logits, _ = model.get_logits({k: v[<span class="c-k">None</span>] <span class="c-k">for</span> k, v <span class="c-k">in</span> audio.items()}, tokenizer(texts))
+<span class="c-f">print</span>({t: <span class="c-f">round</span>(p, <span class="c-n">3</span>) <span class="c-k">for</span> t, p <span class="c-k">in</span> <span class="c-f">zip</span>(texts, logits.softmax(-<span class="c-n">1</span>)[<span class="c-n">0</span>].tolist())})</code></pre><pre tabindex="0" id="code-batch" role="tabpanel" hidden><code><span class="c-k">from</span> torch.nn.utils.rnn <span class="c-k">import</span> pad_sequence
 
-xs = []
-<span class="c-k">for</span> f <span class="c-k">in</span> [<span class="c-s">&quot;dog.wav&quot;</span>, <span class="c-s">&quot;rain.wav&quot;</span>]:
-    w, sr = sf.read(f, dtype=<span class="c-s">&quot;float32&quot;</span>)
-    xs.append(prep(m.audio.cfg.audio_seq_len)((torch.from_numpy(w.T), sr)))
+items = [preprocess()(load_audio(f)) <span class="c-k">for</span> f <span class="c-k">in</span> [<span class="c-s">&quot;dog.wav&quot;</span>, <span class="c-s">&quot;applause.wav&quot;</span>]]
 <span class="c-c"># clips differ in length: pad to the longest, the padding is masked</span>
-batch = {k: pad_sequence([x[k] <span class="c-k">for</span> x <span class="c-k">in</span> xs], batch_first=<span class="c-k">True</span>) <span class="c-k">for</span> k <span class="c-k">in</span> xs[<span class="c-n">0</span>]}
-a = m.encode_audio(batch)
-<span class="c-f">print</span>(torch.cosine_similarity(a[:, <span class="c-k">None</span>], t[<span class="c-k">None</span>], dim=-<span class="c-n">1</span>))</code></pre></div></div></div>
+batch = {k: pad_sequence([x[k] <span class="c-k">for</span> x <span class="c-k">in</span> items], batch_first=<span class="c-k">True</span>) <span class="c-k">for</span> k <span class="c-k">in</span> items[<span class="c-n">0</span>]}
+<span class="c-k">with</span> torch.no_grad():
+    logits, _ = model.get_logits(batch, tokenizer(texts))
+<span class="c-f">print</span>(logits.softmax(-<span class="c-n">1</span>))  <span class="c-c"># one row per clip</span></code></pre></div></div></div>
   </div>
 
   <div class="row" id="use-data">
