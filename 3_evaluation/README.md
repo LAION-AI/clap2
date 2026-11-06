@@ -11,7 +11,7 @@ MAEB scores are the mean over the probe and clustering seeds 42, 1, 2 and 3.
 conda create -n clip_benchmark python=3.12 ffmpeg -y && conda activate clip_benchmark
 pip install "clip-benchmark[audio,hear] @ git+https://github.com/LAION-AI/CLIP_benchmark@dffcbf193b341124b499feacb4dd922dc25c655a"
 pip install --no-deps heareval==2021.1.3
-pip install "open_clip_torch[audio] @ git+https://github.com/mlfoundations/open_clip@refs/pull/1230/head"
+pip install "open_clip_torch[audio]>=4.2.1"
 for m in naflexclap_xxs naflexclap_xs naflexclap_small naflexclap_medium naflexclap_large; do
   for b in mseb hear; do
     clip_benchmark eval --model_type clap2 --model $m --pretrained laion_audio_xl_s1b \

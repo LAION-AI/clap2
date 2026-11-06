@@ -1,13 +1,13 @@
 # Training
 
 Models are trained with upstream [OpenCLIP](https://github.com/mlfoundations/open_clip); the five model configs
-`naflexclap_xxs`, `naflexclap_xs`, `naflexclap_small`, `naflexclap_medium` and `naflexclap_large` are added by
-[PR #1230](https://github.com/mlfoundations/open_clip/pull/1230).
+`naflexclap_xxs`, `naflexclap_xs`, `naflexclap_small`, `naflexclap_medium` and `naflexclap_large` are part of OpenCLIP
+since 4.2.1 ([PR #1230](https://github.com/mlfoundations/open_clip/pull/1230)).
 
 ```bash
 # Environment (FFmpeg decodes the audio)
 conda create -n clap2 python=3.12 ffmpeg -y && conda activate clap2
-pip install "open_clip_torch[training,audio] @ git+https://github.com/mlfoundations/open_clip@refs/pull/1230/head"
+pip install "open_clip_torch[training,audio]>=4.2.1"
 ```
 
 `train.sh MODEL DATA NAME [flags]` trains on all GPUs of the machine with `torchrun` (multi-node: the standard torchrun
