@@ -182,5 +182,5 @@ document.querySelectorAll('.copy[data-copy]').forEach(btn => {
 })();
 
 // for whoever opens the dev console
-console.log('%c  /\\_/\\\n ( o.o )  Rawr! You found Lio.\n  > ^ <   CLAP2 · LAION-Audio-XL\n\n%cModels  https://huggingface.co/laion\nData    laion/laion-audio-xl\nLAION   https://laion.ai',
+console.log('%c  /\\_/\\\n ( o.o )  Rawr! You found Lio.\n  > ^ <   CLAP2 · LAION-Audio-XL\n\n%cModels  https://huggingface.co/collections/laion/laion-audio-xl-and-clap2\nData    laion/laion-audio-xl\nLAION   https://laion.ai',
   'color:#e3a03a;font:600 13px/1.4 monospace', 'color:inherit;font:12px/1.5 monospace');
