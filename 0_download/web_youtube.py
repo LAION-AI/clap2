@@ -1,7 +1,7 @@
-"""Download the YouTube rows of laion-audio-xl-links with yt-dlp, each video once, into tars of 32 kHz mono FLAC clips.
+"""Download the YouTube rows of the links config of laion/laion-audio-xl with yt-dlp, each video once, into tars of 32 kHz mono FLAC clips.
 
-The rows are streamed from Hugging Face with load_dataset. The repository is gated: fill in the form on
-https://huggingface.co/datasets/laion/laion-audio-xl-links once, then log in with `hf auth login`.
+The rows are streamed from Hugging Face with load_dataset. The repository is gated: accept the terms on
+https://huggingface.co/datasets/laion/laion-audio-xl once, then log in with `hf auth login`.
 
 Finished tars, and shards marked in IN/.fetched/, are skipped on resume; to retry a tar, delete it, its
 .failed.parquet and its shard's marker.

@@ -209,11 +209,21 @@
     if (!U.reduced) flash('talking', 1400);
   }
 
+  // parts cited as "Page · …" jump to that part of the page (when it is on the page)
+  const PAGE_PARTS = [
+    [/^Page header/, 'top'], [/BibTeX/, 'bibtex'], [/Compared with Other Corpora/, 'compare'], [/Usage/, 'usage'],
+    [/Scaling chart|Figure 3/, 'scale-fig'], [/Compute-optimal allocation/, 'alloc'], [/State of the Art/, 'sota-fig'],
+    [/Compact Models/, 'table-fig'], [/Pipeline at a Glance/, 'flow'],
+  ];
   // parts cited as "Paper · …" link into the PDF (js/paper-links.js)
   function citeHTML(cite) {
     const L = window.PAPER_LINKS, pdf = window.PAPER_PDF;
     return cite.split(/;\s*/).map(part => {
       const plain = escHTML(part);
+      if (/^Page\b/.test(part)) {
+        const hit = PAGE_PARTS.find(([re, id]) => re.test(part) && document.getElementById(id));
+        return hit ? `<button type="button" class="ask-jump ask-pagelink" data-fig="${hit[1]}">${plain}</button>` : plain;
+      }
       if (!L || !pdf || !/^Paper\b/.test(part)) return plain;
       const href = t => t.dest ? `${pdf}#nameddest=${t.dest}` : `${pdf}#page=${t.page}`;
       const a = (label, t) => t ? `<a href="${href(t)}" target="_blank" rel="noopener">${label}</a>` : label;
@@ -272,7 +282,7 @@
   function render() {
     const e = qa.seed;
     let html = `<p class="ask-q">“${escHTML(qa.q)}”</p>`;
-    if (e) html += `<p>${e.html}</p>` + (e.cite && e.cite !== 'Lio' ? `<p class="ask-cite">${citeHTML(e.cite)}</p>` : '');
+    if (e) html += `<p class="ask-a">${e.html}</p>` + (e.cite && e.cite !== 'Lio' ? `<p class="ask-cite">${citeHTML(e.cite)}</p>` : '');
     else html += qa.error
       ? '<p>Oops, my notes got stuck for a second. Try again in a moment!</p>'
       : '<p>Ooh, good question! That one isn\'t in my notes yet. Try asking it another way, or ask Claude or ChatGPT below.</p>';

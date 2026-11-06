@@ -19,7 +19,7 @@ from common.tars import TarWriter, run, save
 
 GROUPS = dict(pl.read_csv(Path(__file__).with_name("raw") / "sources.csv", columns=["source", "group"]).iter_rows())
 
-LINKS = "laion/laion-audio-xl-links"
+LINKS = ("laion/laion-audio-xl", "links")  # repository and config
 KINDS = {"youtube": ("youtube_id", pc.field("youtube_id").is_valid()),  # kind: (column passed to load, row filter)
          "links": ("url", pc.field("youtube_id").is_null())}
 
@@ -112,12 +112,13 @@ def finish(out, written, failed):
 
 
 def rows(split="train", **kw):
-    """laion-audio-xl-links streamed from Hugging Face; gated: fill in the form on the dataset page, then `hf auth login`."""
-    return load_dataset(LINKS, split=split, streaming=True, **kw)
+    """The links config of laion/laion-audio-xl streamed from Hugging Face; gated: accept the terms on the dataset page,
+    then `hf auth login`."""
+    return load_dataset(*LINKS, split=split, streaming=True, **kw)
 
 
 def links(out, kind, load, per_tar, workers, threads, split="train"):
-    """Fetch the `kind` rows of laion-audio-xl-links into tars out/<source_dataset>/<kind>/<split>/<shard>/<k>.tar, one
+    """Fetch the `kind` rows of the links config into tars out/<source_dataset>/<kind>/<split>/<shard>/<k>.tar, one
     shard per parquet file, chunk k = per_tar media items: every media item is fetched once and all its clips are cut
     from it. The source folder and the `group` of sources.csv (default web) are what 1_preprocessing reads."""
     done = Path(out, ".fetched", kind, split)

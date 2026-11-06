@@ -187,7 +187,7 @@
    "alternateName": [
     "LAION-Audio-XL-500M"
    ],
-   "description": "A web-scale audio-text corpus of 365M audio clips up to 30 s (1.39M hours) with 707M short and long captions, curated from 1.48B clips collected from YouTube, Common Crawl, web collections, internet datasets and 316 academic datasets. The larger LAION-Audio-XL-500M keeps clips up to 120 s (500M clips, 970M captions, 3.35M hours). Released on Hugging Face: laion/laion-audio-xl holds the audio of sources whose licence allows redistribution, and the gated laion/laion-audio-xl-links holds links, captions and metadata for the rest.",
+   "description": "A web-scale audio-text corpus of 365M audio clips up to 30 s (1.39M hours) with 707M short and long captions, curated from 1.48B clips collected from YouTube, Common Crawl, web collections, internet datasets and 316 academic datasets. The larger LAION-Audio-XL-500M keeps clips up to 120 s (500M clips, 970M captions, 3.35M hours). Released on Hugging Face as laion/laion-audio-xl: the audio of sources whose licence allows redistribution, and links with captions and metadata for the rest.",
    "keywords": [
     "audio",
     "audio captions",
@@ -640,7 +640,7 @@ batch = {k: pad_sequence([x[k] <span class="c-k">for</span> x <span class="c-k">
   <div class="row" id="use-data">
     <aside class="side">
       <h3>Use LAION-Audio-XL</h3>
-      <p>Three configs by licence: open (the default), sharealike and noncommercial. Clips we crawled ourselves are listed as links in the gated <a href="https://huggingface.co/datasets/laion/laion-audio-xl-links" target="_blank" rel="noopener">laion/laion-audio-xl-links</a>.</p>
+      <p>Three configs by licence: open (the default), sharealike and noncommercial. Clips we crawled ourselves are listed as links, with their captions and metadata, in a fourth config, links.</p>
       <div class="code-tabs" role="tablist" aria-label="Examples"><button type="button" role="tab" aria-selected="true" aria-controls="code-stream">Stream and Inspect</button><button type="button" role="tab" aria-selected="false" aria-controls="code-filter" tabindex="-1">Filter</button></div>
     </aside>
     <div class="fig"><div class="code-box"><div class="code-head"><button class="copy" type="button" data-copy="code-stream"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button></div><div class="code-body"><pre tabindex="0" id="code-stream" role="tabpanel"><code><span class="c-k">from</span> datasets <span class="c-k">import</span> load_dataset

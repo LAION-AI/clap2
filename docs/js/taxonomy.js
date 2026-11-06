@@ -33,7 +33,7 @@ function buildTree(J) {
   // a node's own demo clip; there is no placeholder, nodes without one simply have no play button
   const clipFor = key => {
     const v = audio[key], smp = v && v.sample && S[v.sample], src = v && (v.src || (smp && smp.src));
-    return src ? { src: base + src, caption: v.caption || (smp && smp.meta.short_caption) || '', placeholder: !!v.placeholder, example: !!v.example } : null;
+    return src ? { src: base + src, caption: v.caption || (smp && smp.meta.short_caption) || '', source: v.source || null, license: v.license || '', from: v.from || '' } : null;
   };
   J.groups.forEach((gj, idx) => {
     const meta = DATA.taxonomy.groups.find(x => x.id === gj.id);
@@ -111,8 +111,7 @@ function tipFor(n) {
   const of = n.depth === 0 ? `${pct(n.clips, n.parent.clips)} of LAION-Audio-XL` : `${pct(n.clips, n.parent.clips)} of ${n.parent.short || n.parent.name}`;
   const what = n.depth === 0 ? `${nf(n.classes)} classes in ${nf(n.kids.length)} categories` : n.kids.length ? `${nf(n.kids.length)} finer classes` : '';
   const hint = n.depth === 0 ? 'Click to explore' : n.kids.length ? (n.clip ? 'Click to open · ▶ plays a demo clip' : 'Click to open') : n.clip ? 'Click to play a demo clip' : '';
-  const note = !n.clip || n.depth === 0 ? '' : n.clip.placeholder ? ' (placeholder audio)' : n.clip.example ? ' (example clip)' : '';
-  return `<b>${n.name}</b><br>${fc(n.clips)} clips · ${of}${what ? `<br>${what}` : ''}${hint ? `<br><span>${hint}${note}</span>` : ''}`;
+  return `<b>${n.name}</b><br>${fc(n.clips)} clips · ${of}${what ? `<br>${what}` : ''}${hint ? `<br><span>${hint}</span>` : ''}`;
 }
 function tween(d, frame, done) {
   const t0 = performance.now(), dur = U.reduced ? 0 : d;
@@ -372,7 +371,16 @@ function explorer(row, ROOT, makeFigure) {
       np.style.setProperty('--c', c.tone);
       npT.children[0].innerHTML = `${icon(c.group, 14)}<span></span>`;
       npT.children[0].lastChild.textContent = `${c.name} · ${c.group.short}`;
-      npT.children[1].textContent = c.clip.placeholder ? 'Placeholder clip until the real demo clips are in' : c.clip.example ? `Example clip, not from LAION-Audio-XL: “${c.clip.caption}”` : `“${c.clip.caption}”`;
+      // where the clip comes from and its licence (CC BY clips need the attribution)
+      const cap = npT.children[1], k = c.clip;
+      cap.textContent = '';
+      const credit = [k.from, k.license].filter(Boolean).join(' · ');
+      if (credit || k.source) {
+        const el = document.createElement(k.source ? 'a' : 'span');
+        el.className = 'np-src'; el.textContent = (credit || 'source') + (k.source ? ' ↗' : '');
+        if (k.source) { el.href = k.source; el.target = '_blank'; el.rel = 'noopener'; }
+        cap.append(el);
+      }
     }
     npB.innerHTML = playing ? PAUSE : PLAY;
     npB.setAttribute('aria-label', playing ? 'Pause' : 'Play');

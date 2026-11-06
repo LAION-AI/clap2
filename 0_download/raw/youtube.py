@@ -1,4 +1,4 @@
-"""YouTube bulk crawl: full audio of its Creative Commons videos in laion-audio-xl-links, as IN/<name>/ tars.
+"""YouTube bulk crawl: full audio of its Creative Commons videos in the links config of laion/laion-audio-xl, as IN/<name>/ tars.
 
 The video ids are streamed from Hugging Face (gated: fill in the form on the dataset page, then `hf auth login`).
 

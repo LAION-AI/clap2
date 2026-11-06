@@ -54,6 +54,11 @@
 /* citations link into the paper PDF */
 .ask-text .ask-cite a { color: var(--ours); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 2px; }
 .ask-text .ask-cite a:hover { text-decoration-style: solid; }
+.ask-text .ask-a a { color: var(--ours); text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; }
+.ask-text .ask-a a:hover { text-decoration-thickness: 2px; }
+/* a "Page · …" source: jumps to that part of the page, styled like the paper links */
+.ask .ask-cite .ask-pagelink { font: inherit; color: var(--ours); background: none; padding: 0; border-radius: 0; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 2px; cursor: pointer; }
+.ask .ask-cite .ask-pagelink:hover { background: none; color: var(--ours); text-decoration-style: solid; }
 /* "See it on the page": scrolls to the figure an answer is about */
 .ask .ask-jump { font: 600 12.5px var(--sans); color: var(--a-acc); background: var(--a-soft); padding: 3px 9px; border-radius: 999px; }
 .ask .ask-jump:hover { background: var(--a-acc); color: var(--a-on-acc); }

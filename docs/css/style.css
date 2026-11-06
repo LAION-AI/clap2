@@ -1226,6 +1226,8 @@ pre:focus-visible { outline: 2px solid var(--ours); outline-offset: 2px; }
 .np-t b { color: var(--ink); font-weight: 600; display: flex; align-items: center; gap: 6px; }
 .np-t b span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .np-t span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.np-src { color: var(--muted); }
+a.np-src:hover { color: var(--ink); }
 .np > i { position: absolute; left: 0; bottom: 0; height: 3px; width: 0; background: var(--c, var(--acc)); }
 /* ================= D: bubbles ================= */
 .bd { display: block; width: 100%; height: auto; overflow: hidden; }
