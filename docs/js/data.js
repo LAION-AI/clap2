@@ -41,7 +41,7 @@ window.DATA = {
     { name: 'Bagpiper', hours: 933e3, captions: 392e6, audio: 392e6, access: 'public' },
     { name: 'GLAP mix', hours: 435e3, captions: 445e6, audio: 445e6, access: 'public' },
     { name: 'LAION-Audio-XL-500M', hours: 3.35e6, captions: 970e6, audio: 500e6, ours: true, access: 'released' },
-    { name: 'LAION-Audio-XL', hours: 1.38e6, captions: 707e6, audio: 365e6, ours: true, access: 'released' },
+    { name: 'LAION-Audio-XL', hours: 1.39e6, captions: 707e6, audio: 365e6, ours: true, access: 'released' },
   ],
 
   // Sound taxonomy (thesis, appendix C.1 and its radial figure): 4,416 nodes, 4,085 leaves, 11 top-level groups,

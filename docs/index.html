@@ -39,7 +39,7 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://projects.laion.ai/clap2/assets/og-image.png">
-  <meta property="og:image:alt" content="LAION-Audio-XL: 365M audio-text clips, and CLAP2 at 52.3% on MAEB-30.">
+  <meta property="og:image:alt" content="LAION-Audio-XL: 365M audio-text pairs, optimal data growing 1.4× faster than model size, and CLAP2-M (153M parameters) at 52.3% on MAEB-30.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -187,7 +187,7 @@
    "alternateName": [
     "LAION-Audio-XL-500M"
    ],
-   "description": "A web-scale audio-text corpus of 365M audio clips up to 30 s (1.39M hours) with 707M short and long captions, curated from 1.48B clips collected from YouTube, Common Crawl, web collections and 316 academic datasets. The larger LAION-Audio-XL-500M keeps clips up to 120 s (500M clips, 970M captions, 3.35M hours). Released on Hugging Face: laion/laion-audio-xl holds the audio of sources whose licence allows redistribution, and the gated laion/laion-audio-xl-links holds links, captions and metadata for the rest.",
+   "description": "A web-scale audio-text corpus of 365M audio clips up to 30 s (1.39M hours) with 707M short and long captions, curated from 1.48B clips collected from YouTube, Common Crawl, web collections, internet datasets and 316 academic datasets. The larger LAION-Audio-XL-500M keeps clips up to 120 s (500M clips, 970M captions, 3.35M hours). Released on Hugging Face: laion/laion-audio-xl holds the audio of sources whose licence allows redistribution, and the gated laion/laion-audio-xl-links holds links, captions and metadata for the rest.",
    "keywords": [
     "audio",
     "audio captions",
@@ -340,16 +340,16 @@
       <span>Ross Wightman<sup>2</sup></span>
       <span>Marianna Nezhurina<sup>1,2</sup></span>
       <span>Christoph Schuhmann<sup>2</sup></span>
-      <span>Jenia Jitsev<sup>1,2,◆</sup></span>
-      <span>A. Sophia Koepke<sup>3,4,◆</sup></span>
+      <span>Jenia Jitsev<sup>1,2,⋄</sup></span>
+      <span>A. Sophia Koepke<sup>3,4,⋄</sup></span>
     </p>
     <p class="affils">
       <span><sup>1</sup>Jülich Supercomputing Center (JSC), Forschungszentrum Jülich (FZJ)</span>
       <span><sup>2</sup>LAION</span>
       <span><sup>3</sup>Technical University of Munich, MCML</span>
       <span><sup>4</sup>University of Tübingen, Tübingen AI Center</span>
-      <span class="equal"><sup>*</sup>Equal contribution, order decided by coin flip</span>
-      <span class="equal"><sup>◆</sup>Senior advisor</span>
+      <span class="equal"><sup>*</sup>Equal contribution, decided by coin flip</span>
+      <span class="equal"><sup>⋄</sup>Equal supervision</span>
     </p>
     <nav class="links">
       <a class="btn" href="#" aria-disabled="true" title="Coming soon"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z M14 2v6h6"/></svg>Paper</a>
@@ -399,7 +399,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
   <header class="row sec-head">
     <div class="sec-title">
       <h2><span class="sec-n" aria-hidden="true">1</span>The LAION-Audio-XL Dataset</h2>
-      <p>We collect 1.48B audio samples from YouTube, Common Crawl, web collections and 316 academic datasets, clean and deduplicate them, select for coverage with a 3,718-class taxonomy, and generate short and long captions for clips that lack them.</p>
+      <p>We collect 1.48B audio samples from YouTube, Common Crawl, web collections, internet datasets and 316 academic datasets, clean and deduplicate them, select for coverage with a 3,718-class taxonomy, and generate short and long captions for clips that lack them.</p>
     </div>
   </header>
 
@@ -429,7 +429,7 @@ t = m.encode_text(oc.get_tokenizer(hub)([<span class="c-s">&quot;a dog&quot;</sp
   <div class="row" id="compare">
     <aside class="side">
       <h3>Compared with Other Corpora <button class="info" type="button" aria-expanded="false" aria-controls="i-cmp" aria-label="More about this comparison"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.25"/><path d="M10 9v5"/><circle class="dot" cx="10" cy="6.2" r=".9"/></svg></button></h3>
-      <div class="info-more" id="i-cmp" hidden><p>Bars share one linear scale per measure. Captions count the text entries each source reports: GLAP's are mostly ASR transcripts, and SALMONN-2 and Audio Flamingo 3 report training samples without clip counts. Dasheng's mix is audio only.</p></div>
+      <div class="info-more" id="i-cmp" hidden><p>Bars share one linear scale per measure. Captions count the text entries each source reports (captions, ASR transcripts, QA pairs); SALMONN-2 and Audio Flamingo 3 do not report clip counts. Dasheng's mix is audio only.</p></div>
       <div class="toggle" id="cmp-toggle" role="group" aria-label="Metric">
         <button class="on" data-k="hours">Duration</button>
         <button data-k="captions">Captions</button>
@@ -670,11 +670,12 @@ music = ds[<span class="c-s">&quot;train&quot;</span>].filter(is_music)
     </div>
     <div class="bib-box">
     <button class="copy" id="bib-copy" type="button"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button>
-    <pre tabindex="0" id="bib"><code>@inproceedings{wijngaard2027laionaudioxl,
+    <pre tabindex="0" id="bib"><code>@misc{wijngaard2026laionaudioxl,
   title     = {{LAION-Audio-XL}: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining},
   author    = {Wijngaard, Gijs and F{\"o}rster, Felix and Wightman, Ross and Nezhurina, Marianna
                and Schuhmann, Christoph and Jitsev, Jenia and Koepke, A. Sophia},
-  year      = {2027},
+  year      = {2026},
+  note      = {Preprint},
 }</code></pre>
     </div>
   </div>

@@ -43,7 +43,7 @@
   ];
   // the step between stage i and i+1: title, one-line detail, and the longer note behind the info button
   const STEPS = [
-    ['Clean', 'silence, duplicates, eval', 'Silent or unreadable audio is dropped, exact duplicates are found by hash and audio fingerprint, near-duplicates with SemDeDup, and clips that overlap evaluation sets are removed.'],
+    ['Clean', 'silence, duplicates, eval', 'Silent or unreadable audio is dropped, exact duplicates are found by hash, near-duplicates by audio fingerprint and SemDeDup, and clips that overlap evaluation sets are removed.'],
     ['Annotate & select', '3,718-class taxonomy', 'Each clip gets taxonomy, language, speaker, emotion, music and species annotations. Selection then keeps 500M clips that cover the 3,718 classes, thinning common content and protecting rare categories.'],
     ['Caption', 'Qwen3-Omni, MOSS-Audio', 'Prompted with the annotations, Qwen3-Omni and MOSS-Audio write a short (12 ± 3 words) and a long (29 ± 11 words) caption for the 471M clips without text.'],
     ['Keep ≤ 30 s', '', 'LAION-Audio-XL-500M keeps every selected clip up to 120 s. Training uses its ≤ 30 s subset, LAION-Audio-XL: +4.1 MAEB-30 points at 3.5× less compute.'],

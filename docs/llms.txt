@@ -2,7 +2,7 @@
 
 > Project page of the LAION-Audio-XL paper. LAION-Audio-XL is a corpus of 365M audio clips with 707M captions (1.39M hours), curated from 1.48B collected clips. The paper derives compute scaling laws for contrastive language-audio pretraining (CLAP) and releases CLAP2, a family of five CLAP models (CLAP2-XXS to CLAP2-L, 27M to 340M parameters). CLAP2-L (340M parameters) reaches 53.6% on MAEB-30, the best score of any model trained from scratch on the MAEB leaderboard.
 
-Authors: Gijs Wijngaard (Jülich Supercomputing Center (JSC), Forschungszentrum Jülich (FZJ); LAION; equal contribution, order decided by coin flip), Felix Förster (Technical University of Munich, MCML; equal contribution), Ross Wightman (LAION), Marianna Nezhurina (JSC, FZJ; LAION), Christoph Schuhmann (LAION), Jenia Jitsev (JSC, FZJ; LAION; senior advisor), A. Sophia Koepke (Technical University of Munich, MCML; University of Tübingen, Tübingen AI Center; senior advisor).
+Authors: Gijs Wijngaard (Jülich Supercomputing Center (JSC), Forschungszentrum Jülich (FZJ); LAION; equal contribution, decided by coin flip), Felix Förster (Technical University of Munich, MCML; equal contribution), Ross Wightman (LAION), Marianna Nezhurina (JSC, FZJ; LAION), Christoph Schuhmann (LAION), Jenia Jitsev (JSC, FZJ; LAION; equal supervision), A. Sophia Koepke (Technical University of Munich, MCML; University of Tübingen, Tübingen AI Center; equal supervision).
 
 Code: https://github.com/LAION-AI/clap2. Dataset: https://huggingface.co/datasets/laion/laion-audio-xl (configs open, sharealike, noncommercial; clips crawled from the web are listed as links in the gated laion/laion-audio-xl-links). Models: https://huggingface.co/laion/clap2-medium-audioxl-s1B; all five sizes are laion/clap2-{xxs,xs,small,medium,large}-audioxl-s1B, loaded with OpenCLIP.
 
@@ -74,11 +74,11 @@ Each LAION-Audio-XL sample stores the audio (32 kHz mono, up to 30 s), a short a
 | LAION-Audio-630K | 4.3K | 634K | 634K | public |
 | Auto-ACD | 5.3K | 1.9M | 1.9M | public |
 | SALMONN-2 | 18.2K | 8.9M | not reported | public |
-| Audio Flamingo 3 | 54.4K | 26.8M | not reported | public |
+| Audio Flamingo 3 | ≥54.4K | 26.8M | not reported | public |
 | LAION-BVD (BVD-A-10M) | 27K | 10M | 10M | public |
 | AutoReCap-XL | 124K | 47M | 47M | public |
 | Dasheng mix | 272K | none (audio only) | 97M | public |
-| SLAP (MovieGen Audio) | 1M | 109M | 109M | not released |
+| SLAP (MovieGen Audio) | ~1M | 109M | 109M | not released |
 | Bagpiper | 933K | 392M | 392M | public |
 | GLAP mix | 435K | 445M | 445M | public |
 | 500M selection (ours) | 3.35M | 970M | 500M | released |
@@ -153,13 +153,14 @@ Selected queries from MAEB test sets (not averages). Rank = position of the corr
 ## Citation
 
 ```bibtex
-@inproceedings{wijngaard2027laionaudioxl,
+@misc{wijngaard2026laionaudioxl,
   title     = {{LAION-Audio-XL}: A Web-Scale Corpus and Scaling Studies
                for Contrastive Language-Audio Pretraining},
   author    = {Wijngaard, Gijs and F{\"o}rster, Felix and Wightman, Ross
                and Nezhurina, Marianna and Schuhmann, Christoph
                and Jitsev, Jenia and Koepke, A. Sophia},
-  year      = {2027},
+  year      = {2026},
+  note      = {Preprint},
 }
 ```
 

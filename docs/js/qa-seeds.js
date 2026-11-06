@@ -35,9 +35,9 @@
       q: ['How do I cite this?', 'citation', 'Is there a BibTeX entry?', 'how should I cite the paper', 'reference for citing this work', 'bibtex', 'how to cite LAION-Audio-XL', 'citation for the paper', 'cite the paper', 'Where can I find the BibTeX for this paper?', 'what should I cite', 'citing this work'],
       a: "Copy the BibTeX at the bottom of the page. It cites “LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining” by Wijngaard, Förster et al.", src: 'Page · BibTeX' },
     { id: 'venue',
-      q: ['Where is the paper published?', 'Is it peer reviewed?', 'Has the paper been accepted?', 'which venue', 'Is the paper peer-reviewed?', 'where was this published', 'publication venue'],
+      q: ['Where is the paper published?', 'Is it peer reviewed?', 'Has the paper been accepted?', 'which venue', 'Is the paper peer-reviewed?', 'where was this published', 'publication venue', 'Is this a preprint?', 'is the paper a preprint'],
       not: ['dataset', 'data', 'code', 'weights', 'checkpoints', 'models', 'model', 'captions', 'audio', 'llm', 'when', 'date', 'dates', ...CAPTION],
-      a: "This project page does not list a publication venue. Use the BibTeX entry at the bottom of the page for the current citation details.", src: 'Page · BibTeX' },
+      a: "It's a <b>preprint</b>, released in 2026, so it has no conference or journal venue yet. The BibTeX entry at the bottom of the page cites it as a 2026 preprint.", src: 'Page · BibTeX' },
 
     // ---------- release, licensing, ethics ----------
     { id: 'release',

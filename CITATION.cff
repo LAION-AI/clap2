@@ -21,9 +21,10 @@ authors:
   - family-names: Koepke
     given-names: A. Sophia
 preferred-citation:
-  type: conference-paper
+  type: article
+  status: preprint
   title: "LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining"
-  year: 2027
+  year: 2026
   authors:
     - family-names: Wijngaard
       given-names: Gijs

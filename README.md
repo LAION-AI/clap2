@@ -94,10 +94,11 @@ Code: MIT. Models: CC BY-NC 4.0. Audio and captions: per source, see the dataset
 ## Citation
 
 ```bibtex
-@inproceedings{wijngaard2027laionaudioxl,
+@misc{wijngaard2026laionaudioxl,
   title     = {{LAION-Audio-XL}: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining},
   author    = {Wijngaard, Gijs and F{\"o}rster, Felix and Wightman, Ross and Nezhurina, Marianna
                and Schuhmann, Christoph and Jitsev, Jenia and Koepke, A. Sophia},
-  year      = {2027},
+  year      = {2026},
+  note      = {Preprint},
 }
 ```
