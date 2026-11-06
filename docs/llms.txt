@@ -4,7 +4,7 @@
 
 Authors: Gijs Wijngaard (Jülich Supercomputing Center (JSC), Forschungszentrum Jülich (FZJ); LAION; equal contribution, decided by coin flip), Felix Förster (Technical University of Munich, MCML; equal contribution), Ross Wightman (LAION), Marianna Nezhurina (JSC, FZJ; LAION), Christoph Schuhmann (LAION), Jenia Jitsev (JSC, FZJ; LAION; equal supervision), A. Sophia Koepke (Technical University of Munich, MCML; University of Tübingen, Tübingen AI Center; equal supervision).
 
-Code: https://github.com/LAION-AI/clap2. Dataset: https://huggingface.co/datasets/laion/laion-audio-xl (configs open, sharealike, noncommercial; clips crawled from the web are listed as links with captions and metadata in the config links). Models: https://huggingface.co/collections/laion/laion-audio-xl-and-clap2 (collection with the dataset and all models); all five sizes are laion/clap2-{xxs,xs,small,medium,large}-audioxl-s1B, loaded with OpenCLIP.
+Code: https://github.com/LAION-AI/clap2. Dataset: https://huggingface.co/datasets/laion/laion-audio-xl (configs open, sharealike, noncommercial; clips crawled from the web are listed as links with captions and metadata in the config links). Models: https://huggingface.co/models?search=laion/clap2; all five sizes are laion/clap2-{xxs,xs,small,medium,large}-audioxl-s1B, loaded with OpenCLIP.
 
 ## Abstract
 

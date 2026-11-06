@@ -11,7 +11,7 @@
   <a href="https://projects.laion.ai/clap2"><img src="docs/assets/readme/badge-project-page.svg" alt="Project page" height="28"></a>
   <a href="https://projects.laion.ai/clap2"><img src="docs/assets/readme/badge-paper.svg" alt="Paper" height="28"></a>
   <a href="https://huggingface.co/datasets/laion/laion-audio-xl"><img src="docs/assets/readme/badge-dataset.svg" alt="LAION-Audio-XL" height="28"></a>
-  <a href="https://huggingface.co/collections/laion/laion-audio-xl-and-clap2"><img src="docs/assets/readme/badge-models.svg" alt="CLAP2" height="28"></a>
+  <a href="https://huggingface.co/models?search=laion/clap2"><img src="docs/assets/readme/badge-models.svg" alt="CLAP2" height="28"></a>
 </p>
 
 <p><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/stats-1-dark.svg"><img src="docs/assets/readme/stats-1.svg" alt="365M audio-text pairs · 1.39M hours of audio, 425 sources" width="380"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/stats-2-dark.svg"><img src="docs/assets/readme/stats-2.svg" alt="5 sizes, 27M–340M parameters · 53.6% MAEB-30 (CLAP2-L)" width="380"></picture></p>
