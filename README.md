@@ -93,7 +93,7 @@ Captioning servers, training and evaluation use their own environments (see `1_p
 
 ## Licence
 
-Code: MIT. Models: CC BY-NC 4.0. Audio and captions: per source, see the dataset card.
+Code: MIT. Models: Apache 2.0. Audio and captions: per source, see the dataset card.
 
 ## Citation
 
