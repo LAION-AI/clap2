@@ -2,7 +2,7 @@
 
 The models are evaluated on MAEB, MSEB and HEAR with [CLIP_benchmark](https://github.com/LAION-AI/CLIP_benchmark)
 (audio support: [PR #154](https://github.com/LAION-AI/CLIP_benchmark/pull/154)). Each task writes the native results of
-its benchmark library into its own directory; `--skip_existing` resumes. Audio is processed at its native length.
+its benchmark library into its own directory, and `--skip_existing` resumes. Audio is processed at its native length.
 
 MAEB scores are the mean over the probe and clustering seeds 42, 1, 2 and 3.
 

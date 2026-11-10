@@ -1,14 +1,14 @@
 # Segmentation of long recordings
 
-Three ways to cut long YouTube recordings (`0_download/raw/youtube.py`; `IN` holds only `IN/YouTube/*.tar`) into clips, compared by
+Three ways to cut long YouTube recordings (`0_download/raw/youtube.py`, with `IN` holding only `IN/YouTube/*.tar`) into clips, compared by
 training XS for 8M samples with three seeds on each:
 
-- `random`: crops of N(30, 10) s, clipped to [5, 120] s, at uniform positions;
+- `random`: crops of N(30, 10) s, clipped to [5, 120] s, at uniform positions.
 - `quality`: the same candidate crops, keeping those with at most half of the frames below -60 dB, a mean frame
-  level of at least -40 dB and at most 5 % clipped samples;
+  level of at least -40 dB and at most 5 % clipped samples.
 - `silence`: cuts at silences (`common.cut`, scanned at 8 kHz).
 
-Each method cuts as many clips from a recording as it has silence segments; `--keep` subsamples all methods to the
+Each method cuts as many clips from a recording as it has silence segments. `--keep` subsamples all methods to the
 same size (about 1M clips each). The clips are captioned with Qwen3-Omni from the audio alone.
 
 ```bash

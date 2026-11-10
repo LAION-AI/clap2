@@ -2,7 +2,7 @@
 
 Each study is a data preparation plus a `2_training/train.sh` run of the M tier of the cosine grid
 (`ratio_m_base`, see `4_experiments/audio_text_ratio` for installing the config) on the 500M selection, with a cosine
-schedule. Runs in the 30 s bucket have a global batch of about 3,400 clips; studies with audio up to 120 s use one
+schedule. Runs in the 30 s bucket have a global batch of about 3,400 clips. Studies with audio up to 120 s use one
 120 s bucket instead (6008 audio tokens, 8 clips per GPU). `prepare.py` derives the study shards from exported shards.
 
 ```bash

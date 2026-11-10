@@ -59,7 +59,7 @@
     { id: 'thead', lane: 't', col: 4, ttl: 'Linear', sub: t => `→ ${t.emb}-d`,
       note: t => ['Projection', `One linear layer into the shared ${t.emb}-d space.`] },
     { id: 'loss', lane: 'j', ttl: 'CLIP loss', sub: () => '',
-      note: () => ['CLIP loss', 'Every clip is scored against every caption; the true pairs on the diagonal should win.'] },
+      note: () => ['CLIP loss', 'Every clip is scored against every caption. The true pairs on the diagonal should win.'] },
   ];
   const byId = Object.fromEntries(STAGES.map(s => [s.id, s]));
   // the batch's similarity matrix: clip i (row) is paired with caption i (column), fixed scores for the rest

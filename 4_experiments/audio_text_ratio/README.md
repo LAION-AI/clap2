@@ -2,7 +2,7 @@
 
 `configs/` holds the XS and M tiers of the cosine-schedule grid (`ratio_xs_base`, `ratio_m_base`, audio:text 2.36:1) and
 three re-allocations of each at the same non-embedding total and embedding width (`3to2`, `1to1`, `1to2`). They are
-OpenCLIP model configs; copy them next to OpenCLIP's own:
+OpenCLIP model configs. Copy them next to OpenCLIP's own:
 
 ```bash
 cp 4_experiments/audio_text_ratio/configs/*.json "$(python -c 'import open_clip, os; print(os.path.dirname(open_clip.__file__))')/model_configs/"
@@ -24,7 +24,7 @@ for c in ratio_xs_base ratio_xs_1to1; do
 done
 ```
 
-MAEB-30 (%, mean over seeds 42, 1, 2, 3; `3_evaluation` with `--model <config> --pretrained logs/<name>/checkpoints/epoch_<n>.pt`):
+MAEB-30 (%, mean over seeds 42, 1, 2, 3, from `3_evaluation` with `--model <config> --pretrained logs/<name>/checkpoints/epoch_<n>.pt`):
 
 | D | Tier | 2.36:1 | 1.5:1 | 1:1 | 1:2 |
 |---|---|---|---|---|---|

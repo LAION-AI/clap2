@@ -5,7 +5,7 @@
   <img src="docs/assets/logos/laion-audio-xl.svg" alt="LAION Audio XL" width="380">
 </picture>
 
-<h4>A Web-Scale Corpus and Scaling Studies for Contrastive Language&#8209;Audio Pretraining</h4>
+<h4>A Web-Scale Corpus and Scaling Studies for Contrastive Language‑Audio Pretraining</h4>
 
 <p>
   <a href="https://projects.laion.ai/clap2"><img src="docs/assets/readme/badge-project-page.svg" alt="Project page" height="28"></a>
@@ -52,8 +52,8 @@ from datasets import load_dataset
 ds = load_dataset("laion/laion-audio-xl", streaming=True)   # configs: open (default), sharealike, noncommercial, links
 ```
 
-Clips that cannot be redistributed are listed as links in the `links` config of the same repository;
-`0_download/web_youtube.py` and `0_download/web_links.py` stream its rows and download and cut the clips into
+Clips that cannot be redistributed are listed as links in the `links` config of the same repository.
+The scripts `0_download/web_youtube.py` and `0_download/web_links.py` stream its rows and download and cut the clips into
 WebDataset tars, one folder per source dataset, ready as input `IN` of the pipeline.
 
 ## Pipeline
@@ -74,7 +74,7 @@ server environments). The selection `target` and `budget` (`5_selection/config.y
 
 | Folder | Step |
 |---|---|
-| `0_download/raw/` | rebuild the collection: `sources.csv` (425 sources), download handlers, converter, text rules; Common Crawl WARC extraction; YouTube |
+| `0_download/raw/` | rebuild the collection: `sources.csv` (425 sources), download handlers, converter and text rules, plus Common Crawl WARC extraction and YouTube |
 | `1_preprocessing/0_convert/` | 32 kHz 16-bit mono, long recordings cut at silences |
 | `1_preprocessing/1_filter_silent/` | per-clip signal statistics, silence and duration gate |
 | `1_preprocessing/2_deduplication/` | `0_hash_matching` (PCM MD5), `1_fingerprint` (Olaf), `2_semdedup` (Dasheng, SemDeDup) |

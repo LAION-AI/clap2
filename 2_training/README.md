@@ -1,6 +1,6 @@
 # Training
 
-Models are trained with upstream [OpenCLIP](https://github.com/mlfoundations/open_clip); the five model configs
+Models are trained with upstream [OpenCLIP](https://github.com/mlfoundations/open_clip). The five model configs
 `naflexclap_xxs`, `naflexclap_xs`, `naflexclap_small`, `naflexclap_medium` and `naflexclap_large` are part of OpenCLIP
 since 4.2.1 ([PR #1230](https://github.com/mlfoundations/open_clip/pull/1230)).
 
@@ -25,7 +25,7 @@ branch that resumes the trunk at 80 % of D and decays the LR linearly to zero ov
 | short | 1M-32M | 4e-4 | 350 | 922 | 200,000 |
 | long | 64M-1024M | 7.5e-4 | 2,800 | 3,686 | 3,200,000 |
 
-`wsd.py MODEL D GPUS` prints the trunk and branch commands; it sets the token budget per GPU to 1504 x round(batch /
+`wsd.py MODEL D GPUS` prints the trunk and branch commands. It sets the token budget per GPU to 1504 x round(batch /
 GPUS), which gives the nearest multiple of GPUS as the global batch:
 
 ```bash

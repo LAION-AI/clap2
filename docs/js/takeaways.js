@@ -71,7 +71,7 @@
     });
     out.push({ t: 'text', x: X(12) - 4, y: Y(Math.log10(f.d0)) - 8, s: 10, c: 'd', v: 'data', a: 'end', b: 1 });
     out.push({ t: 'text', x: X(12) - 4, y: Y(Math.log10(f.n0)) + 21, s: 10, c: 'n', v: 'model size', a: 'end', b: 1 });
-    return { prims: out, cap: 'Compute-optimal model size and data against compute, log scale; data grows faster' };
+    return { prims: out, cap: 'Compute-optimal model size and data against compute, log scale. Data grows faster' };
   }
 
   /* ---------- the three cards ---------- */

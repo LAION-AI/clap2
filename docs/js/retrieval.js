@@ -163,7 +163,7 @@
     const done = el('div', 'gm-end');
     done.innerHTML = `<p class="gm-final"><span>You <b>${you}</b>/${n}</span><span class="ours">CLAP2 <b>${clap}</b>/${n}</span></p>
       <p class="gm-ask">${you > clap ? 'You beat it. Sharp ears!' : you === clap ? 'A draw with the model.' : 'The model wins this time.'}</p>
-      <p class="gm-note">Real queries from the MAEB test sets, hand-picked and failure cases included. Each model ranked the full test set; the options here are only the correct item and the models' wrong first picks.</p>`;
+      <p class="gm-note">Real queries from the MAEB test sets, hand-picked and failure cases included. Each model ranked the full test set. The options here are only the correct item and the models' wrong first picks.</p>`;
     const again = el('button', 'gm-next', 'Play again');
     again.type = 'button';
     again.addEventListener('click', start);

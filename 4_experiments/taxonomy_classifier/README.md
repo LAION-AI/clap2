@@ -2,7 +2,7 @@
 
 `labels.parquet` and `relabelled.parquet` hold one row per labelled clip: `audio` (FLAC or WAV bytes), `l3` (a taxonomy
 path of depth at most 3, as in `1_preprocessing/4_annotation/0_taxonomy/taxonomy.yaml`) and `archive` (the recording or
-tar the clip comes from; the split is by `md5(archive) % 10`: 0 test, 1 held out, the rest training).
+tar the clip comes from). The split is by `md5(archive) % 10`: 0 test, 1 held out, the rest training.
 
 ```bash
 export PYTHONPATH=.
@@ -15,4 +15,4 @@ python 4_experiments/taxonomy_classifier/train.py labels.parquet feats_labels he
 python 4_experiments/taxonomy_classifier/train.py relabelled.parquet feats_relabelled head.safetensors --init head_v1.safetensors --epochs 60 --batch 4096
 ```
 
-`classify.py` reads `head.safetensors` from `laion/audio-taxonomy-classifier`; a head trained here has the same format.
+`classify.py` reads `head.safetensors` from `laion/audio-taxonomy-classifier`. A head trained here has the same format.
