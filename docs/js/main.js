@@ -1,13 +1,3 @@
-// The paper link is a placeholder until the arXiv version is out; a click says so instead of doing nothing
-document.addEventListener('click', e => {
-  const a = e.target.closest('a[aria-disabled="true"]');
-  if (!a) return;
-  e.preventDefault();
-  a.classList.add('soon-show');
-  clearTimeout(a.soonT);
-  a.soonT = setTimeout(() => a.classList.remove('soon-show'), 1600);
-});
-
 // copy the BibTeX entry, from its own button or from the BibTeX link in the top bar
 (function () {
   const btn = document.getElementById('bib-copy');

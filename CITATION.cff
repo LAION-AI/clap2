@@ -23,6 +23,11 @@ authors:
 preferred-citation:
   type: article
   status: preprint
+  url: "https://arxiv.org/abs/2611.11592"
+  identifiers:
+    - type: other
+      value: "arXiv:2611.11592"
+      description: arXiv identifier
   title: "LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining"
   year: 2026
   authors:

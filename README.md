@@ -9,7 +9,7 @@
 
 <p>
   <a href="https://projects.laion.ai/clap2"><img src="docs/assets/readme/badge-project-page.svg" alt="Project page" height="28"></a>
-  <a href="https://projects.laion.ai/clap2"><img src="docs/assets/readme/badge-paper.svg" alt="Paper" height="28"></a>
+  <a href="https://arxiv.org/abs/2611.11592"><img src="docs/assets/readme/badge-paper.svg" alt="Paper" height="28"></a>
   <a href="https://huggingface.co/datasets/laion/laion-audio-xl"><img src="docs/assets/readme/badge-dataset.svg" alt="LAION-Audio-XL" height="28"></a>
   <a href="https://huggingface.co/models?search=laion/clap2"><img src="docs/assets/readme/badge-models.svg" alt="CLAP2" height="28"></a>
 </p>
@@ -98,11 +98,13 @@ Code: MIT. Models: CC BY-NC 4.0. Audio and captions: per source, see the dataset
 ## Citation
 
 ```bibtex
-@misc{wijngaard2026laionaudioxl,
-  title     = {{LAION-Audio-XL}: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining},
-  author    = {Wijngaard, Gijs and F{\"o}rster, Felix and Wightman, Ross and Nezhurina, Marianna
-               and Schuhmann, Christoph and Jitsev, Jenia and Koepke, A. Sophia},
-  year      = {2026},
-  note      = {Preprint},
+@misc{wijngaard2026laionaudioxlwebscalecorpusscaling,
+      title={LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining},
+      author={Gijs Wijngaard and Felix Förster and Ross Wightman and Marianna Nezhurina and Christoph Schuhmann and Jenia Jitsev and A. Sophia Koepke},
+      year={2026},
+      eprint={2611.11592},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/2611.11592},
 }
 ```

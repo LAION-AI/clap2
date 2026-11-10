@@ -371,7 +371,7 @@
   pitch.innerHTML = `
     <button class="ask-close" type="button" aria-label="Close">${ICON('M6 6l12 12M18 6L6 18')}</button>
     <p><b>You made it to the end!</b> This page only shows the highlights. The paper has the rest: every curation step, all the scaling runs and the full benchmark tables.</p>
-    <p class="ask-pitch-acts">${window.PAPER_PDF ? `<a class="ask-pitch-go" href="${window.PAPER_PDF}" target="_blank" rel="noopener" type="application/pdf">Read the full paper ↗</a>` : '<a class="ask-pitch-go" href="#" aria-disabled="true" title="Coming soon">Read the full paper</a>'}</p>`;
+    <p class="ask-pitch-acts"><a class="ask-pitch-go" href="${window.PAPER_PDF}" target="_blank" rel="noopener" type="application/pdf">Read the full paper ↗</a></p>`;
   box.appendChild(pitch);
   // liked it? he hands over the share menu too (js/share.js)
   if (window.SHARE) {

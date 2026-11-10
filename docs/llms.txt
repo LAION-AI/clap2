@@ -4,11 +4,11 @@
 
 Authors: Gijs Wijngaard (Jülich Supercomputing Center (JSC), Forschungszentrum Jülich (FZJ); LAION; equal contribution, decided by coin flip), Felix Förster (Technical University of Munich, MCML; equal contribution), Ross Wightman (LAION), Marianna Nezhurina (JSC, FZJ; LAION), Christoph Schuhmann (LAION), Jenia Jitsev (JSC, FZJ; LAION; equal supervision), A. Sophia Koepke (Technical University of Munich, MCML; University of Tübingen, Tübingen AI Center; equal supervision).
 
-Code: https://github.com/LAION-AI/clap2. Dataset: https://huggingface.co/datasets/laion/laion-audio-xl (configs open, sharealike, noncommercial; clips crawled from the web are listed as links with captions and metadata in the config links). Models: https://huggingface.co/models?search=laion/clap2; all five sizes are laion/clap2-{xxs,xs,small,medium,large}-audioxl-s1B, loaded with OpenCLIP.
+Paper: https://arxiv.org/abs/2611.11592 (Hugging Face paper page: https://huggingface.co/papers/2611.11592). Code: https://github.com/LAION-AI/clap2. Dataset: https://huggingface.co/datasets/laion/laion-audio-xl (configs open, sharealike, noncommercial; clips crawled from the web are listed as links with captions and metadata in the config links). Models: https://huggingface.co/models?search=laion/clap2; all five sizes are laion/clap2-{xxs,xs,small,medium,large}-audioxl-s1B, loaded with OpenCLIP.
 
 ## Abstract
 
-Recent progress on contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.48 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture for the audio encoder. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our resulting models, CLAP2, outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks, and can serve as a drop-in replacement for CLAP in downstream applications. We release our dataset, captions, model checkpoints, and code.
+Recent progress on contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.48 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture for the audio encoder. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our resulting models, CLAP2, outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks. We release our dataset, captions, model checkpoints, and code.
 
 ## Key results
 
@@ -153,14 +153,14 @@ Selected queries from MAEB test sets (not averages). Rank = position of the corr
 ## Citation
 
 ```bibtex
-@misc{wijngaard2026laionaudioxl,
-  title     = {{LAION-Audio-XL}: A Web-Scale Corpus and Scaling Studies
-               for Contrastive Language-Audio Pretraining},
-  author    = {Wijngaard, Gijs and F{\"o}rster, Felix and Wightman, Ross
-               and Nezhurina, Marianna and Schuhmann, Christoph
-               and Jitsev, Jenia and Koepke, A. Sophia},
-  year      = {2026},
-  note      = {Preprint},
+@misc{wijngaard2026laionaudioxlwebscalecorpusscaling,
+      title={LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining},
+      author={Gijs Wijngaard and Felix Förster and Ross Wightman and Marianna Nezhurina and Christoph Schuhmann and Jenia Jitsev and A. Sophia Koepke},
+      year={2026},
+      eprint={2611.11592},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/2611.11592},
 }
 ```
 

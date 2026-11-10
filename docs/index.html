@@ -21,9 +21,10 @@
   <meta name="citation_author" content="Christoph Schuhmann">
   <meta name="citation_author" content="Jenia Jitsev">
   <meta name="citation_author" content="A. Sophia Koepke">
-  <meta name="citation_publication_date" content="2026">
-  <!-- Google Scholar / Highwire tags; add citation_pdf_url once the paper is public -->
-  <meta name="citation_abstract" content="Recent progress on contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.48 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture for the audio encoder. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our resulting models, CLAP2, outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks, and can serve as a drop-in replacement for CLAP in downstream applications. We release our dataset, captions, model checkpoints, and code.">
+  <meta name="citation_publication_date" content="2026/11/08">
+  <meta name="citation_arxiv_id" content="2611.11592">
+  <meta name="citation_pdf_url" content="https://arxiv.org/pdf/2611.11592">
+  <meta name="citation_abstract" content="Recent progress on contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.48 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture for the audio encoder. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our resulting models, CLAP2, outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks. We release our dataset, captions, model checkpoints, and code.">
   <link rel="icon" href="assets/logos/laion-audio-icon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#111315" media="(prefers-color-scheme: dark)">
@@ -61,7 +62,7 @@
    "@id": "#paper",
    "headline": "LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining",
    "name": "LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining",
-   "abstract": "Recent progress on contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.48 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture for the audio encoder. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our resulting models, CLAP2, outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks, and can serve as a drop-in replacement for CLAP in downstream applications. We release our dataset, captions, model checkpoints, and code.",
+   "abstract": "Recent progress on contrastive audio-language models can be attributed mainly to the scale and quality of their training data. Larger training datasets expose models to a broader range of sounds and corresponding audio captions. To exploit this, we collect 1.48 billion audio samples from academic datasets, internet datasets, web collections, Common Crawl, and YouTube, and process them with a multi-stage curation pipeline. Furthermore, we generate short and long captions for samples in our corpus that lack them. We use our dataset to study the scaling behavior of contrastive audio-language models based on the NaFlex architecture for the audio encoder. Our experiments identify trade-offs between model size and training data for a given compute budget. Moreover, our resulting models, CLAP2, outperform prior audio-text models of comparable size on the MAEB and HEAR benchmarks. We release our dataset, captions, model checkpoints, and code.",
    "description": "LAION-Audio-XL is a web-scale corpus of 365M audio clips with 707M captions for contrastive language-audio pretraining (CLAP), with compute scaling laws and the CLAP2 models (CLAP2-XXS to CLAP2-L, 27M–340M parameters); CLAP2-L (340M parameters) reaches 53.6% on MAEB-30.",
    "author": [
     {
@@ -163,7 +164,8 @@
      ]
     }
    ],
-   "datePublished": "2026",
+   "datePublished": "2026-11-08",
+   "sameAs": ["https://arxiv.org/abs/2611.11592", "https://huggingface.co/papers/2611.11592"],
    "inLanguage": "en",
    "keywords": "contrastive language-audio pretraining, CLAP, audio-text dataset, audio captioning, scaling laws, compute-optimal, audio embeddings, MAEB, HEAR, NaFlex, LAION",
    "about": [
@@ -352,7 +354,7 @@
       <span class="equal"><sup>⋄</sup>Equal supervision</span>
     </p>
     <nav class="links">
-      <a class="btn" href="#" aria-disabled="true" title="Coming soon"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z M14 2v6h6"/></svg>Paper</a>
+      <a class="btn" href="https://arxiv.org/abs/2611.11592" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z M14 2v6h6"/></svg>Paper</a>
       <a class="btn" href="https://github.com/LAION-AI/clap2" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg>Code</a>
       <a class="btn" href="https://huggingface.co/datasets/laion/laion-audio-xl" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>Dataset</a>
       <a class="btn" href="https://huggingface.co/models?search=laion/clap2" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2l9 5v10l-9 5-9-5V7z M3 7l9 5 9-5 M12 12v10"/></svg>Models</a>
@@ -668,12 +670,14 @@ music = ds[<span class="c-s">&quot;train&quot;</span>].filter(is_music)
     </div>
     <div class="bib-box">
     <button class="copy" id="bib-copy" type="button"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg><span>Copy</span></button>
-    <pre tabindex="0" id="bib"><code>@misc{wijngaard2026laionaudioxl,
-  title     = {{LAION-Audio-XL}: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining},
-  author    = {Wijngaard, Gijs and F{\"o}rster, Felix and Wightman, Ross and Nezhurina, Marianna
-               and Schuhmann, Christoph and Jitsev, Jenia and Koepke, A. Sophia},
-  year      = {2026},
-  note      = {Preprint},
+    <pre tabindex="0" id="bib"><code>@misc{wijngaard2026laionaudioxlwebscalecorpusscaling,
+      title={LAION-Audio-XL: A Web-Scale Corpus and Scaling Studies for Contrastive Language-Audio Pretraining},
+      author={Gijs Wijngaard and Felix Förster and Ross Wightman and Marianna Nezhurina and Christoph Schuhmann and Jenia Jitsev and A. Sophia Koepke},
+      year={2026},
+      eprint={2611.11592},
+      archivePrefix={arXiv},
+      primaryClass={cs.SD},
+      url={https://arxiv.org/abs/2611.11592},
 }</code></pre>
     </div>
   </div>
@@ -706,7 +710,7 @@ music = ds[<span class="c-s">&quot;train&quot;</span>].filter(is_music)
       </div>
     </div>
   </nav>
-  <a class="paper-thumb" href="#" aria-disabled="true" title="Coming soon"><img src="assets/paper-preview.webp" width="700" height="906" loading="lazy" decoding="async" alt=""><span class="paper-cta">Read the paper<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+  <a class="paper-thumb" href="https://arxiv.org/pdf/2611.11592v1" target="_blank" rel="noopener" type="application/pdf"><img src="assets/paper-preview.webp" width="700" height="906" loading="lazy" decoding="async" alt=""><span class="paper-cta">Read the paper<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
 </div>
 <div class="band-legal">
   <p>© 2026 The authors. Text and figures licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="license noopener">CC BY 4.0</a>. Audio clips and logos keep their own licences. Page design by Felix Förster.</p>
