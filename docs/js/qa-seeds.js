@@ -38,6 +38,10 @@
       q: ['Where is the paper published?', 'Is it peer reviewed?', 'Has the paper been accepted?', 'which venue', 'Is the paper peer-reviewed?', 'where was this published', 'publication venue', 'Is this a preprint?', 'is the paper a preprint'],
       not: ['dataset', 'data', 'code', 'weights', 'checkpoints', 'models', 'model', 'captions', 'audio', 'llm', 'when', 'date', 'dates', ...CAPTION],
       a: "It's an <b>arXiv preprint</b>, <a href=\"https://arxiv.org/abs/2611.11592\" target=\"_blank\" rel=\"noopener\">arXiv:2611.11592</a>, submitted on 8 Nov 2026, so it has no conference or journal venue yet. The BibTeX entry at the bottom of the page is the arXiv entry.", src: 'Page · BibTeX' },
+    { id: 'paper-link',
+      q: ['Where can I read the paper?', 'link to the paper', 'Is the paper on arXiv?', 'arxiv link', 'paper pdf', 'where is the pdf', 'Can I download the paper?', 'full paper', 'arxiv id', 'Where do I find the full paper?'],
+      not: ['dataset', 'data', 'code', 'weights', 'checkpoints', 'models', 'model', 'audio', 'cite', 'bibtex', 'venue', 'peer', 'accepted'],
+      a: "The paper is on arXiv as <a href=\"https://arxiv.org/abs/2611.11592\" target=\"_blank\" rel=\"noopener\">arXiv:2611.11592</a> (<a href=\"https://arxiv.org/pdf/2611.11592v1\" target=\"_blank\" rel=\"noopener\" type=\"application/pdf\">PDF</a>). The <b>Paper</b> button at the top of the page links to it too.", src: 'Page header' },
 
     // ---------- release, licensing, ethics ----------
     { id: 'release',
