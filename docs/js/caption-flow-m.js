@@ -170,8 +170,7 @@ if (window.FK) FK.capPhone = function captionFlowPhone() {
     const apply = () => {
       clipEl.querySelector('.fe-h').textContent = `Audio clip ${i + 1}`;
       FK.capAt = i;
-      clipEl.querySelector('.fe-src').innerHTML = m.youtube_id
-        ? `<a href="https://www.youtube.com/watch?v=${encodeURIComponent(m.youtube_id)}&t=${Math.floor(m.start_sec || 0)}s" target="_blank" rel="noopener">Source on YouTube ↗</a>` : '';
+      clipEl.querySelector('.fe-src').innerHTML = FK.srcLink(m);
       FK.player(clipEl.querySelector('.fe-aud'), s.src, 40);
       on = ROWS.map(r => !!r.val(m));
       nodes.forEach((n, k) => { n.v.textContent = ROWS[k].val(m) || ''; n.g.classList.toggle('off', !on[k]); });

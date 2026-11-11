@@ -40,7 +40,7 @@ window.FK = (function () {
     bird: ['M3 15c3 0 5-1.5 6-5 1-3.5 3.5-5.5 7-5l3 1.5-3 1.5c0 5.5-4 9-9.5 9H3z', 'M14.5 7h.01'],
   };
 
-  const LANGS = { fij: 'Fijian', ja: 'Japanese', en: 'English' };
+  const LANGS = { fij: 'Fijian', ja: 'Japanese', en: 'English', eng: 'English' };
   const pct = p => Math.round(p * 100) + '%';
   const leaf = path => String(path).split('/').pop();
   const r4 = v => (typeof v === 'number' ? +v.toPrecision(4) : v);
@@ -68,7 +68,9 @@ window.FK = (function () {
   ];
   const time = s => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
   const model = m => m.captioning_model.split('/').pop();
-  const CAT = { sound: 'Sound', music: 'Music', speech: 'Speech' };
+  const CAT = { sound: 'Sound', music: 'Music', speech: 'Speech', animal: 'Animal' };
+  // the clip's source page and licence; the title carries the full attribution
+  const srcLink = m => m.source_url ? `<a href="${esc(m.source_url)}" target="_blank" rel="noopener" title="${esc(m.attribution || '')}">${esc(m.credit || m.source_name)} · ${esc(m.license)} ↗</a>` : '';
   const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   // ---------- one figure: svg layers, gradients, text, icons, info popover ----------
@@ -368,5 +370,5 @@ window.FK = (function () {
     return nav;
   }
 
-  return { C, paint, xy, ribbon, ribbonOf, seg, across, smooth, setup, dots, intro, player, playingIn, stop, cycle, clipNav, EXPERTS, GROUPS, ICONS, time, model, CAT, esc, pct };
+  return { C, paint, xy, ribbon, ribbonOf, seg, across, smooth, setup, dots, intro, player, playingIn, stop, cycle, clipNav, EXPERTS, GROUPS, ICONS, time, model, CAT, srcLink, esc, pct };
 })();

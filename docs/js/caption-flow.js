@@ -8,7 +8,7 @@
   const svg = document.getElementById('cap-svg');
   if (!svg || !window.FK) return;
   const S = window.DATA.samples, X = FK.EXPERTS, GROUPS = FK.GROUPS, esc = FK.esc;
-  const AUDIO_ROW = { key: 'audio', group: null, name: 'Audio', by: 'the clip itself', icon: 'wave', val: m => `${FK.time(m.duration)} clip, ${m.sr_orig / 1000} kHz` };
+  const AUDIO_ROW = { key: 'audio', group: null, name: 'Audio', by: 'the clip itself', icon: 'wave', val: m => `${FK.time(m.duration)} clip, ${m.sr_orig ? m.sr_orig / 1000 : 32} kHz` };
   const ROWS = [AUDIO_ROW, ...X];
   const CAPTION_INFO = 'Seven captioner configurations were compared on speed, vocabulary diversity and quality (human and LLM rankings). Qwen3-Omni-30B-A3B-Instruct is fast (75.9 clips/s per node). MOSS-Audio-8B-Thinking writes the most diverse and best-rated captions. Each captioned a disjoint half of the 471,237,555 clips without text, writing a short and a long caption (12 and 29 words on average). The prompt carries the clip’s raw metadata JSON, which ranked best against audio-only and natural-language prompts.';
   const EXPERT_INFO = 'A 3,718-class taxonomy classifier (an MLP on Dasheng-0.6B features) and signal statistics (loudness, silence, clipping, bandwidth) run on every clip. The predicted top-level category then routes it to specialists: speech to language (MMS-LID-4017), speaker age and gender (wav2vec2), emotion (emotion2vec+ large) and pitch (CREPE). Music goes to genre and style (MAEST, 400 Discogs labels) and tempo and key (librosa). Animal sounds go to species (Perch 2.0).';
@@ -195,9 +195,8 @@
       const apply = () => {
         clipH.textContent = `Audio clip ${i + 1}`;
         FK.capAt = i;
-        // link to the source video at the clip's start
-        clipFo.querySelector('.fe-src').innerHTML = m.youtube_id
-          ? `<a href="https://www.youtube.com/watch?v=${encodeURIComponent(m.youtube_id)}&t=${Math.floor(m.start_sec || 0)}s" target="_blank" rel="noopener">Source on YouTube ↗</a>` : '';
+        // link to the clip's source page, with its licence
+        clipFo.querySelector('.fe-src').innerHTML = FK.srcLink(m);
         FK.player(clipFo.querySelector('.fe-aud'), s.src, 34);
         on = ROWS.map(r => !!r.val(m));
         nodes.forEach((n, k) => { n.v.textContent = ROWS[k].val(m) || ''; n.g.classList.toggle('off', !on[k]); });
