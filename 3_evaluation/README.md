@@ -1,15 +1,14 @@
 # Evaluation
 
-The models are evaluated on MAEB, MSEB and HEAR with [CLIP_benchmark](https://github.com/LAION-AI/CLIP_benchmark)
-(audio support: [PR #154](https://github.com/LAION-AI/CLIP_benchmark/pull/154)). Each task writes the native results of
-its benchmark library into its own directory, and `--skip_existing` resumes. Audio is processed at its native length.
+The models are evaluated on MAEB, MSEB and HEAR with [CLIP_benchmark](https://github.com/LAION-AI/CLIP_benchmark).
+Each task writes the native results of its benchmark library into its own directory, and `--skip_existing` resumes. Audio is processed at its native length.
 
 MAEB scores are the mean over the probe and clustering seeds 42, 1, 2 and 3.
 
 ```bash
 # Environment (MSEB needs Python 3.12; FFmpeg decodes the audio; OpenCLIP comes last)
 conda create -n clip_benchmark python=3.12 ffmpeg -y && conda activate clip_benchmark
-pip install "clip-benchmark[audio,hear] @ git+https://github.com/LAION-AI/CLIP_benchmark@dffcbf193b341124b499feacb4dd922dc25c655a"
+pip install "clip-benchmark[audio,hear] @ git+https://github.com/LAION-AI/CLIP_benchmark@main"
 pip install --no-deps heareval==2021.1.3
 pip install "open_clip_torch[audio]>=4.2.1"
 for size in xxs xs small medium large; do
